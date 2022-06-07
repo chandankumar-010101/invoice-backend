@@ -3,6 +3,6 @@ from apps.customer.models import Customer
 
 # Register your models here.
 @admin.register(Customer)
-class PersonAdmin(admin.ModelAdmin):
+class CustomerAdmin(admin.ModelAdmin):
     list_display = ("full_name", "email", 
-                "is_active","created_on")
+            "is_active","created_on")
