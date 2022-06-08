@@ -1,10 +1,10 @@
-from pickle import TRUE
-from statistics import mode
+import uuid
 from django.db import models
 
 # Create your models here.
 class Organization(models.Model):
 
+    code = models.CharField(max_length=10, null=True, blank=True, unique=True)
     name = models.CharField(max_length=254, null=False, blank=False)
     email = models.EmailField(max_length=30, null=False, blank=False, unique=True)
     address = models.TextField(max_length=30, null=True, blank=True)
