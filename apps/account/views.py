@@ -75,6 +75,7 @@ class LoginView(APIView):
                 response['user_type'] = user.user_type
                 response['access'] = token.get('access')
                 response['refresh'] = token.get('refresh')
+                response['last_login'] = user.last_login.strftime("%H:%M %P, %d %b %Y")
             return Response(response, status=status.HTTP_200_OK)
       
 
