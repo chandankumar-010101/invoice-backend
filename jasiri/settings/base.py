@@ -63,9 +63,6 @@ MIDDLEWARE = [
     "corsheaders.middleware.CorsMiddleware",
 ]
 
-AUTHENTICATION_BACKENDS = (
-    'django.contrib.auth.backends.ModelBackend',
-)
 
 CORS_ORIGIN_ALLOW_ALL = True
 ROOT_URLCONF = 'jasiri.urls'

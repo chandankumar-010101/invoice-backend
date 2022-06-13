@@ -1,2 +1,6 @@
 EMAIL_DOES_NOT_EXIST = 'User with this email does not exists.'
 USER_NOT_ACTIVE = 'The account is deactive.'
+EMAIL_ALREADY_EXISTS = 'A Organization with this email already exists.'
+PHONE_ALREADY_EXISTS = 'A Organization with this phone already exists.'
+COMPANY_ALREADY_EXISTS = 'A Organization with same name already exists.'
+PASSWORD_VALIDATION = 'Password cannot be less than 8 charater and must contain one uppercase, one lowercase and one number.'

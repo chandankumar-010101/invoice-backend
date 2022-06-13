@@ -18,6 +18,8 @@ class Organization(models.Model):
                                     blank=False, unique=True)
     email = models.EmailField(max_length=255, null=False, 
                             blank=False, unique=True, db_index=True)
+    phone_number = models.CharField(max_length=10, null=True, 
+                            blank=True, unique=True, db_index=True)
     industry = models.CharField(max_length=255, null=True, blank=True)
     annual_turnover = models.CharField(max_length=255, null=True, blank=True)
     accounting_software = models.CharField(max_length=255, null=True, blank=True)
