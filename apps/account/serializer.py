@@ -1,6 +1,9 @@
 from rest_framework import serializers
 from .models import Organization 
+from .models import UserProfile 
 from .utils import generate_organization_code
+from django.contrib.auth import get_user_model
+import apps.account.response_messages as resp_msg
 
 
 class OrganizationSerializer(serializers.ModelSerializer):
@@ -34,7 +37,24 @@ class SignupSerializer(serializers.Serializer):
 
 class LoginSerializers(serializers.Serializer):
 
-     email = serializers.CharField(max_length=255)
-     password = serializers.CharField(max_length=128, write_only=True)    
+    email = serializers.CharField(max_length=255)
+    password = serializers.CharField(max_length=128, write_only=True)   
 
+    def validate(self, validate_data):
+        email = validate_data.get('email')
+        User = get_user_model()
+        is_email_exist = User.objects.filter(email=email).exists()
+        if not is_email_exist:
+            raise serializers.ValidationError(resp_msg.EMAIL_DOES_NOT_EXIST)
+
+        is_user_active = User.objects.get(email=email).is_active
+        if not is_user_active:
+            raise serializers.ValidationError(resp_msg.USER_NOT_ACTIVE)
+
+        return validate_data
        
+class UserProfileSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = UserProfile
+        fields = '__all__'

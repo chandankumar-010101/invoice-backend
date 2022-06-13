@@ -49,6 +49,8 @@ PROJECT_APPS = [
 
 INSTALLED_APPS += PROJECT_APPS
 
+AUTH_USER_MODEL = 'account.User'
+
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -60,6 +62,10 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     "corsheaders.middleware.CorsMiddleware",
 ]
+
+AUTHENTICATION_BACKENDS = (
+    'django.contrib.auth.backends.ModelBackend',
+)
 
 CORS_ORIGIN_ALLOW_ALL = True
 ROOT_URLCONF = 'jasiri.urls'

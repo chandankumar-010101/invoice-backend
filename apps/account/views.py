@@ -1,3 +1,4 @@
+from cmath import log
 import email
 from django.forms import PasswordInput
 from rest_framework import generics
@@ -8,6 +9,8 @@ from rest_framework.views import APIView
 from rest_framework import status
 from .serializer import SignupSerializer
 from .serializer import LoginSerializers
+from django.contrib.auth import authenticate, login
+
 
 # Create your views here.
 class OrganizationListView(generics.ListAPIView):
@@ -48,12 +51,13 @@ class LoginView(APIView):
      def post(self, request, *args, **kwargs):
         email = request.data.get('email')
         password = request.data.get('password')
+        print(email)
+        print(password)
         
         serializer = LoginSerializers(data = request.data)
         if serializer.is_valid():
-            return Response({"status": "success", "data": serializer.data}, status=status.HTTP_200_OK)
-        else:
-            return Response({"status": "error", "data": serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({"status": "success", "data": serializer.data}, 
+                        status=status.HTTP_200_OK)
       
 
 
