@@ -72,8 +72,8 @@ class UserProfile(models.Model):
     email = models.EmailField(unique=True, db_index=True)
     phone = models.CharField(max_length=10, blank=True, null=True)
     is_verified = models.BooleanField(default=False)
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
+    created_at = models.DateField(auto_now_add=True)
+    updated_at = models.DateField(auto_now=True)
     organization = models.ForeignKey(Organization, on_delete=models.CASCADE)
 
     def __str__(self):

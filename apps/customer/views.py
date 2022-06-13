@@ -4,6 +4,7 @@ from .pagination import CustomPagination
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from apps.customer.serializers import CustomerSerializer, CustomerFilterSerializer
+from rest_framework.permissions import IsAuthenticated
 
 
 # Create your views here.
@@ -23,7 +24,6 @@ class RetrieveUpdateDeleteCustomer(generics.RetrieveUpdateDestroyAPIView):
     lookup_field = 'id'
     queryset = Customer.objects.all()
     serializer_class = CustomerSerializer
-
 
 class CustomerFilterView(APIView):
 

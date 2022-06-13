@@ -1,16 +1,18 @@
-import email
 from rest_framework import generics
 from .models import Organization
-from .serializer import OrganizationSerializer
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework import status
-from .serializer import SignupSerializer
-from .serializer import LoginSerializers
 from django.contrib.auth import authenticate, login
 import apps.account.user_service as user_service
-from .models import Organization
 import apps.account.response_messages as resp_msg
+from .utils import get_jwt_tokens_for_user
+from .models import UserProfile
+from .models import Organization
+from .serializer import OrganizationSerializer
+from .serializer import SignupSerializer
+from .serializer import LoginSerializers
+from .serializer import UserProfileSerializer
 
 
 # Create your views here.
@@ -57,13 +59,23 @@ class SignupView(APIView):
 class LoginView(APIView):
 
      def post(self, request, *args, **kwargs):
+        response = {}
         email = request.data.get('email')
         password = request.data.get('password')
         serializer = LoginSerializers(data = request.data)
         if serializer.is_valid():
             user = authenticate(username=email, password=password)
-            return Response({"status": "success", "data": serializer.data}, 
-                        status=status.HTTP_200_OK)
+            if user is not None:
+                login(request, user)
+                queryset = UserProfile.objects.get(email=email)
+                serializer = UserProfileSerializer(queryset)
+                token = get_jwt_tokens_for_user(user)
+                response['profile'] = serializer.data
+                response['organization'] = queryset.organization.company_name
+                response['user_type'] = user.user_type
+                response['access'] = token.get('access')
+                response['refresh'] = token.get('refresh')
+            return Response(response, status=status.HTTP_200_OK)
       
 
 
