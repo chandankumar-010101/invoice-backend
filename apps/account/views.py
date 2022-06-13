@@ -33,12 +33,13 @@ class SignupView(APIView):
 
             # create Organization
             org = user_service.create_organization(request)
-            
+
+            request['user_type'] = 2
             #create user
             try:
                 user = user_service.create_admin_user(request)
             except Exception as e:
-                return Response({'status':'error','error':resp_msg.USER_CREATION_UNSUCCESSFULL}, 
+                return Response({'error':resp_msg.USER_CREATION_UNSUCCESSFULL}, 
                 status=status.HTTP_400_BAD_REQUEST)
 
             #create profile

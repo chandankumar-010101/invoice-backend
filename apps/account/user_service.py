@@ -32,6 +32,7 @@ def create_admin_user(request):
     User = get_user_model()
     email = request.data.get('email')
     password = request.data.get('password')
-    user = User.objects.create_user(email, password, user_type=2)
+    user = User.objects.create_user(email, password, 
+                            user_type=request.data.get('user_type'))
     return user
 
