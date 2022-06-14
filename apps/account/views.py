@@ -21,11 +21,6 @@ class OrganizationListView(generics.ListAPIView):
     queryset = Organization.objects.all()
     serializer_class = OrganizationSerializer
 
-class OrganizationCreateView(generics.CreateAPIView):
-
-    queryset = Organization.objects.all()
-    serializer_class = OrganizationSerializer
-
 class SignupView(APIView):
     
     def post(self, request, *args, **kwargs):
@@ -59,9 +54,6 @@ class SignupView(APIView):
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
        
-
-        #return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
 class LoginView(APIView):
 
      def post(self, request, *args, **kwargs):
@@ -83,6 +75,8 @@ class LoginView(APIView):
                 response['refresh'] = token.get('refresh')
                 response['last_login'] = user.last_login.strftime("%H:%M %P, %d %b %Y")
             return Response(response, status=status.HTTP_200_OK)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        
       
 
 

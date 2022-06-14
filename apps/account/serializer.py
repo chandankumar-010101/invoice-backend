@@ -14,16 +14,6 @@ class OrganizationSerializer(serializers.ModelSerializer):
         fields = '__all__'
         read_only_fields = ('code',)
 
-    def create(self, validated_data):
-        """ Overrirde serializer save method.
-        
-        Override the method for saving organization code,
-        organization code is auto-generated 10 charcter unique code
-        for every organization.
-        """
-        validated_data['code'] = generate_organization_code()
-        return super(OrganizationSerializer, self).create(validated_data)
-
 class SignupSerializer(serializers.Serializer):
     first_name = serializers.CharField(max_length=100)
     last_name = serializers.CharField(max_length=100)
