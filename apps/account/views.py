@@ -1,9 +1,8 @@
 from rest_framework import generics
-from .models import Organization
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework import status
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import authenticate, login, logout
 import apps.account.user_service as user_service
 import apps.account.response_messages as resp_msg
 from .utils import get_jwt_tokens_for_user
@@ -17,7 +16,6 @@ from .serializer import UserCreateSerializer
 from .serializer import UserProfileListSerializer
 from rest_framework.permissions import IsAuthenticated
 from .permissions import IsAdminOnly
-from django.contrib.auth import get_user_model
 
 
 # Create your views here.
@@ -137,3 +135,10 @@ class UserListView(generics.ListAPIView):
         queryset = UserProfile.objects.filter(organization=organization)
         return queryset
 
+class LogoutView(APIView):
+
+    permission_classes = (IsAuthenticated, )
+
+    def post(self, request):
+        logout(request)
+        return Response({'success': True}, status=status.HTTP_200_OK)
