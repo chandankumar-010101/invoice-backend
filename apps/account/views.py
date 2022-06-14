@@ -14,8 +14,10 @@ from .serializer import SignupSerializer
 from .serializer import LoginSerializers
 from .serializer import UserProfileSerializer
 from .serializer import UserCreateSerializer
+from .serializer import UserProfileListSerializer
 from rest_framework.permissions import IsAuthenticated
 from .permissions import IsAdminOnly
+from django.contrib.auth import get_user_model
 
 
 # Create your views here.
@@ -88,6 +90,7 @@ class UserCreateView(APIView):
         serializer = UserCreateSerializer(data = request.data)
         if serializer.is_valid():
             user_org = UserProfile.objects.get(user=request.user).organization
+            
             try:
                 user =  user_service.create_user_with_role(request)
             except Exception as e:
@@ -103,7 +106,15 @@ class UserCreateView(APIView):
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         
-      
+class UserListView(generics.ListAPIView):
 
+    queryset = UserProfile.objects.all()
+    serializer_class = UserProfileListSerializer
+    permission_classes = (IsAuthenticated & IsAdminOnly,)
 
+    def get_queryset(self):
+        user = self.request.user
+        organization = UserProfile.objects.get(user=user).organization
+        queryset = UserProfile.objects.filter(organization=organization)
+        return queryset
 

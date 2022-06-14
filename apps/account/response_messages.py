@@ -10,4 +10,4 @@ USER_ALREADY_EXISTS = "User with this email already exists."
 
 #Permission messages
 NOT_ADMIN = "You are not Admin."
-ADMIN_ONLY_PERMISSION = "You are not allowed to perform this action.Only Admin can create users."
+ADMIN_ONLY_PERMISSION = "You are not allowed to perform this action."

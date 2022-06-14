@@ -110,3 +110,16 @@ class UserCreateSerializer(serializers.Serializer):
         if not lower:
             raise serializers.ValidationError(resp_msg.PASSWORD_VALIDATION)
        
+class UserSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = User
+        fields = ('id','email', 'user_type', )
+
+class UserProfileListSerializer(serializers.ModelSerializer):
+
+    user = UserSerializer()
+
+    class Meta:
+        model = UserProfile
+        fields = ('pk', 'full_name', 'email', 'organization', 'user')
