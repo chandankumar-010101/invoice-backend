@@ -27,6 +27,11 @@ class OrganizationListView(generics.ListAPIView):
     serializer_class = OrganizationSerializer
 
 class SignupView(APIView):
+    """ Create new User and organization.
+    
+    Register a user and organization and create
+    a user profile.
+    """
     
     def post(self, request, *args, **kwargs):
         response = {}
@@ -60,8 +65,12 @@ class SignupView(APIView):
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
        
 class LoginView(APIView):
-
-     def post(self, request, *args, **kwargs):
+    """ Login a user in the platform.
+    
+    Login the user in the platform and generate access and 
+    refresh jwt token for users.
+    """
+    def post(self, request, *args, **kwargs):
         response = {}
         email = request.data.get('email')
         password = request.data.get('password')
@@ -83,6 +92,11 @@ class LoginView(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class UserCreateView(APIView):
+    """ Create new User for an organization.
+    
+    Register a user and create a user profile.
+    validation for only admin user can create new user.
+    """
 
     permission_classes = (IsAuthenticated & IsAdminOnly,)
 
@@ -90,7 +104,7 @@ class UserCreateView(APIView):
         serializer = UserCreateSerializer(data = request.data)
         if serializer.is_valid():
             user_org = UserProfile.objects.get(user=request.user).organization
-            
+
             try:
                 user =  user_service.create_user_with_role(request)
             except Exception as e:
@@ -107,6 +121,11 @@ class UserCreateView(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         
 class UserListView(generics.ListAPIView):
+    """ List of user from an organization.
+    
+    List of user from an organization, only admin user
+    are allowed.
+    """
 
     queryset = UserProfile.objects.all()
     serializer_class = UserProfileListSerializer

@@ -10,6 +10,8 @@ def generate_organization_code():
     return org_code
 
 def get_jwt_tokens_for_user(user):
+    """ Generate access and refresh token for a user. """
+
     refresh = RefreshToken.for_user(user)
 
     return {
