@@ -13,6 +13,9 @@ from .serializer import OrganizationSerializer
 from .serializer import SignupSerializer
 from .serializer import LoginSerializers
 from .serializer import UserProfileSerializer
+from .serializer import UserCreateSerializer
+from rest_framework.permissions import IsAuthenticated
+from .permissions import IsAdminOnly
 
 
 # Create your views here.
@@ -75,6 +78,29 @@ class LoginView(APIView):
                 response['refresh'] = token.get('refresh')
                 response['last_login'] = user.last_login.strftime("%H:%M %P, %d %b %Y")
             return Response(response, status=status.HTTP_200_OK)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+class UserCreateView(APIView):
+
+    permission_classes = (IsAuthenticated & IsAdminOnly,)
+
+    def post(self, request, *args, **kwargs):
+        serializer = UserCreateSerializer(data = request.data)
+        if serializer.is_valid():
+            user_org = UserProfile.objects.get(user=request.user).organization
+            try:
+                user =  user_service.create_user_with_role(request)
+            except Exception as e:
+                print(str(e))
+                return Response({'error':resp_msg.USER_CREATION_UNSUCCESSFULL}, 
+                status=status.HTTP_400_BAD_REQUEST)
+
+            if user:
+                profile = user_service.create_user_profile(request, user, user_org)
+                queryset = UserProfile.objects.get(pk=profile.pk)
+                serializer = UserProfileSerializer(queryset)
+
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         
       

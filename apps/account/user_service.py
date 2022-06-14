@@ -19,7 +19,11 @@ def create_organization(request):
 
 def create_user_profile(request, user, org):
 
-    full_name = request.data.get('first_name')+' '+request.data.get('last_name')
+    if request.data.get('first_name') is None and request.data.get('last_name') is None:
+        full_name = request.data.get('full_name')
+    else:
+        full_name = request.data.get('first_name')+' '+request.data.get('last_name')
+        
     profile = UserProfile.objects.create(
                             full_name=full_name,
                             email=request.data.get('email'),
@@ -36,3 +40,10 @@ def create_admin_user(request, user_type):
     user = User.objects.create_user(email, password, user_type=user_type)
     return user
 
+def create_user_with_role(request):
+    User = get_user_model()
+    email = request.data.get('email')
+    password = request.data.get('password')
+    role = request.data.get('role')
+    user = User.objects.create_user(email, password, user_type=role)
+    return user
