@@ -18,21 +18,21 @@ def create_organization(request):
     return org
 
 def create_user_profile(request, user, org):
-    profile = UserProfile.objects.create(first_name=request.data.get('first_name'),
-                                    last_name=request.data.get('last_name'),
-                                    email=request.data.get('email'),
-                                    phone=request.data.get('phone_number'),
-                                    user=user,
-                                    organization=org,
-                                    is_verified=True
-                                )
+
+    full_name = request.data.get('first_name')+' '+request.data.get('last_name')
+    profile = UserProfile.objects.create(
+                            full_name=full_name,
+                            email=request.data.get('email'),
+                            phone=request.data.get('phone_number'),
+                            user=user,
+                            organization=org,
+                            is_verified=True)
     return profile
 
-def create_admin_user(request):
+def create_admin_user(request, user_type):
     User = get_user_model()
     email = request.data.get('email')
     password = request.data.get('password')
-    user = User.objects.create_user(email, password, 
-                            user_type=request.data.get('user_type'))
+    user = User.objects.create_user(email, password, user_type=user_type)
     return user
 

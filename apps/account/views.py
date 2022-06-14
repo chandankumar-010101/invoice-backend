@@ -29,18 +29,19 @@ class OrganizationCreateView(generics.CreateAPIView):
 class SignupView(APIView):
     
     def post(self, request, *args, **kwargs):
-
+        response = {}
         serializer = SignupSerializer(data = request.data)
         if serializer.is_valid():
 
             # create Organization
             org = user_service.create_organization(request)
+            user_type = 2
 
-            request['user_type'] = 2
             #create user
             try:
-                user = user_service.create_admin_user(request)
+                user = user_service.create_admin_user(request,user_type)
             except Exception as e:
+                print(str(e))
                 return Response({'error':resp_msg.USER_CREATION_UNSUCCESSFULL}, 
                 status=status.HTTP_400_BAD_REQUEST)
 
@@ -49,7 +50,12 @@ class SignupView(APIView):
             if (org is not None and 
                 user is not None and 
                 profile is not None):
-                return Response(serializer.data, status=status.HTTP_201_CREATED)
+                queryset = UserProfile.objects.get(email=profile.email)
+                serializer = UserProfileSerializer(queryset)
+                response['profile'] = serializer.data
+                response['organization'] = queryset.organization.company_name
+                response['user_type'] = user.user_type
+                return Response(response, status=status.HTTP_201_CREATED)
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
        

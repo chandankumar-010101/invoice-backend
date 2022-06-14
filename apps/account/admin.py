@@ -15,4 +15,4 @@ class UserAdmin(admin.ModelAdmin):
 
 @admin.register(UserProfile)
 class UserProfileAdmin(admin.ModelAdmin):
-    list_display = ("first_name", "email", "is_verified")
+    list_display = ("full_name", "email", "is_verified")
