@@ -35,6 +35,15 @@ class SignupSerializer(serializers.Serializer):
 class LoginSerializers(serializers.Serializer):
 
      email = serializers.CharField(max_length=255)
-     password = serializers.CharField(max_length=128, write_only=True)    
+     password = serializers.CharField(max_length=128, write_only=True)  
 
-       
+
+class ProfileupdateSerializer(serializers.Serializer):
+
+    user_name = serializers.CharField(max_length=100)
+    name = serializers.CharField(max_length=100)
+    email = serializers.CharField(max_length=50)
+    company = serializers.CharField(max_length=100)
+    role = serializers.CharField(max_length=100)
+    status = serializers.BooleanField(default=True)
+

@@ -8,6 +8,7 @@ from rest_framework.views import APIView
 from rest_framework import status
 from .serializer import SignupSerializer
 from .serializer import LoginSerializers
+from .serializer import ProfileupdateSerializer
 
 # Create your views here.
 class OrganizationListView(generics.ListAPIView):
@@ -40,9 +41,6 @@ class SignupView(APIView):
         else:
             return Response({"status": "error", "data": serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
        
-
-        #return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
 class LoginView(APIView):
 
      def post(self, request, *args, **kwargs):
@@ -56,5 +54,21 @@ class LoginView(APIView):
             return Response({"status": "error", "data": serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
       
 
+class ProfileupdateView(APIView):
+     
+     def post(self, request, *args, **kwargs):
+        user_name = request.data.get('user_name')
+        name = request.data.get('name')
+        email = request.data.get('email')
+        company = request.data.get('company')
+        role = request.data.get('role')
+        user_status = request.data['user_status']
+
+        serializer = ProfileupdateSerializer(data = request.data)
+        if serializer.is_valid():
+            return Response({"status": "success", "data": serializer.data}, status=status.HTTP_200_OK)
+        else:
+            return Response({"status": "error", "data": serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
+                        
 
 
