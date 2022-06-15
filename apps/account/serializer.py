@@ -47,3 +47,9 @@ class ProfileupdateSerializer(serializers.Serializer):
     role = serializers.CharField(max_length=100)
     status = serializers.BooleanField(default=True)
 
+class PasswordchangeSerializer(serializers.Serializer):
+
+    current_password = serializers.CharField(max_length=128,write_only=True)
+    new_password = serializers.CharField(max_length=128,write_only=True)
+
+

@@ -1,9 +1,10 @@
 from django.urls import path
-from .views import OrganizationListView
+from .views import OrganizationListView, PasswordchangeView
 from .views import OrganizationCreateView
 from .views import SignupView
 from .views import LoginView
 from .views import ProfileupdateView
+from . views import PasswordchangeView
 
 app_name= 'account'
 
@@ -13,4 +14,5 @@ urlpatterns = [
     path('signup', SignupView.as_view(), name="signup"),
     path('login', LoginView.as_view(), name="login"),
     path('profileupdate', ProfileupdateView.as_view(), name="profileupdate"),
+    path('passwordchange', PasswordchangeView.as_view(), name="passwordchange"),
 ]

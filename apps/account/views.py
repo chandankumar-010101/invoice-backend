@@ -2,13 +2,14 @@ import email
 from django.forms import PasswordInput
 from rest_framework import generics
 from .models import Organization
-from .serializer import OrganizationSerializer
+from .serializer import OrganizationSerializer, PasswordchangeSerializer
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework import status
 from .serializer import SignupSerializer
 from .serializer import LoginSerializers
 from .serializer import ProfileupdateSerializer
+from .serializer import PasswordchangeSerializer
 
 # Create your views here.
 class OrganizationListView(generics.ListAPIView):
@@ -70,5 +71,14 @@ class ProfileupdateView(APIView):
         else:
             return Response({"status": "error", "data": serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
                         
+class PasswordchangeView(APIView):
+    
+    def post(self,request,*args,**kwargs):
+        current_password = request.data.get('current_password')
+        new_password = request.data.get('new_password')
 
-
+        serializer = PasswordchangeSerializer(data = request.data)
+        if serializer.is_valid():
+            return Response({"status": "success", "data": serializer.data}, status=status.HTTP_200_OK)
+        else:
+            return Response({"status": "error", "data": serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
