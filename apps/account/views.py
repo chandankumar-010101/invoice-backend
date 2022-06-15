@@ -1,3 +1,4 @@
+import email
 from rest_framework import generics
 
 from .models import Organization
@@ -21,6 +22,8 @@ from rest_framework.permissions import IsAuthenticated
 from .permissions import IsAdminOnly
 from .serializer import ProfileupdateSerializer
 from .serializer import PasswordchangeSerializer
+from django.contrib.auth import get_user_model
+
 
 # Create your views here.
 class OrganizationListView(generics.ListAPIView):
@@ -165,12 +168,25 @@ class ProfileupdateView(APIView):
                         
 class ChangePasswordView(APIView):
     
-    def post(self,request,*args,**kwargs):
-        current_password = request.data.get('current_password')
-        new_password = request.data.get('new_password')
+    permission_classes = (IsAuthenticated, )
 
+    def get_object(self, queryset=None):
+        return self.request.user
+
+    def post(self,request,*args,**kwargs):
+        User = get_user_model()
         serializer = PasswordchangeSerializer(data = request.data)
         if serializer.is_valid():
-            return Response({"status": "success", "data": serializer.data}, status=status.HTTP_200_OK)
+            current_password = request.data.get('current_password')
+            new_password = request.data.get('new_password')
+            user = User.objects.get(email=request.user.email)
+            if not user.check_password(current_password):
+                return Response({"detail": resp_msg.INCORRECT_PASSWORD},
+                status=status.HTTP_400_BAD_REQUEST)
+            else:
+                print(self)
+                self.get_object().set_password(new_password)
+                self.get_object().save()
+            return Response({"detail": resp_msg.PASSWORD_CHANGED}, status=status.HTTP_200_OK)
         else:
             return Response({"status": "error", "data": serializer.errors}, status=status.HTTP_400_BAD_REQUEST)

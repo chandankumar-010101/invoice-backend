@@ -7,6 +7,8 @@ USER_CREATION_UNSUCCESSFULL = "Something went wrong while creating user."
 PASSWORD_VALIDATION = "Password cannot be less than 8 characters and must contain one uppercase, one lowercase, and one number."
 INVALID_ROLE_SELECTED = "Invalid role choice."
 USER_ALREADY_EXISTS = "User with this email already exists."
+INCORRECT_PASSWORD = "Current password is incorrect."
+PASSWORD_CHANGED = "Password Updated Successfully."
 
 #Permission messages
 NOT_ADMIN = "You are not Admin."

@@ -137,3 +137,14 @@ class PasswordchangeSerializer(serializers.Serializer):
 
     current_password = serializers.CharField(max_length=128,write_only=True)
     new_password = serializers.CharField(max_length=128,write_only=True)
+
+    def validate_new_password(self, password):
+        if len(password) < 8:
+            raise serializers.ValidationError(resp_msg.PASSWORD_VALIDATION)
+
+        lower = any(letter.islower() for letter in password)
+        upper = any(letter.isupper() for letter in password)
+        if not upper:
+            raise serializers.ValidationError(resp_msg.PASSWORD_VALIDATION)
+        if not lower:
+            raise serializers.ValidationError(resp_msg.PASSWORD_VALIDATION)
