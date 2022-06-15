@@ -1,9 +1,14 @@
 from statistics import mode
 from django.db import models
+from .constants import CUSTOMER_TYPE_CHOICE
+from .constants import PAYMENT_TERM_CHOICE
+from django.core import validators
 
 
 class Customer(models.Model):
 
+    customer_type = models.PositiveSmallIntegerField(choices = CUSTOMER_TYPE_CHOICE,
+                                                    default=4)
     full_name = models.CharField(max_length=30, null=False, blank=False)
     pin_number = models.CharField(max_length=30, null=True, blank=True)
     industry_name = models.CharField(max_length=30, null=False, blank=False)
@@ -18,7 +23,10 @@ class Customer(models.Model):
     primary_name = models.CharField(max_length=30, null=True, blank=True)
     primary_role = models.CharField(max_length=30, null=True, blank=True) #change later
     email = models.EmailField(max_length=254, unique=True)
-    phone = models.CharField(max_length=30, null=True, blank=True, unique=True)
+    phone = models.CharField(max_length=30,null=True, blank=True, unique=True)
+    payments_term = models.PositiveSmallIntegerField(choices = PAYMENT_TERM_CHOICE,
+                                                    default=6)
+    payments_credit = models.IntegerField(null=True, blank=True)
     is_active = models.BooleanField(default=True)
 
     class Meta:
