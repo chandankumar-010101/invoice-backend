@@ -1,4 +1,7 @@
 from rest_framework import generics
+
+from .models import Organization
+from .serializer import OrganizationSerializer, PasswordchangeSerializer
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework import status
@@ -16,7 +19,8 @@ from .serializer import UserCreateSerializer
 from .serializer import UserProfileListSerializer
 from rest_framework.permissions import IsAuthenticated
 from .permissions import IsAdminOnly
-
+from .serializer import ProfileupdateSerializer
+from .serializer import PasswordchangeSerializer
 
 # Create your views here.
 class OrganizationListView(generics.ListAPIView):
@@ -35,7 +39,6 @@ class SignupView(APIView):
         response = {}
         serializer = SignupSerializer(data = request.data)
         if serializer.is_valid():
-
             # create Organization
             org = user_service.create_organization(request)
             user_type = 2
@@ -61,6 +64,7 @@ class SignupView(APIView):
                 return Response(response, status=status.HTTP_201_CREATED)
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
        
 class LoginView(APIView):
     """ Login a user in the platform.
@@ -142,3 +146,31 @@ class LogoutView(APIView):
     def post(self, request):
         logout(request)
         return Response({'success': True}, status=status.HTTP_200_OK)
+
+class ProfileupdateView(APIView):
+     
+     def post(self, request, *args, **kwargs):
+        user_name = request.data.get('user_name')
+        name = request.data.get('name')
+        email = request.data.get('email')
+        company = request.data.get('company')
+        role = request.data.get('role')
+        profile_status = request.data.get('status')
+
+        serializer = ProfileupdateSerializer(data = request.data)
+        if serializer.is_valid():
+            return Response({"status": "success", "data": serializer.data}, status=status.HTTP_200_OK)
+        else:
+            return Response({"status": "error", "data": serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
+                        
+class ChangePasswordView(APIView):
+    
+    def post(self,request,*args,**kwargs):
+        current_password = request.data.get('current_password')
+        new_password = request.data.get('new_password')
+
+        serializer = PasswordchangeSerializer(data = request.data)
+        if serializer.is_valid():
+            return Response({"status": "success", "data": serializer.data}, status=status.HTTP_200_OK)
+        else:
+            return Response({"status": "error", "data": serializer.errors}, status=status.HTTP_400_BAD_REQUEST)

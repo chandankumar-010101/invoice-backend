@@ -5,6 +5,11 @@ from .views import LoginView
 from .views import UserCreateView
 from .views import UserListView
 from .views import LogoutView
+from .views import OrganizationListView
+from .views import SignupView
+from .views import LoginView
+from .views import ProfileupdateView
+from .views import ChangePasswordView
 
 app_name= 'account'
 
@@ -15,5 +20,6 @@ urlpatterns = [
     path('create_user', UserCreateView.as_view(), name="create_user"),
     path('users/list', UserListView.as_view(), name="users_list"),
     path('logout', LogoutView.as_view(), name="logout"),
-
+    path('profileupdate', ProfileupdateView.as_view(), name="profileupdate"),
+    path('change_password', ChangePasswordView.as_view(), name="change_password"),
 ]

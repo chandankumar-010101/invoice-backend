@@ -123,3 +123,17 @@ class UserProfileListSerializer(serializers.ModelSerializer):
     class Meta:
         model = UserProfile
         fields = ('pk', 'full_name', 'email', 'organization', 'user')
+
+class ProfileupdateSerializer(serializers.Serializer):
+
+    user_name = serializers.CharField(max_length=100)
+    name = serializers.CharField(max_length=100)
+    email = serializers.CharField(max_length=50)
+    company = serializers.CharField(max_length=100)
+    role = serializers.CharField(max_length=100)
+    status = serializers.BooleanField(default=True)
+
+class PasswordchangeSerializer(serializers.Serializer):
+
+    current_password = serializers.CharField(max_length=128,write_only=True)
+    new_password = serializers.CharField(max_length=128,write_only=True)
