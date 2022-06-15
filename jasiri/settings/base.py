@@ -24,8 +24,11 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = config('SECRET_KEY')
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = ["https://www.jasiricap.com","*"]
 
+CORS_ALLOWED_ORIGINS = [
+    "https://www.jasiricap.com",
+]
 
 # Application definition
 
@@ -51,7 +54,8 @@ PROJECT_APPS = [
 INSTALLED_APPS += PROJECT_APPS
 
 AUTH_USER_MODEL = 'account.User'
-
+CORS_ALLOW_ALL_ORIGINS = True
+CORS_ORIGIN_ALLOW_ALL = True
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
