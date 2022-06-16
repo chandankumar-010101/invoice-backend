@@ -8,10 +8,10 @@ from decouple import config
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': config('TEST_DB_NAME'), 
-        'USER': config('TEST_USER'), 
-        'PASSWORD': config('TEST_PASSWORD'),
-        'HOST': config('TEST_HOST'), 
-        'PORT': config('TEST_PORT'),
+        'NAME': config('PRODUCTION_DB_NAME'), 
+        'USER': config('PRODUCTION_USER'), 
+        'PASSWORD': config('PRODUCTION_PASSWORD'),
+        'HOST': config('PRODUCTION_HOST'), 
+        'PORT': config('PRODUCTION_PORT'),
     }
 }
