@@ -9,6 +9,7 @@ INVALID_ROLE_SELECTED = "Invalid role choice."
 USER_ALREADY_EXISTS = "User with this email already exists."
 INCORRECT_PASSWORD = "Current password is incorrect."
 PASSWORD_CHANGED = "Password Updated Successfully."
+INVALID_EMAIL_PASSWORD = "Email or password is invalid."
 
 #Permission messages
 NOT_ADMIN = "You are not Admin."

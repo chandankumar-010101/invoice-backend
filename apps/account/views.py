@@ -93,7 +93,10 @@ class LoginView(APIView):
                 response['access'] = token.get('access')
                 response['refresh'] = token.get('refresh')
                 response['last_login'] = user.last_login.strftime("%H:%M %P, %d %b %Y")
-            return Response(response, status=status.HTTP_200_OK)
+                return Response(response, status=status.HTTP_200_OK)
+            else:
+                return Response({'detail':resp_msg.INVALID_EMAIL_PASSWORD}, 
+                            status=status.HTTP_200_OK)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class UserCreateView(APIView):
