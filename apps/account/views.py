@@ -95,7 +95,7 @@ class LoginView(APIView):
                 response['last_login'] = user.last_login.strftime("%H:%M %P, %d %b %Y")
                 return Response(response, status=status.HTTP_200_OK)
             else:
-                return Response({'detail':resp_msg.INVALID_EMAIL_PASSWORD}, 
+                return Response({'detail':[resp_msg.INVALID_EMAIL_PASSWORD]}, 
                             status=status.HTTP_400_BAD_REQUEST)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
