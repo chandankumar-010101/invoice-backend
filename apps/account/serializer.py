@@ -60,7 +60,8 @@ class LoginSerializers(serializers.Serializer):
         email = validate_data.get('email')
         is_email_exist = User.objects.filter(email=email).exists()
         if not is_email_exist:
-            raise serializers.ValidationError(resp_msg.EMAIL_DOES_NOT_EXIST)
+            print('here')
+            raise serializers.ValidationError({'detail':resp_msg.EMAIL_DOES_NOT_EXIST})
 
         is_user_active = User.objects.get(email=email).is_active
         if not is_user_active:

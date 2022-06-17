@@ -96,7 +96,7 @@ class LoginView(APIView):
                 return Response(response, status=status.HTTP_200_OK)
             else:
                 return Response({'detail':resp_msg.INVALID_EMAIL_PASSWORD}, 
-                            status=status.HTTP_200_OK)
+                            status=status.HTTP_400_BAD_REQUEST)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class UserCreateView(APIView):
