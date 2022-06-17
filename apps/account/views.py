@@ -1,6 +1,4 @@
-import email
 from rest_framework import generics
-
 from .models import Organization
 from .serializer import OrganizationSerializer, PasswordchangeSerializer
 from rest_framework.response import Response

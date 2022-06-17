@@ -1,40 +1,27 @@
 from rest_framework import serializers
 from apps.customer.models import Customer 
 from apps.customer.models import AlternateContact
+import apps.customer.response_messages as resp_msg
 
 
-class ALternateContactSerializer(serializers.ModelSerializer):
+class AlternateContactSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = AlternateContact
         fields = '__all__'
 
-
 class CustomerSerializer(serializers.ModelSerializer):
 
-    alternate_contact = ALternateContactSerializer()
+    alternate_contact = AlternateContactSerializer()
 
     class Meta:
         model = Customer
-        fields = '__all__'
+        fields = '__all__' 
 
-    def validate_phone(self,phone):
-        
-        if len(phone) > 10 or len(phone) < 10:
-            raise serializers .ValidationError('number cannot be less or greater than 10')
-        return phone     
-
-    def create(self, validated_data):
-        # print(validated_data)
-        alternate_record = validated_data.get('alternate_contact')
-        print('==================')
-        print(alternate_record)
-        instance = Customer.objects.create(**validated_data)
-        AlternateContact.objects.create(**alternate_record)
-        # alternate_obj.customer = instance
-        # alternate_obj.save()
-        instance.save()
-        return instance
+    def validate_email(self, email):
+        is_email_exist = Customer.objects.filter(email=email)
+        if len(is_email_exist) > 0:
+            raise serializers.ValidationError(resp_msg.CUSTOMER_EMAIL_ALREADY_EXIST)
 
 class CustomerFilterSerializer(serializers.ModelSerializer):
 
