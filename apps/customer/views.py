@@ -1,28 +1,42 @@
 from rest_framework import generics
 from .models import Customer
+from apps.account.models import Organization, UserProfile
 from .pagination import CustomPagination
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from apps.customer.serializers import (CustomerSerializer, CustomerFilterSerializer, 
-                                    AlternateContactSerializer)
+                                    AlternateContactSerializer, CustomerListSerializer)
 from apps.customer.models import AlternateContact
 import apps.customer.response_messages as resp_msg
 from rest_framework import status
+from rest_framework.permissions import IsAuthenticated
+from django.contrib.auth import get_user_model
+User = get_user_model()
 
 
 # Create your views here.
-class CustomerListView(generics.ListAPIView, generics.RetrieveAPIView):
+class CustomerListView(generics.ListAPIView):
 
     queryset = Customer.objects.all()
-    serializer_class = CustomerSerializer
+    serializer_class = CustomerListSerializer
     pagination_class = CustomPagination
+    permission_classes = (IsAuthenticated, )
+
+    def list(self, request, *args, **kwargs):
+        organization = UserProfile.objects.get(user=request.user).organization
+        queryset = Customer.objects.filter(organization=organization)
+        serializer = self.serializer_class(queryset, many=True)
+        return Response(serializer.data,status=status.HTTP_200_OK) 
 
 class CustomerCreateView(generics.CreateAPIView):
 
     queryset = Customer.objects.all()
     serializer_class = CustomerSerializer
+    permission_classes = (IsAuthenticated, )
 
     def create(self, serializer):
+        user = serializer.user
+        profile = UserProfile.objects.get(user=user)
         is_alternate_contact = serializer.data.get('alternate_contact')
 
         is_email_exist = Customer.objects.filter(email=serializer.data.get('email'))
@@ -38,7 +52,8 @@ class CustomerCreateView(generics.CreateAPIView):
         if serializer.data.get('alternate_contact') is not None:
             alternate_contact = serializer.data.pop('alternate_contact')
             
-        instance = Customer.objects.create(**serializer.data)
+        instance = Customer.objects.create(**serializer.data, user=serializer.user, 
+                                        organization=profile.organization)
         instance.save()
 
         if is_alternate_contact:

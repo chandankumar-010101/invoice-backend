@@ -28,3 +28,10 @@ class CustomerFilterSerializer(serializers.ModelSerializer):
     class Meta:
         model = Customer
         fields = ('id','full_name','email',)
+
+class CustomerListSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Customer
+        fields = ('pk','full_name','outstanding_invoices',
+                'open_balance','overdue_balance') 
