@@ -21,12 +21,14 @@ class CustomerListView(generics.ListAPIView):
     serializer_class = CustomerListSerializer
     pagination_class = CustomPagination
     permission_classes = (IsAuthenticated, )
+    pagination_class.page_size=1
 
     def list(self, request, *args, **kwargs):
         organization = UserProfile.objects.get(user=request.user).organization
         queryset = Customer.objects.filter(organization=organization)
         serializer = self.serializer_class(queryset, many=True)
-        return Response(serializer.data,status=status.HTTP_200_OK) 
+        page = self.paginate_queryset(serializer.data)
+        return self.get_paginated_response(page) 
 
 class CustomerCreateView(generics.CreateAPIView):
 
