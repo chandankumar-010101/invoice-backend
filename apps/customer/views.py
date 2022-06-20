@@ -1,16 +1,18 @@
 from rest_framework import generics
 from .models import Customer
-from apps.account.models import Organization, UserProfile
+from apps.account.models import UserProfile
 from .pagination import CustomPagination
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from apps.customer.serializers import (CustomerSerializer, CustomerFilterSerializer, 
-                                    AlternateContactSerializer, CustomerListSerializer)
+                                    AlternateContactSerializer, CustomerListSerializer,
+                                    CustomerRetriveDestroySerializer)
 from apps.customer.models import AlternateContact
 import apps.customer.response_messages as resp_msg
 from rest_framework import status
 from rest_framework.permissions import IsAuthenticated
 from django.contrib.auth import get_user_model
+import apps.customer.models as customer_models
 User = get_user_model()
 
 
@@ -71,7 +73,7 @@ class RetrieveUpdateDeleteCustomer(generics.RetrieveUpdateDestroyAPIView):
 
     lookup_field = 'id'
     queryset = Customer.objects.all()
-    serializer_class = CustomerSerializer
+    serializer_class = CustomerRetriveDestroySerializer
 
 class CustomerFilterView(APIView):
 
@@ -82,3 +84,16 @@ class CustomerFilterView(APIView):
         queryset = Customer.objects.filter(full_name__contains=q)
         serializer = self.serializer_class(queryset, many=True)
         return Response(serializer.data)
+
+class DeleteMultipleCustomerView(APIView):
+
+    def post(self, request):
+        customer_list = request.data.get('customer_list',[])
+
+        if len(customer_list) == 0:
+            return Response({'detail':[resp_msg.CUSTOMER_DELETE_VALIDATION]},
+                            status=status.HTTP_400_BAD_REQUEST)
+
+        queryset = customer_models.Customer.objects.filter(pk__in=customer_list)
+        queryset.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)

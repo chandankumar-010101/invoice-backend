@@ -35,3 +35,20 @@ class CustomerListSerializer(serializers.ModelSerializer):
         model = Customer
         fields = ('pk','full_name','outstanding_invoices',
                 'open_balance','overdue_balance') 
+
+class CustomerRetriveDestroySerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Customer
+        fields = '__all__'
+
+    def to_representation(self, instance):
+        representation = super().to_representation(instance)
+        try:
+            queryset = AlternateContact.objects.get(customer=instance)
+            serializer = AlternateContactSerializer(queryset)
+            representation['alternate_contact'] = serializer.data
+        except Exception as e:
+            representation['alternate_contact'] = None
+
+        return representation
