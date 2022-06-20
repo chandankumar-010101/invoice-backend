@@ -26,7 +26,7 @@ class CustomerListView(generics.ListAPIView):
     pagination_class.page_size=1
 
     def list(self, request, *args, **kwargs):
-        organization = UserProfile.objects.get(user=request.user).organization
+        organization = request.user.profile.organization
         queryset = Customer.objects.filter(organization=organization)
         serializer = self.serializer_class(queryset, many=True)
         page = self.paginate_queryset(serializer.data)
@@ -39,8 +39,7 @@ class CustomerCreateView(generics.CreateAPIView):
     permission_classes = (IsAuthenticated, )
 
     def create(self, serializer):
-        user = serializer.user
-        profile = UserProfile.objects.get(user=user)
+        organization = serializer.user.profile.organization
         is_alternate_contact = serializer.data.get('alternate_contact')
 
         is_email_exist = Customer.objects.filter(email=serializer.data.get('email'))
@@ -57,7 +56,7 @@ class CustomerCreateView(generics.CreateAPIView):
             alternate_contact = serializer.data.pop('alternate_contact')
             
         instance = Customer.objects.create(**serializer.data, user=serializer.user, 
-                                        organization=profile.organization)
+                                        organization=organization)
         instance.save()
 
         if is_alternate_contact:
