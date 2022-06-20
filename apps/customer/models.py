@@ -44,6 +44,8 @@ class Customer(models.Model):
         return self.full_name
 
 class AlternateContact(models.Model):
+    """ Alternate contact for the customer."""
+    
     customer = models.ForeignKey(Customer, on_delete=models.CASCADE, 
                                         related_name='customer', default=None)
     alternate_name = models.CharField(max_length=30, null=True, blank=True)

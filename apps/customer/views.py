@@ -18,6 +18,11 @@ User = get_user_model()
 
 # Create your views here.
 class CustomerListView(generics.ListAPIView):
+    """ Paginated customer list. 
+    
+    Get list of Customer by user's organization with 
+    pagination.
+    """
 
     queryset = Customer.objects.all()
     serializer_class = CustomerListSerializer
@@ -33,7 +38,10 @@ class CustomerListView(generics.ListAPIView):
         return self.get_paginated_response(page) 
 
 class CustomerCreateView(generics.CreateAPIView):
-
+    """create customer record. 
+    
+    create Customer and its alternate record.
+    """
     queryset = Customer.objects.all()
     serializer_class = CustomerSerializer
     permission_classes = (IsAuthenticated, )
@@ -68,7 +76,11 @@ class CustomerCreateView(generics.CreateAPIView):
         return Response({'data':serializer.data},
                         status=status.HTTP_201_CREATED)
 
-class RetrieveUpdateDeleteCustomer(generics.RetrieveUpdateDestroyAPIView):
+class RetrieveDeleteCustomer(generics.RetrieveDestroyAPIView):
+    """Customer detail operations. 
+    
+    delete reterive view for a customer .
+    """
 
     lookup_field = 'id'
     queryset = Customer.objects.all()
@@ -85,7 +97,10 @@ class CustomerFilterView(APIView):
         return Response(serializer.data)
 
 class DeleteMultipleCustomerView(APIView):
-
+    """Customer delete operations. 
+    
+    Delete multiple customer at once.
+    """
     def post(self, request):
         customer_list = request.data.get('customer_list',[])
 

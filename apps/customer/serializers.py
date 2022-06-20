@@ -5,12 +5,14 @@ import apps.customer.response_messages as resp_msg
 
 
 class AlternateContactSerializer(serializers.ModelSerializer):
+    """ Alternate contact serializer for customer. """
 
     class Meta:
         model = AlternateContact
         fields = '__all__'
 
 class CustomerSerializer(serializers.ModelSerializer):
+    """ Customer model serializer. """
 
     alternate_contact = AlternateContactSerializer()
 
@@ -30,6 +32,7 @@ class CustomerFilterSerializer(serializers.ModelSerializer):
         fields = ('id','full_name','email',)
 
 class CustomerListSerializer(serializers.ModelSerializer):
+    """List of Customer serializer. """
 
     class Meta:
         model = Customer
@@ -37,6 +40,7 @@ class CustomerListSerializer(serializers.ModelSerializer):
                 'open_balance','overdue_balance') 
 
 class CustomerRetriveDestroySerializer(serializers.ModelSerializer):
+    """Reterive and delete Customer record serializer. """
 
     class Meta:
         model = Customer
