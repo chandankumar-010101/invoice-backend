@@ -42,7 +42,7 @@ urlpatterns = [
     path('api/token/refresh/', jwt_views.TokenRefreshView.as_view(), name='token_refresh'),
     path('api/v1/invoice/', include('apps.invoice.urls', namespace='invoice')),
 
-    path('api-doc/', include_docs_urls(title='Clinikio Documentation')),
+    path('api-doc/', include_docs_urls(title='Invoicing Platform Documentation')),
     path('', schema_view.with_ui('swagger', cache_timeout=0),name='schema-swagger-ui'),
     path('api-auth/', include(('rest_framework.urls','rest_framework'), namespace='rest_framework')),
     re_path(r'^swagger(?P<format>\.json|\.yaml)$',schema_view.without_ui(cache_timeout=0), name='schema-json'),

@@ -7,10 +7,8 @@ from .constants import INVOICE_STATUS
 class Invoice(models.Model):
 
     customer = models.ForeignKey(Customer, on_delete=models.CASCADE)
-    po_number = models.CharField(max_length=255, null=True, 
-                                blank=True, unique=True)
-    invoice_number = models.CharField(max_length=255, null=True, 
-                                    blank=True, unique=True)
+    po_number = models.CharField(max_length=255, null=True,blank=True, unique=True)
+    invoice_number = models.CharField(max_length=255, null=True, blank=True, unique=True)
     invoice_date = models.DateField()
     due_date = models.DateField()
     due_amount = models.FloatField(max_length=255, default=0.0, null=True, blank=True)
