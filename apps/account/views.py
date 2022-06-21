@@ -1,3 +1,6 @@
+
+from drf_yasg.utils import swagger_auto_schema
+
 from rest_framework import generics
 from .models import Organization
 from .serializer import OrganizationSerializer, PasswordchangeSerializer
@@ -22,6 +25,10 @@ from .serializer import ProfileupdateSerializer
 from .serializer import PasswordchangeSerializer
 from django.contrib.auth import get_user_model
 
+from .schema import (
+    login_schema,
+    change_password_schema,
+)
 
 # Create your views here.
 class OrganizationListView(generics.ListAPIView):
@@ -73,6 +80,7 @@ class LoginView(APIView):
     Login the user in the platform and generate access and 
     refresh jwt token for users.
     """
+    @swagger_auto_schema(request_body=login_schema, operation_description='Login')
     def post(self, request, *args, **kwargs):
         response = {}
         email = request.data.get('email')
@@ -174,6 +182,7 @@ class ChangePasswordView(APIView):
     def get_object(self, queryset=None):
         return self.request.user
 
+    @swagger_auto_schema(request_body=change_password_schema, operation_description='Change Password')
     def post(self,request,*args,**kwargs):
         User = get_user_model()
         serializer = PasswordchangeSerializer(data = request.data)

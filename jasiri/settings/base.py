@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     #Third party packeges
     'corsheaders',
     'rest_framework',
+    'drf_yasg',
 
 ]
 
@@ -71,6 +72,18 @@ MIDDLEWARE = [
     "corsheaders.middleware.CorsMiddleware",
 ]
 
+SWAGGER_SETTINGS = {
+    'SECURITY_DEFINITIONS': {
+        'Basic': {
+            'type': 'basic'
+        },
+        'JWT': {
+            'in': 'header',
+            'name': 'Authorization',
+            'type': 'apiKey',
+        },
+    },
+}
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
