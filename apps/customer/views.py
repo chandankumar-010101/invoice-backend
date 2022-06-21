@@ -28,7 +28,7 @@ class CustomerListView(generics.ListAPIView):
     serializer_class = CustomerListSerializer
     pagination_class = CustomPagination
     permission_classes = (IsAuthenticated, )
-    pagination_class.page_size=1
+    pagination_class.page_size=2
 
     def list(self, request, *args, **kwargs):
         organization = request.user.profile.organization
