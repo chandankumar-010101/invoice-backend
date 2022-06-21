@@ -1,11 +1,12 @@
 from django.urls import path
-from .views import InvoiceListView
-from .views import InvoiceCreateView
+
+from apps.invoice import views
+
 
 
 app_name= 'account'
 
 urlpatterns = [
-    path('list', InvoiceListView.as_view(), name="invoice_list"),
-    path('create', InvoiceCreateView.as_view(), name="invoice_create"),
+    path('list', views.InvoiceListView.as_view(), name="invoice_list"),
+    path('create', views.InvoiceCreateView.as_view(), name="invoice_create"),
 ]
