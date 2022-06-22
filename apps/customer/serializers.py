@@ -1,7 +1,10 @@
 from rest_framework import serializers
 
-from apps.customer.models import Customer 
-from apps.customer.models import AlternateContact,PrimaryContact
+from apps.customer.models import (
+    Customer,
+    PrimaryContact,
+    AlternateContact,
+)
 import apps.customer.response_messages as resp_msg
 
 
@@ -26,7 +29,6 @@ class CustomerSerializer(serializers.ModelSerializer):
     alternate_contact = AlternateContactSerializer()
     primary_contact = PrimaryContactSerializer()
 
-
     class Meta:
         model = Customer
         fields = '__all__' 
@@ -38,20 +40,13 @@ class CustomerSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError(resp_msg.CUSTOMER_EMAIL_ALREADY_EXIST)
 
 
-
 class UpdateCustomerSerializer(serializers.ModelSerializer):
     """ Customer model serializer. """
-    # alternate_contact = AlternateContactSerializer()
 
     class Meta:
         model = Customer
         fields = '__all__' 
-
-    # def validate_email(self, email):
-    #     is_email_exist = Customer.objects.filter(email=email)
-    #     if len(is_email_exist) > 0:
-    #         raise serializers.ValidationError(resp_msg.CUSTOMER_EMAIL_ALREADY_EXIST)
-
+    
    
 class CustomerFilterSerializer(serializers.ModelSerializer):
 
@@ -60,7 +55,7 @@ class CustomerFilterSerializer(serializers.ModelSerializer):
         fields = ('id','full_name','email',)
 
 class CustomerListSerializer(serializers.ModelSerializer):
-    """List of Customer serializer. """
+    """ List of Customer serializer. """
 
     class Meta:
         model = Customer
@@ -68,7 +63,7 @@ class CustomerListSerializer(serializers.ModelSerializer):
                 'open_balance','overdue_balance') 
 
 class CustomerRetriveDestroySerializer(serializers.ModelSerializer):
-    """Reterive and delete Customer record serializer. """
+    """ Reterive and delete Customer record serializer. """
 
     class Meta:
         model = Customer
@@ -82,5 +77,4 @@ class CustomerRetriveDestroySerializer(serializers.ModelSerializer):
             representation['alternate_contact'] = serializer.data
         except Exception as e:
             representation['alternate_contact'] = None
-
         return representation

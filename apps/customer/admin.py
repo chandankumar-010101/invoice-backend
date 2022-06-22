@@ -6,7 +6,7 @@ from apps.customer.models import AlternateContact
 # Register your models here.
 @admin.register(Customer)
 class CustomerAdmin(admin.ModelAdmin):
-    list_display = ("full_name", "email", 
+    list_display = ("full_name", 
             "is_active","created_on")
 
 @admin.register(AlternateContact)

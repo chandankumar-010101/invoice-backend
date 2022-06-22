@@ -24,10 +24,6 @@ class Customer(models.Model):
     shipping_country = models.CharField(max_length=30, null=True, blank=True)
     created_on = models.DateField(auto_now_add=True)
     updated_on = models.DateField(auto_now=True)
-    primary_name = models.CharField(max_length=30, null=False, blank=False, default=None)
-    primary_role = models.CharField(max_length=30, null=False, blank=False, default=None)
-    email = models.EmailField(max_length=254, unique=True)
-    phone = models.CharField(max_length=30,null=True, blank=True, unique=True)
     payments_term = models.PositiveSmallIntegerField(choices = PAYMENT_TERM_CHOICE,default=6)
     payments_credit = models.IntegerField(null=True, blank=True)
     is_active = models.BooleanField(default=True)
@@ -55,5 +51,7 @@ class PrimaryContact(models.Model):
     customer = models.OneToOneField(Customer, on_delete=models.CASCADE,related_name='primary_customer', default=None)
     primary_name = models.CharField(max_length=30, null=True, blank=True)
     primary_role = models.CharField(max_length=30, null=True, blank=True)
-    primary_email = models.EmailField(max_length=254)
-    primary_phone = models.CharField(max_length=30,null=True, blank=True)
+    primary_email = models.EmailField(max_length=254,unique=True)
+    primary_phone = models.CharField(max_length=30,null=True, blank=True,unique=True)
+
+
