@@ -113,22 +113,27 @@ class UpdateCustomerView(APIView):
     def post(self,request,pk):
         params = request.data
         data ={}
-        instance = Customer.objects.get(id=pk)
-        serializer = UpdateCustomerSerializer(instance,data=params, partial=True)
-        serializer.is_valid(raise_exception=True)
-        serializer.save()
-        data['customer'] = serializer.data
-        primary_serializer = PrimaryContactSerializer(instance.primary_customer,data=params['primary_contact'], partial=True)
-        primary_serializer.is_valid(raise_exception=True)
-        primary_serializer.save()
-        data['primary_contact'] = primary_serializer.data
-        alternative_serializer = AlternateContactSerializer(instance.customer,data=params['alternate_contact'], partial=True)
-        alternative_serializer.is_valid(raise_exception=True)
-        alternative_serializer.save()
-        data['alternative_contact'] = alternative_serializer.data
-        return Response({
-            'data':data
-        }, status=status.HTTP_200_OK)
+        try:
+            instance = Customer.objects.get(id=pk)
+            serializer = UpdateCustomerSerializer(instance,data=params, partial=True)
+            serializer.is_valid(raise_exception=True)
+            serializer.save()
+            data['customer'] = serializer.data
+            primary_serializer = PrimaryContactSerializer(instance.primary_customer,data=params['primary_contact'], partial=True)
+            primary_serializer.is_valid(raise_exception=True)
+            primary_serializer.save()
+            data['primary_contact'] = primary_serializer.data
+            alternative_serializer = AlternateContactSerializer(instance.customer,data=params['alternate_contact'], partial=True)
+            alternative_serializer.is_valid(raise_exception=True)
+            alternative_serializer.save()
+            data['alternative_contact'] = alternative_serializer.data
+            return Response({
+                'data':data
+            }, status=status.HTTP_200_OK)
+        except Exception as error:
+            return Response({
+                'detail': [error.args[0]]
+            }, status=status.HTTP_400_BAD_REQUEST)
 
 
 
