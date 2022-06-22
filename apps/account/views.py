@@ -92,6 +92,7 @@ class LoginView(APIView):
             user = authenticate(username=email, password=password)
             if user is not None:
                 login(request, user)
+                print("#########",user.last_login)
                 queryset = UserProfile.objects.get(email=email)
                 serializer = UserProfileSerializer(queryset)
                 token = get_jwt_tokens_for_user(user)
@@ -100,8 +101,7 @@ class LoginView(APIView):
                 response['user_type'] = user.user_type
                 response['access'] = token.get('access')
                 response['refresh'] = token.get('refresh')
-                response['last_login'] = user.last_login.strftime(
-                    "%H:%M %P, %d %b %Y")
+                response['last_login'] = user.last_login.strftime("%m/%d/%Y, %H:%M:%S")
                 return Response(response, status=status.HTTP_200_OK)
             else:
                 return Response({'detail': [resp_msg.INVALID_EMAIL_PASSWORD]},

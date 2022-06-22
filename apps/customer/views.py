@@ -1,17 +1,26 @@
+
+from rest_framework import status
 from rest_framework import generics
+from rest_framework import viewsets
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework.permissions import IsAuthenticated
+
+from django.contrib.auth import get_user_model
+from apps.customer import serializers
+
+from apps.customer.serializers import (
+    CustomerSerializer, CustomerFilterSerializer,
+    AlternateContactSerializer, CustomerListSerializer,
+    CustomerRetriveDestroySerializer,UpdateCustomerSerializer,
+    PrimaryContactSerializer,
+)
+from apps.customer.models import AlternateContact,PrimaryContact
+import apps.customer.response_messages as resp_msg
+
 from .models import Customer
 from apps.account.models import UserProfile
 from .pagination import CustomPagination
-from rest_framework.views import APIView
-from rest_framework.response import Response
-from apps.customer.serializers import (CustomerSerializer, CustomerFilterSerializer,
-                                       AlternateContactSerializer, CustomerListSerializer,
-                                       CustomerRetriveDestroySerializer)
-from apps.customer.models import AlternateContact
-import apps.customer.response_messages as resp_msg
-from rest_framework import status
-from rest_framework.permissions import IsAuthenticated
-from django.contrib.auth import get_user_model
 import apps.customer.models as customer_models
 User = get_user_model()
 
@@ -50,26 +59,34 @@ class CustomerCreateView(generics.CreateAPIView):
     def create(self, serializer):
         organization = serializer.user.profile.organization
         is_alternate_contact = serializer.data.get('alternate_contact')
+        is_primary_contact = serializer.data.get('primary_contact')
+
 
         is_email_exist = Customer.objects.filter(
             email=serializer.data.get('email'))
         if len(is_email_exist) > 0:
-            return Response({'detail': [resp_msg.CUSTOMER_EMAIL_ALREADY_EXIST]},
-                            status=status.HTTP_400_BAD_REQUEST)
+            return Response({
+                'detail': [resp_msg.CUSTOMER_EMAIL_ALREADY_EXIST]
+            },status=status.HTTP_400_BAD_REQUEST)
 
         is_phone_exist = Customer.objects.filter(
             phone=serializer.data.get('phone'))
         if len(is_phone_exist) > 0:
-            return Response({'detail': [resp_msg.CUSTOMER_PHONE_ALREADY_EXIST]},
-                            status=status.HTTP_400_BAD_REQUEST)
+            return Response({
+                'detail': [resp_msg.CUSTOMER_PHONE_ALREADY_EXIST]
+            },status=status.HTTP_400_BAD_REQUEST)
 
         if serializer.data.get('alternate_contact') is not None:
             alternate_contact = serializer.data.pop('alternate_contact')
+        
+        if serializer.data.get('primary_contact') is not None:
+            primary_contact = serializer.data.pop('primary_contact')
 
-        instance = Customer.objects.create(**serializer.data, user=serializer.user,
-                                           organization=organization)
+        instance = Customer.objects.create(
+            **serializer.data, user=serializer.user,
+            organization=organization
+        )
         instance.save()
-
         if is_alternate_contact:
             alternate_obj = AlternateContact.objects.create(
                 **alternate_contact, customer=instance)
@@ -78,8 +95,41 @@ class CustomerCreateView(generics.CreateAPIView):
                 alternate_contact)
             serializer.data['alternate_contact'] = alternate_serializer.data
 
-        return Response({'data': serializer.data},
-                        status=status.HTTP_201_CREATED)
+        if is_primary_contact:
+            alternate_obj = PrimaryContact.objects.create(
+                **primary_contact, customer=instance)
+            alternate_obj.save()
+            alternate_serializer = PrimaryContactSerializer(primary_contact)
+            serializer.data['primary_contact'] = alternate_serializer.data
+
+        return Response({
+            'data': serializer.data
+        },status=status.HTTP_201_CREATED)
+
+
+class UpdateCustomerView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def post(self,request,pk):
+        params = request.data
+        data ={}
+        instance = Customer.objects.get(id=pk)
+        serializer = UpdateCustomerSerializer(instance,data=params, partial=True)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        data['customer'] = serializer.data
+        primary_serializer = PrimaryContactSerializer(instance.primary_customer,data=params['primary_contact'], partial=True)
+        primary_serializer.is_valid(raise_exception=True)
+        primary_serializer.save()
+        data['primary_contact'] = primary_serializer.data
+        alternative_serializer = AlternateContactSerializer(instance.customer,data=params['alternate_contact'], partial=True)
+        alternative_serializer.is_valid(raise_exception=True)
+        alternative_serializer.save()
+        data['alternative_contact'] = alternative_serializer.data
+        return Response({
+            'data':data
+        }, status=status.HTTP_200_OK)
+
 
 
 class RetrieveDeleteCustomer(generics.RetrieveDestroyAPIView):

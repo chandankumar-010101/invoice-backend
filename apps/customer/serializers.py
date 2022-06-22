@@ -1,6 +1,7 @@
 from rest_framework import serializers
+
 from apps.customer.models import Customer 
-from apps.customer.models import AlternateContact
+from apps.customer.models import AlternateContact,PrimaryContact
 import apps.customer.response_messages as resp_msg
 
 
@@ -11,20 +12,47 @@ class AlternateContactSerializer(serializers.ModelSerializer):
         model = AlternateContact
         fields = '__all__'
 
+
+class PrimaryContactSerializer(serializers.ModelSerializer):
+    """ Alternate contact serializer for customer. """
+
+    class Meta:
+        model = PrimaryContact
+        fields = '__all__'
+
 class CustomerSerializer(serializers.ModelSerializer):
     """ Customer model serializer. """
 
     alternate_contact = AlternateContactSerializer()
+    primary_contact = PrimaryContactSerializer()
+
 
     class Meta:
         model = Customer
         fields = '__all__' 
+        read_only_fields = ('user', 'organization', 'point')
 
     def validate_email(self, email):
         is_email_exist = Customer.objects.filter(email=email)
         if len(is_email_exist) > 0:
             raise serializers.ValidationError(resp_msg.CUSTOMER_EMAIL_ALREADY_EXIST)
 
+
+
+class UpdateCustomerSerializer(serializers.ModelSerializer):
+    """ Customer model serializer. """
+    # alternate_contact = AlternateContactSerializer()
+
+    class Meta:
+        model = Customer
+        fields = '__all__' 
+
+    # def validate_email(self, email):
+    #     is_email_exist = Customer.objects.filter(email=email)
+    #     if len(is_email_exist) > 0:
+    #         raise serializers.ValidationError(resp_msg.CUSTOMER_EMAIL_ALREADY_EXIST)
+
+   
 class CustomerFilterSerializer(serializers.ModelSerializer):
 
     class Meta:

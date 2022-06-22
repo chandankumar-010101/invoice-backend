@@ -5,7 +5,6 @@ from .constants import INVOICE_STATUS
 
 # Create your models here.
 class Invoice(models.Model):
-
     customer = models.ForeignKey(Customer, on_delete=models.CASCADE)
     po_number = models.CharField(max_length=255, null=True,blank=True, unique=True)
     invoice_number = models.CharField(max_length=255, null=True, blank=True, unique=True)
