@@ -1,6 +1,8 @@
 from django.contrib import admin
-from apps.customer.models import Customer
-from apps.customer.models import AlternateContact
+from apps.customer.models import (
+    Customer,
+    AlternateContact,PrimaryContact
+)
 
 
 # Register your models here.
@@ -8,6 +10,12 @@ from apps.customer.models import AlternateContact
 class CustomerAdmin(admin.ModelAdmin):
     list_display = ("full_name", 
             "is_active","created_on")
+
+
+@admin.register(PrimaryContact)
+class PrimaryContactAdmin(admin.ModelAdmin):
+    list_display = ("primary_name",)
+
 
 @admin.register(AlternateContact)
 class AlternateContactAdmin(admin.ModelAdmin):

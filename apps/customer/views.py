@@ -119,11 +119,19 @@ class UpdateCustomerView(APIView):
             serializer.is_valid(raise_exception=True)
             serializer.save()
             data['customer'] = serializer.data
-            primary_serializer = PrimaryContactSerializer(instance.primary_customer,data=params['primary_contact'], partial=True)
+            if hasattr(instance, 'primary_customer'):
+                primary_serializer = PrimaryContactSerializer(instance.primary_customer,data=params['primary_contact'], partial=True)
+            else:
+                params['primary_contact']['customer'] = instance.id
+                primary_serializer = PrimaryContactSerializer(data=params['primary_contact'])
             primary_serializer.is_valid(raise_exception=True)
             primary_serializer.save()
             data['primary_contact'] = primary_serializer.data
-            alternative_serializer = AlternateContactSerializer(instance.customer,data=params['alternate_contact'], partial=True)
+            if hasattr(instance, 'customer'):
+                alternative_serializer = AlternateContactSerializer(instance.customer,data=params['alternate_contact'], partial=True)
+            else:
+                params['alternate_contact']['customer'] = instance.id
+                alternative_serializer = AlternateContactSerializer(data=params['alternate_contact'])
             alternative_serializer.is_valid(raise_exception=True)
             alternative_serializer.save()
             data['alternative_contact'] = alternative_serializer.data
