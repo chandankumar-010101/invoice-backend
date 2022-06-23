@@ -24,7 +24,6 @@ from .pagination import CustomPagination
 import apps.customer.models as customer_models
 User = get_user_model()
 
-# Customer.objects.all().delete()
 # Create your views here.
 class CustomerListView(generics.ListAPIView):
     """ Paginated customer list. 
@@ -59,8 +58,6 @@ class CustomerCreateView(generics.CreateAPIView):
     def create(self, serializer):
         organization = serializer.user.profile.organization
         is_alternate_contact = serializer.data.get('alternate_contact')
-        is_primary_contact = serializer.data.get('primary_contact')
-
 
         is_email_exist = Customer.objects.filter(
             primary_email=serializer.data.get('primary_email'))
@@ -79,9 +76,6 @@ class CustomerCreateView(generics.CreateAPIView):
         if serializer.data.get('alternate_contact') is not None:
             alternate_contact = serializer.data.pop('alternate_contact')
         
-        if serializer.data.get('primary_contact') is not None:
-            primary_contact = serializer.data.pop('primary_contact')
-
         instance = Customer.objects.create(
             **serializer.data, user=serializer.user,
             organization=organization
@@ -104,7 +98,7 @@ class UpdateCustomerView(APIView):
 
     def post(self,request,pk):
         params = request.data
-        data ={}
+        data = {}
         try:
             instance = Customer.objects.get(id=pk)
             serializer = UpdateCustomerSerializer(instance,data=params, partial=True)

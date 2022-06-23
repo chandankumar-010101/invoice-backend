@@ -15,18 +15,10 @@ class AlternateContactSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
-# class PrimaryContactSerializer(serializers.ModelSerializer):
-#     """ Alternate contact serializer for customer. """
-
-#     class Meta:
-#         model = PrimaryContact
-#         fields = '__all__'
-
 class CustomerSerializer(serializers.ModelSerializer):
     """ Customer model serializer. """
 
     alternate_contact = AlternateContactSerializer()
-    # primary_contact = PrimaryContactSerializer()
 
     class Meta:
         model = Customer
