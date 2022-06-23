@@ -13,9 +13,9 @@ from apps.customer.serializers import (
     CustomerSerializer, CustomerFilterSerializer,
     AlternateContactSerializer, CustomerListSerializer,
     CustomerRetriveDestroySerializer,UpdateCustomerSerializer,
-    PrimaryContactSerializer,
+    
 )
-from apps.customer.models import AlternateContact,PrimaryContact
+from apps.customer.models import AlternateContact
 import apps.customer.response_messages as resp_msg
 
 from .models import Customer
@@ -24,7 +24,7 @@ from .pagination import CustomPagination
 import apps.customer.models as customer_models
 User = get_user_model()
 
-
+# Customer.objects.all().delete()
 # Create your views here.
 class CustomerListView(generics.ListAPIView):
     """ Paginated customer list. 
@@ -63,14 +63,14 @@ class CustomerCreateView(generics.CreateAPIView):
 
 
         is_email_exist = Customer.objects.filter(
-            email=serializer.data.get('email'))
+            primary_email=serializer.data.get('primary_email'))
         if len(is_email_exist) > 0:
             return Response({
                 'detail': [resp_msg.CUSTOMER_EMAIL_ALREADY_EXIST]
             },status=status.HTTP_400_BAD_REQUEST)
 
         is_phone_exist = Customer.objects.filter(
-            phone=serializer.data.get('phone'))
+            primary_phone=serializer.data.get('primary_phone'))
         if len(is_phone_exist) > 0:
             return Response({
                 'detail': [resp_msg.CUSTOMER_PHONE_ALREADY_EXIST]
@@ -95,12 +95,12 @@ class CustomerCreateView(generics.CreateAPIView):
                 alternate_contact)
             serializer.data['alternate_contact'] = alternate_serializer.data
 
-        if is_primary_contact:
-            alternate_obj = PrimaryContact.objects.create(
-                **primary_contact, customer=instance)
-            alternate_obj.save()
-            alternate_serializer = PrimaryContactSerializer(primary_contact)
-            serializer.data['primary_contact'] = alternate_serializer.data
+        # if is_primary_contact:
+        #     alternate_obj = PrimaryContact.objects.create(
+        #         **primary_contact, customer=instance)
+        #     alternate_obj.save()
+        #     alternate_serializer = PrimaryContactSerializer(primary_contact)
+        #     serializer.data['primary_contact'] = alternate_serializer.data
 
         return Response({
             'data': serializer.data
@@ -119,14 +119,14 @@ class UpdateCustomerView(APIView):
             serializer.is_valid(raise_exception=True)
             serializer.save()
             data['customer'] = serializer.data
-            if hasattr(instance, 'primary_customer'):
-                primary_serializer = PrimaryContactSerializer(instance.primary_customer,data=params['primary_contact'], partial=True)
-            else:
-                params['primary_contact']['customer'] = instance.id
-                primary_serializer = PrimaryContactSerializer(data=params['primary_contact'])
-            primary_serializer.is_valid(raise_exception=True)
-            primary_serializer.save()
-            data['primary_contact'] = primary_serializer.data
+            # if hasattr(instance, 'primary_customer'):
+            #     primary_serializer = PrimaryContactSerializer(instance.primary_customer,data=params['primary_contact'], partial=True)
+            # else:
+            #     params['primary_contact']['customer'] = instance.id
+            #     primary_serializer = PrimaryContactSerializer(data=params['primary_contact'])
+            # primary_serializer.is_valid(raise_exception=True)
+            # primary_serializer.save()
+            # data['primary_contact'] = primary_serializer.data
             if hasattr(instance, 'customer'):
                 alternative_serializer = AlternateContactSerializer(instance.customer,data=params['alternate_contact'], partial=True)
             else:

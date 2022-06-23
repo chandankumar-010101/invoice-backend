@@ -31,6 +31,12 @@ class Customer(models.Model):
     open_balance = models.FloatField(null=True, blank=True, default=0.0)
     overdue_balance = models.FloatField(null=True, blank=True, default=0.0)
 
+    primary_name = models.CharField(max_length=30, null=True, blank=True)
+    primary_role = models.CharField(max_length=30, null=True, blank=True)
+    primary_email = models.EmailField(max_length=254,null=True, blank=True)
+    primary_phone = models.CharField(max_length=30,null=True, blank=True,unique=True)
+
+
     class Meta:
         verbose_name = 'Customer'
         verbose_name_plural = 'Customer'
@@ -47,11 +53,10 @@ class AlternateContact(models.Model):
     alternate_email = models.EmailField(max_length=254)
     alternate_phone = models.CharField(max_length=30,null=True, blank=True)
 
-class PrimaryContact(models.Model):
-    customer = models.OneToOneField(Customer, on_delete=models.CASCADE,related_name='primary_customer', default=None)
-    primary_name = models.CharField(max_length=30, null=True, blank=True)
-    primary_role = models.CharField(max_length=30, null=True, blank=True)
-    primary_email = models.EmailField(max_length=254,unique=True)
-    primary_phone = models.CharField(max_length=30,null=True, blank=True,unique=True)
-
+# class PrimaryContact(models.Model):
+#     customer = models.OneToOneField(Customer, on_delete=models.CASCADE,related_name='primary_customer', default=None)
+#     primary_name = models.CharField(max_length=30, null=True, blank=True)
+#     primary_role = models.CharField(max_length=30, null=True, blank=True)
+#     primary_email = models.EmailField(max_length=254,unique=True)
+#     primary_phone = models.CharField(max_length=30,null=True, blank=True,unique=True)
 

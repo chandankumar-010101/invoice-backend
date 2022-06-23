@@ -2,7 +2,6 @@ from rest_framework import serializers
 
 from apps.customer.models import (
     Customer,
-    PrimaryContact,
     AlternateContact,
 )
 import apps.customer.response_messages as resp_msg
@@ -16,18 +15,18 @@ class AlternateContactSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
-class PrimaryContactSerializer(serializers.ModelSerializer):
-    """ Alternate contact serializer for customer. """
+# class PrimaryContactSerializer(serializers.ModelSerializer):
+#     """ Alternate contact serializer for customer. """
 
-    class Meta:
-        model = PrimaryContact
-        fields = '__all__'
+#     class Meta:
+#         model = PrimaryContact
+#         fields = '__all__'
 
 class CustomerSerializer(serializers.ModelSerializer):
     """ Customer model serializer. """
 
     alternate_contact = AlternateContactSerializer()
-    primary_contact = PrimaryContactSerializer()
+    # primary_contact = PrimaryContactSerializer()
 
     class Meta:
         model = Customer
