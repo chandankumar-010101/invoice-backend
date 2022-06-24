@@ -1,3 +1,4 @@
+import logging
 
 
 from rest_framework import status
@@ -29,6 +30,8 @@ from .schema import (
     change_password_schema,
 )
 
+logger = logging.getLogger(__name__)
+
 # Create your views here.
 
 
@@ -58,6 +61,7 @@ class SignupView(APIView):
                 user = user_service.create_admin_user(request, user_type)
             except Exception as e:
                 print(str(e))
+                logger.error(e)
                 return Response({'error': resp_msg.USER_CREATION_UNSUCCESSFULL},
                                 status=status.HTTP_400_BAD_REQUEST)
 
@@ -73,6 +77,7 @@ class SignupView(APIView):
                 response['user_type'] = user.user_type
                 return Response(response, status=status.HTTP_201_CREATED)
         else:
+            logger.error(serializer.errors)
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
@@ -106,6 +111,7 @@ class LoginView(APIView):
             else:
                 return Response({'detail': [resp_msg.INVALID_EMAIL_PASSWORD]},
                                 status=status.HTTP_400_BAD_REQUEST)
+        logger.error(serializer.errors)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
@@ -127,6 +133,7 @@ class UserCreateView(APIView):
                 user = user_service.create_user_with_role(request)
             except Exception as e:
                 print(str(e))
+                logger.error(e)
                 return Response({'error': resp_msg.USER_CREATION_UNSUCCESSFULL},
                                 status=status.HTTP_400_BAD_REQUEST)
 
@@ -181,6 +188,7 @@ class ProfileupdateView(APIView):
         if serializer.is_valid():
             return Response({"status": "success", "data": serializer.data}, status=status.HTTP_200_OK)
         else:
+            logger.error(serializer.errors)
             return Response({"status": "error", "data": serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
 
 
@@ -208,4 +216,5 @@ class ChangePasswordView(APIView):
                 self.get_object().save()
             return Response({"detail": resp_msg.PASSWORD_CHANGED}, status=status.HTTP_200_OK)
         else:
+            logger.error(serializer.errors)
             return Response({"status": "error", "data": serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
