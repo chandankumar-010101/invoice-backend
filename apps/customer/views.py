@@ -1,3 +1,5 @@
+import logging
+
 
 from rest_framework import status
 from rest_framework import generics
@@ -23,6 +25,7 @@ from apps.account.models import UserProfile
 from .pagination import CustomPagination
 import apps.customer.models as customer_models
 User = get_user_model()
+logger = logging.getLogger(__name__)
 
 # Create your views here.
 class CustomerListView(generics.ListAPIView):
@@ -117,6 +120,7 @@ class UpdateCustomerView(APIView):
                 'data':data
             }, status=status.HTTP_200_OK)
         except Exception as error:
+            logger.error(error)
             return Response({
                 'detail': [error.args[0]]
             }, status=status.HTTP_400_BAD_REQUEST)
@@ -162,3 +166,4 @@ class DeleteMultipleCustomerView(APIView):
             pk__in=customer_list)
         queryset.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
+

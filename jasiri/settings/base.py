@@ -72,6 +72,7 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     "corsheaders.middleware.CorsMiddleware",
+
 ]
 
 SWAGGER_SETTINGS = {
@@ -91,7 +92,9 @@ REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'rest_framework_simplejwt.authentication.JWTAuthentication',
     ],
+    # 'EXCEPTION_HANDLER': ('apps.utility.exception.custom_exception_handler')
 }
+
 
 SIMPLE_JWT = {
     'ACCESS_TOKEN_LIFETIME': timedelta(days=1),
@@ -165,29 +168,27 @@ STATIC_URL = 'static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
+
 # LOGGING = {
-#     "version": 1,
-#     "disable_existing_loggers": False,
+#     'version': 1,
+#     'disable_existing_loggers': False,
 #     "root": {"level": "INFO", "handlers": ["file"]},
-#     "handlers": {
-#         "file": {
-#             "level": "ERROR",
-#             "class": "logging.handlers.TimedRotatingFileHandler",
-#             'when': 'D',
-#             'interval': 1,
-#             'backupCount': 3,
-#             "filename": "log/invoice-platform.log",
-#             "formatter": "app",
+#     'handlers': {
+#         'file': {
+#             'level': 'WARNING',
+#             'class': 'logging.FileHandler',
+#             'filename': 'log/{}.log'.format(str(datetime.date.today())),
+            
 #         },
 #     },
-#     "loggers": {
-#         "django": {
-#             "handlers": ["file"],
-#             "level": "INFO",
-#             "propagate": True
+#     'loggers': {
+#         '': {
+#             'handlers': ['file'], 
+#             'level': 'WARNING',
+#             'propagate': True,
 #         },
 #     },
-#     "formatters": {
+#      "formatters": {
 #         "app": {
 #             "format": (
 #                 u"%(asctime)s [%(levelname)-8s] "
@@ -197,5 +198,4 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 #         },
 #     },
 # }
-
-ADMINS = [("Aftab Hussain", "aftab.hussain@oodles.io")]
+# ADMINS = [("Aftab Hussain", "aftab.hussain@oodles.io")]

@@ -12,6 +12,9 @@ python manage.py makemigrations invoice --settings=jasiri.settings.local
 runserver local: 
 python manage.py runserver --settings=jasiri.settings.local
 
+
+python manage.py makemigrations --settings=jasiri.settings.local
+
 before all these commands you need to setup postgres database.
 configuration are in .env file for database.
 
