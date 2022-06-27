@@ -8,9 +8,7 @@ from apps.customer.models import (
 # Register your models here.
 @admin.register(Customer)
 class CustomerAdmin(admin.ModelAdmin):
-    list_display = ("full_name", 
-            "is_active","created_on")
-
+    list_display = ("full_name","is_active","created_on")
 
 
 @admin.register(AlternateContact)

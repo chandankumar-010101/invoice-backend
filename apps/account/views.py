@@ -97,7 +97,6 @@ class LoginView(APIView):
             user = authenticate(username=email, password=password)
             if user is not None:
                 login(request, user)
-                print("#########",user.last_login)
                 queryset = UserProfile.objects.get(email=email)
                 serializer = UserProfileSerializer(queryset)
                 token = get_jwt_tokens_for_user(user)

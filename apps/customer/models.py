@@ -30,7 +30,6 @@ class Customer(models.Model):
     outstanding_invoices = models.IntegerField(null=True, blank=True, default=0)
     open_balance = models.FloatField(null=True, blank=True, default=0.0)
     overdue_balance = models.FloatField(null=True, blank=True, default=0.0)
-
     primary_name = models.CharField(max_length=30, null=True, blank=True)
     primary_role = models.CharField(max_length=30, null=True, blank=True)
     primary_email = models.EmailField(max_length=254,unique=True)

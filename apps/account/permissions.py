@@ -12,5 +12,4 @@ class IsAdminOnly(BasePermission):
         if request.user.user_type != 2:
             self.message = resp_msg.ADMIN_ONLY_PERMISSION
             return False
-
         return True
