@@ -55,8 +55,8 @@ class CustomerListSerializer(serializers.ModelSerializer):
 
 class CustomerRetriveDestroySerializer(serializers.ModelSerializer):
     """ Reterive and delete Customer record serializer. """
-    customer_type = serializers.CharField(source='get_customer_type_display')
-    payments_term = serializers.CharField(source='get_payments_term_display')
+    # customer_type = serializers.CharField(source='get_customer_type_display')
+    # payments_term = serializers.CharField(source='get_payments_term_display')
 
     class Meta:
         model = Customer
