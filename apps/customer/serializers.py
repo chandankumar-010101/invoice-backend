@@ -40,6 +40,7 @@ class UpdateCustomerSerializer(serializers.ModelSerializer):
     
    
 class CustomerFilterSerializer(serializers.ModelSerializer):
+    ''' Serializer for customer filter list '''
 
     class Meta:
         model = Customer

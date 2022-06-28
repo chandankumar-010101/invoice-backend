@@ -55,7 +55,7 @@ class SignupSerializer(serializers.Serializer):
             raise serializers.ValidationError(resp_msg.PASSWORD_VALIDATION)
 
 class LoginSerializers(serializers.Serializer):
-
+    ''' Serializer for user login '''
     email = serializers.CharField(max_length=255)
     password = serializers.CharField(max_length=128, write_only=True)   
 

@@ -106,6 +106,8 @@ class CustomerCreateView(generics.CreateAPIView):
 
 
 class UpdateCustomerView(APIView):
+    ''' View for update customer details '''
+
     permission_classes = [IsAuthenticated]
 
     def post(self,request,pk):
@@ -152,6 +154,7 @@ class RetrieveDeleteCustomer(generics.RetrieveDestroyAPIView):
 
 
 class CustomerFilterView(APIView):
+    ''' View Filter for customer list by customer name '''
 
     serializer_class = CustomerFilterSerializer
 
