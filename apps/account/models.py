@@ -12,13 +12,10 @@ class Organization(models.Model):
     th models have basic details of the company.
     """
 
-    code = models.CharField(max_length=10, null=True, blank=True, unique=True)
-    company_name = models.CharField(max_length=254, null=False, 
-                                    blank=False, unique=True)
-    email = models.EmailField(max_length=255, null=False, 
-                            blank=False, unique=True, db_index=True)
-    phone_number = models.CharField(max_length=10, null=True, 
-                            blank=True, unique=True, db_index=True)
+    code = models.CharField(max_length=10, null=True, blank=True,unique=True)
+    company_name = models.CharField(max_length=254, null=False,blank=False, unique=True)
+    email = models.EmailField(max_length=255, null=False, blank=False, unique=True, db_index=True)
+    phone_number = models.CharField(max_length=10, null=True,blank=True, unique=True, db_index=True)
     industry = models.CharField(max_length=255, null=True, blank=True)
     annual_turnover = models.CharField(max_length=255, null=True, blank=True)
     accounting_software = models.CharField(max_length=255, null=True, blank=True)
@@ -64,8 +61,7 @@ class UserProfile(models.Model):
     User profile is models for basic information for the user
     every user profile is unique.
     """
-    user = models.OneToOneField(User, on_delete=models.CASCADE, 
-                            primary_key=True, related_name="profile")
+    user = models.OneToOneField(User, on_delete=models.CASCADE,primary_key=True, related_name="profile")
     full_name = models.CharField(max_length=255, null=True, blank=True)
     email = models.EmailField(unique=True, db_index=True)
     phone = models.CharField(max_length=10, blank=True, null=True)

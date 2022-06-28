@@ -34,7 +34,6 @@ logger = logging.getLogger(__name__)
 
 # Create your views here.
 
-
 class OrganizationListView(generics.ListAPIView):
 
     queryset = Organization.objects.all()
@@ -62,9 +61,9 @@ class SignupView(APIView):
             except Exception as e:
                 print(str(e))
                 logger.error(e)
-                return Response({'error': resp_msg.USER_CREATION_UNSUCCESSFULL},
-                                status=status.HTTP_400_BAD_REQUEST)
-
+                return Response({
+                    'error': resp_msg.USER_CREATION_UNSUCCESSFULL
+                },status=status.HTTP_400_BAD_REQUEST)
             # create profile
             profile = user_service.create_user_profile(request, user, org)
             if (org is not None and
@@ -115,7 +114,6 @@ class LoginView(APIView):
 
 class UserCreateView(APIView):
     """ Create new User for an organization.
-
     Register a user and create a user profile.
     validation for only admin user can create new user.
     """
@@ -126,21 +124,19 @@ class UserCreateView(APIView):
         serializer = UserCreateSerializer(data=request.data)
         if serializer.is_valid():
             user_org = UserProfile.objects.get(user=request.user).organization
-
             try:
                 user = user_service.create_user_with_role(request)
             except Exception as e:
                 print(str(e))
                 logger.error(e)
-                return Response({'error': resp_msg.USER_CREATION_UNSUCCESSFULL},
-                                status=status.HTTP_400_BAD_REQUEST)
-
+                return Response({
+                    'error': resp_msg.USER_CREATION_UNSUCCESSFULL
+                },status=status.HTTP_400_BAD_REQUEST)
             if user:
                 profile = user_service.create_user_profile(
                     request, user, user_org)
                 queryset = UserProfile.objects.get(pk=profile.pk)
                 serializer = UserProfileSerializer(queryset)
-
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
@@ -169,7 +165,9 @@ class LogoutView(APIView):
 
     def post(self, request):
         logout(request)
-        return Response({'success': True}, status=status.HTTP_200_OK)
+        return Response({
+            'success': True
+        }, status=status.HTTP_200_OK)
 
 
 class ProfileupdateView(APIView):
@@ -184,10 +182,14 @@ class ProfileupdateView(APIView):
 
         serializer = ProfileupdateSerializer(data=request.data)
         if serializer.is_valid():
-            return Response({"status": "success", "data": serializer.data}, status=status.HTTP_200_OK)
+            return Response({
+                "status": "success", "data": serializer.data
+            }, status=status.HTTP_200_OK)
         else:
             logger.error(serializer.errors)
-            return Response({"status": "error", "data": serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({
+                "status": "error", "data": serializer.errors
+            }, status=status.HTTP_400_BAD_REQUEST)
 
 
 class ChangePasswordView(APIView):
@@ -206,13 +208,18 @@ class ChangePasswordView(APIView):
             new_password = request.data.get('new_password')
             user = User.objects.get(email=request.user.email)
             if not user.check_password(current_password):
-                return Response({"detail": resp_msg.INCORRECT_PASSWORD},
-                                status=status.HTTP_400_BAD_REQUEST)
+                return Response({
+                    "detail": resp_msg.INCORRECT_PASSWORD
+                },status=status.HTTP_400_BAD_REQUEST)
             else:
                 print(self)
                 self.get_object().set_password(new_password)
                 self.get_object().save()
-            return Response({"detail": resp_msg.PASSWORD_CHANGED}, status=status.HTTP_200_OK)
+            return Response({
+                "detail": resp_msg.PASSWORD_CHANGED
+            }, status=status.HTTP_200_OK)
         else:
             logger.error(serializer.errors)
-            return Response({"status": "error", "data": serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({
+                "status": "error", "data": serializer.errors
+            }, status=status.HTTP_400_BAD_REQUEST)

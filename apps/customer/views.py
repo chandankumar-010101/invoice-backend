@@ -46,8 +46,11 @@ class CustomerListView(generics.ListAPIView):
 
 
     def list(self, request, *args, **kwargs):
+        params = request.GET
         organization = request.user.profile.organization
         queryset = Customer.objects.filter(organization=organization)
+        if 'search' in params and params['search'] !='':
+            queryset = queryset.filter(full_name__contains=params['search'])
         serializer = self.serializer_class(queryset, many=True)
         page = self.paginate_queryset(serializer.data)
         return self.get_paginated_response(page)
