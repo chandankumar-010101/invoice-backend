@@ -8,7 +8,6 @@ from .constants import USER_TYPE_CHOICES
 # Create your models here.
 class Organization(models.Model):
     """ Organiation or company of the user.
-    
     Every user is associated with organization/company
     th models have basic details of the company.
     """

@@ -32,6 +32,9 @@ class SignupSerializer(serializers.Serializer):
 
     def validate_phone_number(self, phone_number):
         is_phone_exist = Organization.objects.filter(phone_number=phone_number)
+        if len(str(phone_number)) >=11:
+            raise serializers.ValidationError(resp_msg.PHONE_LENGTH)
+
         if len(is_phone_exist) > 0:
             raise serializers.ValidationError(resp_msg.PHONE_ALREADY_EXISTS)
 
