@@ -20,7 +20,7 @@ class SignupSerializer(serializers.Serializer):
     phone_number = serializers.IntegerField()
     company_name = serializers.CharField(max_length=100,required=False)
     industry = serializers.CharField(max_length=50)
-    annual_turnover = serializers.FloatField()
+    annual_turnover = serializers.CharField(max_length=100)
     accounting_software = serializers.CharField(max_length=100)
     invoice_issue_month = serializers.CharField(max_length=100)
     password = serializers.CharField(max_length=50)
