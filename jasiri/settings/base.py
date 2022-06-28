@@ -168,6 +168,7 @@ STATIC_URL = 'static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
+# print("Loading..............")
 # LOGGING = {
 #     'version': 1,
 #     'disable_existing_loggers': False,
@@ -177,7 +178,6 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 #             'level': 'WARNING',
 #             'class': 'logging.FileHandler',
 #             'filename': 'log/{}.log'.format(str(datetime.date.today())),
-            
 #         },
 #     },
 #     'loggers': {

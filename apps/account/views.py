@@ -76,9 +76,8 @@ class SignupView(APIView):
                 response['organization'] = queryset.organization.company_name
                 response['user_type'] = user.user_type
                 return Response(response, status=status.HTTP_201_CREATED)
-        else:
-            logger.error(serializer.errors)
-            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        logger.error(serializer.errors)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 class LoginView(APIView):
@@ -107,9 +106,9 @@ class LoginView(APIView):
                 response['refresh'] = token.get('refresh')
                 response['last_login'] = user.last_login.strftime("%m/%d/%Y, %H:%M:%S")
                 return Response(response, status=status.HTTP_200_OK)
-            else:
-                return Response({'detail': [resp_msg.INVALID_EMAIL_PASSWORD]},
-                                status=status.HTTP_400_BAD_REQUEST)
+            return Response({
+                'detail': [resp_msg.INVALID_EMAIL_PASSWORD]
+            },status=status.HTTP_400_BAD_REQUEST)
         logger.error(serializer.errors)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 

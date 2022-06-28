@@ -7,6 +7,7 @@ from rest_framework import viewsets
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
+from rest_framework.filters import SearchFilter
 
 from django.contrib.auth import get_user_model
 from apps.customer import serializers
@@ -40,6 +41,9 @@ class CustomerListView(generics.ListAPIView):
     pagination_class = CustomPagination
     permission_classes = (IsAuthenticated, )
     pagination_class.page_size = 2
+    search_fields = ['full_name']
+    filter_backends = (SearchFilter,)
+
 
     def list(self, request, *args, **kwargs):
         organization = request.user.profile.organization
@@ -104,6 +108,10 @@ class UpdateCustomerView(APIView):
     def post(self,request,pk):
         params = request.data
         data = {}
+        # from jasiri.settings.base import LOGGING
+        # from django.conf import settings
+        # logger.error('Testing!!!!')
+
         try:
             instance = Customer.objects.get(id=pk)
             serializer = UpdateCustomerSerializer(instance,data=params, partial=True)
@@ -161,9 +169,9 @@ class DeleteMultipleCustomerView(APIView):
         customer_list = request.data.get('customer_list', [])
 
         if len(customer_list) == 0:
-            return Response({'detail': [resp_msg.CUSTOMER_DELETE_VALIDATION]},
-                            status=status.HTTP_400_BAD_REQUEST)
-
+            return Response({
+                'detail': [resp_msg.CUSTOMER_DELETE_VALIDATION]
+            },status=status.HTTP_400_BAD_REQUEST)
         queryset = customer_models.Customer.objects.filter(
             pk__in=customer_list)
         queryset.delete()
