@@ -37,6 +37,7 @@ class Customer(models.Model):
     # primary_phone = models.CharField(max_length=30,null=True, blank=True,unique=True)
     primary_phone = PhoneNumberField(null=True, blank=True,)
 
+
     class Meta:
         verbose_name = 'Customer'
         verbose_name_plural = 'Customer'
