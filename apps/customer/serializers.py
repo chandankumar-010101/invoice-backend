@@ -33,6 +33,7 @@ class CustomerSerializer(serializers.ModelSerializer):
 
 class UpdateCustomerSerializer(serializers.ModelSerializer):
     """ Customer model serializer. """
+    industry_name = serializers.CharField(max_length=50,required=False)
 
     class Meta:
         model = Customer
