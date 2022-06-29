@@ -66,6 +66,13 @@ class CustomerCreateView(generics.CreateAPIView):
     permission_classes = (IsAuthenticated, )
 
     def create(self, serializer):
+        params = serializer.data
+        if params['customer_type'] == '':
+            params['customer_type'] = 5
+        if params['payments_term'] == '':
+            params['payments_term'] = 7
+        if params['payments_credit'] == '':
+            params['payments_credit'] = 0
         organization = serializer.user.profile.organization
         is_alternate_contact = serializer.data.get('alternate_contact')
 
@@ -87,7 +94,7 @@ class CustomerCreateView(generics.CreateAPIView):
             alternate_contact = serializer.data.pop('alternate_contact')
         
         instance = Customer.objects.create(
-            **serializer.data, user=serializer.user,
+            **params, user=serializer.user,
             organization=organization
         )
         instance.save()
@@ -113,9 +120,12 @@ class UpdateCustomerView(APIView):
     def post(self,request,pk):
         params = request.data
         data = {}
-        # from jasiri.settings.base import LOGGING
-        # from django.conf import settings
-        # logger.error('Testing!!!!')
+        if params['customer_type'] == '':
+            params['customer_type'] = 5
+        if params['payments_term'] == '':
+            params['payments_term'] = 7
+        if params['payments_credit'] == '':
+            params['payments_credit'] = 0
 
         try:
             instance = Customer.objects.get(id=pk)

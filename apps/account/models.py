@@ -1,5 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
+from django.contrib.postgres.fields import JSONField
+
 from django.db import models
 from .managers import UserManager
 from .constants import USER_TYPE_CHOICES
@@ -72,3 +74,6 @@ class UserProfile(models.Model):
 
     def __str__(self):
         return self.user.email
+
+class StaticContent(models.Model):
+    industry = models.JSONField(default=dict)

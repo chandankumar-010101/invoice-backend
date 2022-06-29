@@ -11,11 +11,10 @@ from drf_yasg.utils import swagger_auto_schema
 
 from django.contrib.auth import get_user_model
 from django.contrib.auth import authenticate, login, logout
-
 from .utils import get_jwt_tokens_for_user
 import apps.account.user_service as user_service
 import apps.account.response_messages as resp_msg
-from .models import UserProfile,Organization
+from .models import UserProfile,Organization,StaticContent
 from .serializer import (
     OrganizationSerializer,
     SignupSerializer, LoginSerializers,
@@ -223,3 +222,16 @@ class ChangePasswordView(APIView):
             return Response({
                 "status": "error", "data": serializer.errors
             }, status=status.HTTP_400_BAD_REQUEST)
+
+
+class StaticContentView(APIView):
+
+    def get(self,request):
+        instance = StaticContent.objects.all()
+        if instance is not None:
+            return Response({
+                "industry": instance.last().industry
+            }, status=status.HTTP_200_OK)
+        return Response({
+            "industry": []
+        }, status=status.HTTP_204_NO_CONTENT)

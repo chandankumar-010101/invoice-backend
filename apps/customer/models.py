@@ -25,7 +25,7 @@ class Customer(models.Model):
     created_on = models.DateField(auto_now_add=True)
     updated_on = models.DateField(auto_now=True)
     payments_term = models.PositiveSmallIntegerField(choices = PAYMENT_TERM_CHOICE,default=6)
-    payments_credit = models.IntegerField(null=True, blank=True)
+    payments_credit = models.IntegerField(null=True, blank=True,default=0)
     is_active = models.BooleanField(default=True)
     outstanding_invoices = models.IntegerField(null=True, blank=True, default=0)
     open_balance = models.FloatField(null=True, blank=True, default=0.0)
