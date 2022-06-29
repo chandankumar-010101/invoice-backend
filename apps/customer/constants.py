@@ -10,7 +10,6 @@ CUSTOMER_TYPE_CHOICE = (
     (INDIVIDUAL,"Individual"),
     (OTHER,"Other"),
     (BLANK,""),
-
 )
 
 NET_15 = 1
