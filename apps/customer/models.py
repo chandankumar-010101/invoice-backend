@@ -15,7 +15,7 @@ class Customer(models.Model):
     customer_type = models.PositiveSmallIntegerField(choices = CUSTOMER_TYPE_CHOICE,default=4)
     full_name = models.CharField(max_length=30, null=False, blank=False)
     pin_number = models.CharField(max_length=30, null=True, blank=True)
-    industry_name = models.CharField(max_length=30, null=True, blank=True)
+    industry_name = models.CharField(max_length=30, null=True, blank=True,default='')
     postal_address = models.TextField(max_length=254, null=True, blank=True)
     postal_city = models.CharField(max_length=30, null=True, blank=True)
     postal_country = models.CharField(max_length=30, null=True, blank=True)
