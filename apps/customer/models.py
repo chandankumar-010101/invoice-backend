@@ -1,6 +1,7 @@
 from django.db import models
 from apps.account.models import Organization
 from django.contrib.auth import get_user_model
+from phonenumber_field.modelfields import PhoneNumberField
 
 from .constants import (
     CUSTOMER_TYPE_CHOICE,
@@ -33,8 +34,8 @@ class Customer(models.Model):
     primary_name = models.CharField(max_length=30, null=True, blank=True)
     primary_role = models.CharField(max_length=30, null=True, blank=True)
     primary_email = models.EmailField(max_length=254,unique=True)
-    primary_phone = models.CharField(max_length=30,null=True, blank=True,unique=True)
-
+    # primary_phone = models.CharField(max_length=30,null=True, blank=True,unique=True)
+    primary_phone = PhoneNumberField(null=True, blank=True,)
 
     class Meta:
         verbose_name = 'Customer'

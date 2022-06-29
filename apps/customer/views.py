@@ -145,7 +145,6 @@ class UpdateCustomerView(APIView):
                 'data':data
             }, status=status.HTTP_200_OK)
         except Exception as error:
-            print("#################",error)
             logger.error(error)
             return Response({
                 'detail': [error.args[0]]
