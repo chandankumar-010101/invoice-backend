@@ -98,14 +98,11 @@ class CustomerCreateView(generics.CreateAPIView):
             organization=organization
         )
         instance.save()
-        print("#alternate_contact",alternate_contact['alternate_name'])
-
         if is_alternate_contact and alternate_contact['alternate_name'] != None or alternate_contact['alternate_role'] != None or alternate_contact['alternate_email'] != None or alternate_contact['alternate_phone'] != None:
             alternate_obj = AlternateContact.objects.create(
                 **alternate_contact, customer=instance)
             alternate_obj.save()
-            alternate_serializer = AlternateContactSerializer(
-                alternate_contact)
+            alternate_serializer = AlternateContactSerializer(alternate_contact)
             serializer.data['alternate_contact'] = alternate_serializer.data
         return Response({
             'data': serializer.data

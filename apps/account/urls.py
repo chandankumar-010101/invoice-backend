@@ -16,6 +16,7 @@ urlpatterns = [
     path('change_password', views.ChangePasswordView.as_view(), name="change_password"),
 
     path('forgot-password', views.ForgotPasswordView.as_view(), name="change_password"),
+    path('reset-password', views.ResetPasswordView.as_view(), name="change_password"),
 
 
     path('static-content', views.StaticContentView.as_view(), name="change_password"),

@@ -1,6 +1,9 @@
 import logging
 
 
+
+from django.template.loader import render_to_string
+
 from rest_framework import status
 from rest_framework import generics
 from rest_framework.views import APIView
@@ -28,7 +31,7 @@ from .permissions import IsAdminOnly
 from .schema import (
     login_schema,
     change_password_schema,
-    forgot_password_schema
+    forgot_password_schema,reset_password_schema
 )
 
 logger = logging.getLogger(__name__)
@@ -246,22 +249,42 @@ class ForgotPasswordView(APIView):
         try:
             user = User.objects.get(email = params['email'])
             context = {
-                'name': '',
+                'name': user.profile.full_name,
+                'url':GenerateForgotLink.generate(request,user),
                 'site_url': str(SiteUrl.site_url(request)),
             }
-            # get_template = render_to_string(
-            #     'email_template/forgot_password.html', context)
-            # send_email = SendMail.mail(
-            #     "Forgot Password OTP", obj.email, get_template)
-            print(context)
-            obj = GenerateForgotLink.generate(request,user)
-            print(obj)
-            return Response({})
+            get_template = render_to_string(
+                'email_template/forgot_password.html', context)
+            SendMail.mail(
+                "Forgot Password OTP", user.email, get_template)
+            return Response({
+                "message":"Mail sent sucessfully."
+            },status=status.HTTP_200_OK)
         except Exception as error:
             logger.error([error.args[0]])
             return Response({
                 "detail": [error.args[0]]
             }, status=status.HTTP_400_BAD_REQUEST)
 
+
+class ResetPasswordView(APIView):
+    @swagger_auto_schema(request_body=reset_password_schema, operation_description='Forgot Password')
+    def post(self,request):
+        params = request.data
+        try:
+            user,minutes = GenerateForgotLink.decode(params['uuid'],params['time'])
+            if minutes > 15:
+                return Response({"message":"Link is Expired."
+                },status=status.HTTP_400_BAD_REQUEST)
+            user.set_password(params['password'])
+            user.save()
+            return Response({
+                "message":"Password has been reset sucessfully."
+            },status=status.HTTP_200_OK)
+        except Exception as error:
+            logger.error([error.args[0]])
+            return Response({
+                "detail": [error.args[0]]
+            }, status=status.HTTP_400_BAD_REQUEST)
 
 

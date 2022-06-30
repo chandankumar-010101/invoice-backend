@@ -4,10 +4,11 @@ from decouple import config
 
 from django.conf import settings
 from django.core.mail import EmailMessage
-from django.utils.encoding import force_bytes
+from django.utils.encoding import force_bytes,force_str
+from django.utils.dateparse import parse_datetime
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 
-
+from apps.account.models import User
 
 def filename_path(folder, instance, filename) -> str:
     """
@@ -26,12 +27,16 @@ def filename_path(folder, instance, filename) -> str:
 class GenerateForgotLink(object):
     
     def generate(request,user):
-        uid = urlsafe_base64_encode(force_bytes(user.id))
-        print(uid)
+        uid = urlsafe_base64_encode(force_bytes(user.uuid))
         time = urlsafe_base64_encode(force_bytes(datetime.datetime.now()))
-        url = "{}?uuid={0}&time={1}".format(str(SiteUrl.site_url(request)),uid, time) 
-        print(url)
+        url = "http://52.7.133.188/forget-password/?uuid={0}&time={1}".format(uid, time) 
         return url
+    
+    def decode(uuid,time):
+        decoded_time = parse_datetime(force_str(urlsafe_base64_decode(time)))
+        minute = (datetime.datetime.now() - decoded_time).total_seconds()/60.0
+        user = User.objects.get(uuid=force_str(urlsafe_base64_decode(uuid)))
+        return user,minute
 
 class SendMail(object):
 
