@@ -14,7 +14,7 @@ from django.contrib.auth import authenticate, login, logout
 from .utils import get_jwt_tokens_for_user
 import apps.account.user_service as user_service
 import apps.account.response_messages as resp_msg
-from .models import UserProfile,Organization,StaticContent
+from .models import UserProfile,Organization,StaticContent,User
 from .serializer import (
     OrganizationSerializer,
     SignupSerializer, LoginSerializers,
@@ -23,10 +23,12 @@ from .serializer import (
     PasswordchangeSerializer
 )
 
+from apps.utility.helper import SiteUrl,SendMail,GenerateForgotLink
 from .permissions import IsAdminOnly
 from .schema import (
     login_schema,
     change_password_schema,
+    forgot_password_schema
 )
 
 logger = logging.getLogger(__name__)
@@ -182,12 +184,12 @@ class ProfileupdateView(APIView):
         serializer = ProfileupdateSerializer(data=request.data)
         if serializer.is_valid():
             return Response({
-                "status": "success", "data": serializer.data
+                "data": serializer.data
             }, status=status.HTTP_200_OK)
         else:
             logger.error(serializer.errors)
             return Response({
-                "status": "error", "data": serializer.errors
+                "data": serializer.errors
             }, status=status.HTTP_400_BAD_REQUEST)
 
 
@@ -220,7 +222,7 @@ class ChangePasswordView(APIView):
         else:
             logger.error(serializer.errors)
             return Response({
-                "status": "error", "data": serializer.errors
+                "data": serializer.errors
             }, status=status.HTTP_400_BAD_REQUEST)
 
 
@@ -235,3 +237,31 @@ class StaticContentView(APIView):
         return Response({
             "industry": []
         }, status=status.HTTP_204_NO_CONTENT)
+
+
+class ForgotPasswordView(APIView):
+    @swagger_auto_schema(request_body=forgot_password_schema, operation_description='Forgot Password')
+    def post(self,request):
+        params = request.data
+        try:
+            user = User.objects.get(email = params['email'])
+            context = {
+                'name': '',
+                'site_url': str(SiteUrl.site_url(request)),
+            }
+            # get_template = render_to_string(
+            #     'email_template/forgot_password.html', context)
+            # send_email = SendMail.mail(
+            #     "Forgot Password OTP", obj.email, get_template)
+            print(context)
+            obj = GenerateForgotLink.generate(request,user)
+            print(obj)
+            return Response({})
+        except Exception as error:
+            logger.error([error.args[0]])
+            return Response({
+                "detail": [error.args[0]]
+            }, status=status.HTTP_400_BAD_REQUEST)
+
+
+

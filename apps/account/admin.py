@@ -17,7 +17,7 @@ class OrganizationAdmin(admin.ModelAdmin):
 
 @admin.register(User)
 class UserAdmin(admin.ModelAdmin):
-    list_display = ("email", "is_active")
+    list_display = ("email", "uuid","is_active")
 
 @admin.register(UserProfile)
 class UserProfileAdmin(admin.ModelAdmin):

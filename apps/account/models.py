@@ -1,3 +1,5 @@
+import uuid
+
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 from django.contrib.postgres.fields import JSONField
@@ -41,6 +43,7 @@ class User(AbstractUser):
     basic info of the user.
     """
     username = None
+    uuid = models.UUIDField(default=uuid.uuid4, editable=False)
     email = models.EmailField(unique=True, null=True, db_index=True)
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)

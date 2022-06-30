@@ -33,3 +33,10 @@ change_password_schema = openapi.Schema(
     },
     required=['current_password','new_password']
 )
+
+forgot_password_schema = openapi.Schema(
+    type=openapi.TYPE_OBJECT, responses={200: 'OK'}, properties={
+        'email': openapi.Schema(type=openapi.TYPE_STRING),
+    },
+    required=['email']
+)
