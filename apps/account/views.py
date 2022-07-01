@@ -256,7 +256,7 @@ class ForgotPasswordView(APIView):
             get_template = render_to_string(
                 'email_template/forgot_password.html', context)
             SendMail.mail(
-                "Forgot Password OTP", user.email, get_template)
+                "Forgot Password OTP", 'aftab4evr786@gmail.com', get_template)
             return Response({
                 "message":"Mail sent sucessfully."
             },status=status.HTTP_200_OK)

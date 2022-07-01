@@ -55,6 +55,7 @@ class SendMail(object):
             msg.send()
             return True
         except Exception as e:
+            print("####",e)
             return False
 
 class SiteUrl(object):
