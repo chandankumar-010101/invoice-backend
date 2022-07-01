@@ -71,7 +71,6 @@ class LoginSerializers(serializers.Serializer):
 
         if not is_user_active:
             raise serializers.ValidationError(resp_msg.USER_NOT_ACTIVE)
-
         return validate_data
        
 class UserProfileSerializer(serializers.ModelSerializer):
