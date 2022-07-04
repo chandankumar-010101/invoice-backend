@@ -3,6 +3,14 @@ from rest_framework import serializers
 from .models import Invoice 
 
 
+class GetInvoiceSerializer(serializers.ModelSerializer):
+   
+    class Meta:
+        model = Invoice
+        fields = '__all__'
+        read_only_fields = ('customer','untaxed_amount','vat_amount','notes','curreny')
+
+
 class InvoiceSerializer(serializers.ModelSerializer):
     attachment = serializers.FileField(required=True)
     invoice_number = serializers.CharField(required=True)

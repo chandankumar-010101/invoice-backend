@@ -7,14 +7,14 @@ from rest_framework.parsers import FormParser, MultiPartParser
 
 from apps.customer.pagination import CustomPagination
 from .models import Invoice,InvoiceAttachment
-from .serializer import InvoiceSerializer
+from .serializer import InvoiceSerializer,GetInvoiceSerializer
 
 
 # Create your views here.
 class InvoiceListView(generics.ListAPIView):
 
     queryset = Invoice.objects.all()
-    serializer_class = InvoiceSerializer
+    serializer_class = GetInvoiceSerializer
     permission_classes = [IsAuthenticated,]
 
     pagination_class = CustomPagination
