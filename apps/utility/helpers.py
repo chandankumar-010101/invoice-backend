@@ -24,6 +24,7 @@ def filename_path(folder, instance, filename) -> str:
     )
 
 
+
 class GenerateForgotLink(object):
     
     def generate(request,user):

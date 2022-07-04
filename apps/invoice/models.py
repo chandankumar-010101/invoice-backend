@@ -1,12 +1,20 @@
+import uuid
+
 from django.db import models
 from apps.customer.models import Customer
 from .constants import INVOICE_STATUS
 
 
+from apps.utility.helpers import filename_path
+
+def invoice_attachment(instance, filename):
+    return filename_path('invoice', instance, filename)
+
+
 # Create your models here.
 class Invoice(models.Model):
-    customer = models.ForeignKey(Customer, on_delete=models.CASCADE)
-    po_number = models.CharField(max_length=255, null=True,blank=True, unique=True)
+    invoice_id = models.UUIDField(default=uuid.uuid4, editable=False)
+    customer = models.ForeignKey(Customer, on_delete=models.CASCADE,related_name="invoice")
     invoice_number = models.CharField(max_length=255, null=True, blank=True, unique=True)
     invoice_date = models.DateField()
     due_date = models.DateField()
@@ -18,7 +26,7 @@ class Invoice(models.Model):
     notes = models.TextField(null=True, blank=True)
     created_on = models.DateField(auto_now_add=True)
     updated_on = models.DateField(auto_now=True)
-    curreny = models.CharField(max_length=255, null=True, blank=True)
+    curreny = models.CharField(max_length=255, default='KES')
 
     class Meta:
         verbose_name = 'Invoice'
@@ -26,3 +34,10 @@ class Invoice(models.Model):
 
     def __str__(self):
         return self.invoice_number
+
+class InvoiceAttachment(models.Model):
+    invoice = models.ForeignKey(Invoice, on_delete=models.CASCADE,related_name="invoice_attachment")
+    attachment = models.FileField(upload_to=invoice_attachment, blank=True, null=True) 
+
+    class Meta:
+        ordering = ('id',)

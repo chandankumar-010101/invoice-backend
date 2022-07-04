@@ -12,7 +12,7 @@ User = get_user_model()
 
 class Customer(models.Model):
     organization = models.ForeignKey(Organization, on_delete=models.CASCADE, related_name='org', default=None)
-    user = models.ForeignKey(User, on_delete=models.CASCADE, default=None)
+    user = models.ForeignKey(User, on_delete=models.CASCADE,related_name='customer', default=None)
     customer_type = models.PositiveSmallIntegerField(choices = CUSTOMER_TYPE_CHOICE,default=4)
     full_name = models.CharField(max_length=30, null=False, blank=False)
     pin_number = models.CharField(max_length=30, null=True, blank=True)

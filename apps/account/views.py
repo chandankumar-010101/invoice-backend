@@ -26,7 +26,7 @@ from .serializer import (
     PasswordchangeSerializer
 )
 
-from apps.utility.helper import SiteUrl,SendMail,GenerateForgotLink
+from apps.utility.helpers import SiteUrl,SendMail,GenerateForgotLink
 from .permissions import IsAdminOnly
 from .schema import (
     login_schema,
@@ -256,7 +256,7 @@ class ForgotPasswordView(APIView):
             get_template = render_to_string(
                 'email_template/forgot_password.html', context)
             SendMail.mail(
-                "Forgot Password OTP", user.email, get_template)
+                "Forgot Password Link", user.email, get_template)
             return Response({
                 "message":"Mail sent sucessfully."
             },status=status.HTTP_200_OK)
