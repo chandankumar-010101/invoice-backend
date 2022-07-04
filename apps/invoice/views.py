@@ -1,9 +1,11 @@
 from rest_framework import status
 from rest_framework import generics
 from rest_framework.response import Response
+from rest_framework.filters import SearchFilter
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.parsers import FormParser, MultiPartParser
 
+from apps.customer.pagination import CustomPagination
 from .models import Invoice,InvoiceAttachment
 from .serializer import InvoiceSerializer
 
@@ -14,6 +16,11 @@ class InvoiceListView(generics.ListAPIView):
     queryset = Invoice.objects.all()
     serializer_class = InvoiceSerializer
     permission_classes = [IsAuthenticated,]
+
+    pagination_class = CustomPagination
+    pagination_class.page_size = 2
+    search_fields = ['full_name']
+    filter_backends = (SearchFilter,)
 
 
     def list(self, request, *args, **kwargs):

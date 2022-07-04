@@ -6,9 +6,7 @@ from .models import Invoice
 class InvoiceAdmin(admin.ModelAdmin):
 
     list_display = (
-        "invoice_number",  "get_customer_name",
-        "invoice_date", "due_date", "due_amount",
-        "total_amount"
+        "invoice_number","get_customer_name","invoice_date", "due_date", "due_amount","total_amount"
     )
 
 
