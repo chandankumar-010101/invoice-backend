@@ -46,8 +46,6 @@ class InvoiceCreateView(generics.CreateAPIView):
     def post(self, request, *args, **kwargs):
         try:
             params = request.data
-            print("#params", params)
-            print("#FILES", request.FILES)
             serializer = self.get_serializer(data=params)
             serializer.is_valid(raise_exception=True)
             invoice = serializer.save()
