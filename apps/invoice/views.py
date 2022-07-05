@@ -21,7 +21,7 @@ class InvoiceListView(generics.ListAPIView):
     serializer_class = GetInvoiceSerializer
     permission_classes = [IsAuthenticated]
     filter_backends = (filters.DjangoFilterBackend, SearchFilter)
-    search_fields = ['customer__full_name']
+    search_fields = ['customer__full_name',"invoice_number","invoice_id"]
     queryset = Invoice.objects.all()
 
     def list(self, request, *args, **kwargs):
