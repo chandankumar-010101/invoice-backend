@@ -1,4 +1,7 @@
+from datetime import datetime, date
+
 import django_filters
+
 
 
 from apps.invoice.models import Invoice
@@ -25,7 +28,9 @@ def invoice_filter(request,queryset):
             if due_date == 1:
                 pass
             elif due_date == 2:
-                pass
+                queryset = queryset.filter(
+                    due_date__month=date.today().month
+                )
             elif due_date == 3:
                 pass
             elif due_date == 4:
@@ -36,7 +41,8 @@ def invoice_filter(request,queryset):
                 pass
             elif due_date == 7:
                 pass
-    except:
+    except Exception as e:
+        print("EXception",e)
         pass
 
     return queryset

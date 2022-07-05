@@ -9,4 +9,6 @@ app_name= 'account'
 urlpatterns = [
     path('list', views.InvoiceListView.as_view(), name="invoice_list"),
     path('create', views.InvoiceCreateView.as_view(), name="invoice_create"),
+    path('delete/<int:id>', views.DeleteInvoiceView.as_view(), name="invoice_delete"),
+
 ]

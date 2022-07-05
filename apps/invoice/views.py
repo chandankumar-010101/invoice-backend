@@ -1,6 +1,6 @@
-
 from rest_framework import status
 from rest_framework import generics
+from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.filters import SearchFilter
 from django_filters import rest_framework as filters
@@ -39,6 +39,13 @@ class InvoiceListView(generics.ListAPIView):
             'data': response.data,
         }, status=status.HTTP_200_OK)
     
+
+class DeleteInvoiceView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def delete(self,request,id):
+        Invoice.objects.filter(id=id).delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
 
 class InvoiceCreateView(generics.CreateAPIView):
 
