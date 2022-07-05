@@ -115,7 +115,19 @@ class InvoiceUpdateView(generics.UpdateAPIView):
             return Response({
                 'detail': [error.args[0]]
             }, status=status.HTTP_400_BAD_REQUEST)
-    
+
+class RetrieveInvoiceView(generics.RetrieveDestroyAPIView):
+    """Customer detail operations. 
+
+    delete reterive view for a customer .
+    """
+
+    lookup_field = 'id'
+    queryset = Invoice.objects.all()
+    permission_classes = [IsAuthenticated,]
+    serializer_class = GetInvoiceSerializer
+
+
 class DeleteInvoiceAttachmentView(APIView):
     permission_classes = [IsAuthenticated]
 

@@ -1,10 +1,24 @@
 from rest_framework import serializers
 
-from .models import Invoice 
+from .models import Invoice,InvoiceAttachment
+
+
+class InvoiceAttachmentSerializer(serializers.ModelSerializer):
+    attachment = serializers.SerializerMethodField()
+    def get_attachment(self,obj):
+        if obj.attachment:
+            return obj.attachment.url
+        return None
+
+    class Meta:
+        model = InvoiceAttachment
+        fields = '__all__'
+        read_only_fields = ('invoice',)
 
 
 class GetInvoiceSerializer(serializers.ModelSerializer):
     customer = serializers.SerializerMethodField()
+    invoice_attachment = InvoiceAttachmentSerializer(many=True)
     def get_customer(self,obj):
         return obj.customer.full_name
     class Meta:
