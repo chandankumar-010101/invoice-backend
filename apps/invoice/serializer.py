@@ -14,7 +14,7 @@ class GetInvoiceSerializer(serializers.ModelSerializer):
 
 
 class InvoiceSerializer(serializers.ModelSerializer):
-    attachment = serializers.FileField(required=True)
+    attachment = serializers.FileField(required=False)
     invoice_number = serializers.CharField(required=True)
     due_date = serializers.DateField(required=True)
     total_amount = serializers.FloatField(required=True)

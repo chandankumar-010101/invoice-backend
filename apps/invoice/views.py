@@ -91,10 +91,14 @@ class InvoiceUpdateView(generics.UpdateAPIView):
     permission_classes = [IsAuthenticated,]
     parser_classes = (FormParser, MultiPartParser)
 
-    def post(self, request,invoice_number, *args, **kwargs):
+    def update(self, request,pk, *args, **kwargs):
         try:
             params = request.data
-            instance = Invoice.objects.get(invoice_number = invoice_number)
+            instance = Invoice.objects.get(pk = pk)
+            if instance.invoice_number != params['invoice_number'] and Invoice.objects.filter(invoice_number = params['invoice_number']).exists():
+                return Response({
+                    'detail': ["Invoice Number is already exists."]
+                },status=status.HTTP_400_BAD_REQUEST)
             serializer = self.get_serializer(instance,data=params,partial=True)
             serializer.is_valid(raise_exception=True)
             invoice = serializer.save()
