@@ -60,6 +60,11 @@ class InvoiceCreateView(generics.CreateAPIView):
     def create(self, request, *args, **kwargs):
         try:
             params = request.data
+            if Invoice.objects.filter(invoice_number = params['invoice_number']).exists():
+                return Response({
+                    'detail': ["Invoice Number is already exists."]
+                },status=status.HTTP_400_BAD_REQUEST)
+
             serializer = self.get_serializer(data=params)
             serializer.is_valid(raise_exception=True)
             invoice = serializer.save()
