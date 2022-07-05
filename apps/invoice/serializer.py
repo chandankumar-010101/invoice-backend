@@ -4,7 +4,9 @@ from .models import Invoice
 
 
 class GetInvoiceSerializer(serializers.ModelSerializer):
-   
+    customer = serializers.SerializerMethodField()
+    def get_customer(self,obj):
+        return obj.customer.full_name
     class Meta:
         model = Invoice
         fields = '__all__'

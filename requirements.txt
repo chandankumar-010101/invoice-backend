@@ -12,3 +12,5 @@ sqlparse==0.4.2
 drf_yasg
 phonenumbers==8.12.18
 django-phonenumber-field
+django-filter
+
