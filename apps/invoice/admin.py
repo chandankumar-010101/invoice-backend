@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Invoice
+from .models import Invoice,InvoiceAttachment
 
 # Register your models here.
 @admin.register(Invoice)
@@ -13,3 +13,11 @@ class InvoiceAdmin(admin.ModelAdmin):
     @admin.display(description='Customer Name')
     def get_customer_name(self, obj):
         return obj.customer.full_name
+
+
+@admin.register(InvoiceAttachment)
+class InvoiceAttachmentAdmin(admin.ModelAdmin):
+
+    list_display = (
+        "id",
+    )

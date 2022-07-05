@@ -56,8 +56,8 @@ class InvoiceCreateView(generics.CreateAPIView):
 
     def get_serializer_context(self):
         return {'request': self.request}
-
-    def post(self, request, *args, **kwargs):
+        
+    def create(self, request, *args, **kwargs):
         try:
             params = request.data
             serializer = self.get_serializer(data=params)
@@ -76,3 +76,40 @@ class InvoiceCreateView(generics.CreateAPIView):
             return Response({
                 'detail': [error.args[0]]
             }, status=status.HTTP_400_BAD_REQUEST)
+
+
+
+class InvoiceUpdateView(generics.UpdateAPIView):
+
+    queryset = Invoice.objects.all()
+    serializer_class = InvoiceSerializer
+    permission_classes = [IsAuthenticated,]
+    parser_classes = (FormParser, MultiPartParser)
+
+    def post(self, request,invoice_number, *args, **kwargs):
+        try:
+            params = request.data
+            instance = Invoice.objects.get(invoice_number = invoice_number)
+            serializer = self.get_serializer(instance,data=params,partial=True)
+            serializer.is_valid(raise_exception=True)
+            invoice = serializer.save()
+            if 'attachment' in request.FILES:
+                for data in request.FILES.getlist('attachment'):
+                    InvoiceAttachment.objects.create(
+                        invoice = invoice,
+                        attachment = data
+                    )
+            return Response({
+                'message': 'Invoice updated successfully.',
+            }, status=status.HTTP_200_OK)
+        except Exception as error:
+            return Response({
+                'detail': [error.args[0]]
+            }, status=status.HTTP_400_BAD_REQUEST)
+    
+class DeleteInvoiceAttachmentView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def delete(self,request,id):
+        InvoiceAttachment.objects.filter(id=id).delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)

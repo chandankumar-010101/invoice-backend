@@ -180,7 +180,6 @@ class DeleteMultipleCustomerView(APIView):
 
     def post(self, request):
         customer_list = request.data.get('customer_list', [])
-
         if len(customer_list) == 0:
             return Response({
                 'detail': [resp_msg.CUSTOMER_DELETE_VALIDATION]

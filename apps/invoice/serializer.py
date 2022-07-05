@@ -20,7 +20,17 @@ class InvoiceSerializer(serializers.ModelSerializer):
     total_amount = serializers.FloatField(required=True)
     due_amount = serializers.FloatField(required=True)
 
+
+    def create(self, validated_data):
+        validated_data.pop('attachment')
+        print(validated_data)
+
+        instance = Invoice.objects.create(
+            **validated_data
+        )
+        return instance
+
     class Meta:
         model = Invoice
         fields = '__all__'
-        read_only_fields = ('customer','untaxed_amount','vat_amount','notes','curreny')
+        read_only_fields = ('untaxed_amount','vat_amount','notes','curreny')

@@ -2,6 +2,8 @@ import datetime
 
 from decouple import config
 
+from django.utils import timezone
+
 from django.conf import settings
 from django.core.mail import EmailMessage
 from django.utils.encoding import force_bytes,force_str
