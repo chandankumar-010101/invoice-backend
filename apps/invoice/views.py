@@ -10,7 +10,7 @@ from rest_framework.parsers import FormParser, MultiPartParser
 from .models import Invoice,InvoiceAttachment
 from .serializer import InvoiceSerializer,GetInvoiceSerializer
 
-from apps.utility.filters import InvoiceFilter
+from apps.utility.filters import InvoiceFilter,invoice_filter
 from apps.customer.pagination import CustomPagination
 
 # Create your views here.
@@ -22,7 +22,14 @@ class InvoiceListView(generics.ListAPIView):
     permission_classes = [IsAuthenticated]
     filter_backends = (filters.DjangoFilterBackend, SearchFilter)
     search_fields = ['customer__full_name',"invoice_number","invoice_id"]
-    queryset = Invoice.objects.all()
+
+
+    def get_queryset(self):
+        queryset = Invoice.objects.all()
+
+        queryset = invoice_filter(self.request,queryset)
+        return queryset
+
 
     def list(self, request, *args, **kwargs):
         response = super(InvoiceListView, self).list(
