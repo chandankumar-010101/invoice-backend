@@ -4,6 +4,7 @@ from .models import Invoice,InvoiceAttachment
 
 
 class InvoiceAttachmentSerializer(serializers.ModelSerializer):
+
     attachment = serializers.SerializerMethodField()
     def get_attachment(self,obj):
         if obj.attachment:
@@ -12,15 +13,17 @@ class InvoiceAttachmentSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = InvoiceAttachment
-        fields = '__all__'
-        read_only_fields = ('invoice',)
+        fields = ('id','attachment')
 
 
 class GetInvoiceSerializer(serializers.ModelSerializer):
+
     customer = serializers.SerializerMethodField()
     invoice_attachment = InvoiceAttachmentSerializer(many=True)
+
     def get_customer(self,obj):
         return obj.customer.full_name
+        
     class Meta:
         model = Invoice
         fields = '__all__'
@@ -28,6 +31,7 @@ class GetInvoiceSerializer(serializers.ModelSerializer):
 
 
 class InvoiceSerializer(serializers.ModelSerializer):
+    
     attachment = serializers.FileField(required=False)
     invoice_number = serializers.CharField(required=True)
     due_date = serializers.DateField(required=True)

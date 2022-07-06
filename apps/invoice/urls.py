@@ -2,9 +2,7 @@ from django.urls import path
 
 from apps.invoice import views
 
-
-
-app_name= 'account'
+app_name= 'invoice'
 
 urlpatterns = [
     path('list', views.InvoiceListView.as_view()),
@@ -13,5 +11,4 @@ urlpatterns = [
     path('delete/<int:id>', views.DeleteInvoiceView.as_view()),
     path('details/<str:id>', views.RetrieveInvoiceView.as_view()),
     path('attachment/delete/<int:id>', views.DeleteInvoiceAttachmentView.as_view()),
-
 ]

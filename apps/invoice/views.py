@@ -1,3 +1,4 @@
+
 from rest_framework import status
 from rest_framework import generics
 from rest_framework.views import APIView
@@ -26,10 +27,8 @@ class InvoiceListView(generics.ListAPIView):
 
     def get_queryset(self):
         queryset = Invoice.objects.all()
-
         queryset = invoice_filter(self.request,queryset)
         return queryset
-
 
     def list(self, request, *args, **kwargs):
         response = super(InvoiceListView, self).list(
@@ -38,7 +37,6 @@ class InvoiceListView(generics.ListAPIView):
             'message': "Data Fetched Successfully.",
             'data': response.data,
         }, status=status.HTTP_200_OK)
-    
 
 class DeleteInvoiceView(APIView):
     permission_classes = [IsAuthenticated]
@@ -51,7 +49,7 @@ class InvoiceCreateView(generics.CreateAPIView):
 
     queryset = Invoice.objects.all()
     serializer_class = InvoiceSerializer
-    permission_classes = [IsAuthenticated,]
+    permission_classes = [IsAuthenticated]
     parser_classes = (FormParser, MultiPartParser)
 
     def get_serializer_context(self):
@@ -64,7 +62,6 @@ class InvoiceCreateView(generics.CreateAPIView):
                 return Response({
                     'detail': ["Invoice Number is already exists."]
                 },status=status.HTTP_400_BAD_REQUEST)
-
             serializer = self.get_serializer(data=params)
             serializer.is_valid(raise_exception=True)
             invoice = serializer.save()
@@ -82,13 +79,11 @@ class InvoiceCreateView(generics.CreateAPIView):
                 'detail': [error.args[0]]
             }, status=status.HTTP_400_BAD_REQUEST)
 
-
-
 class InvoiceUpdateView(generics.UpdateAPIView):
 
     queryset = Invoice.objects.all()
     serializer_class = InvoiceSerializer
-    permission_classes = [IsAuthenticated,]
+    permission_classes = [IsAuthenticated]
     parser_classes = (FormParser, MultiPartParser)
 
     def update(self, request,pk, *args, **kwargs):
@@ -124,9 +119,8 @@ class RetrieveInvoiceView(generics.RetrieveDestroyAPIView):
 
     lookup_field = 'id'
     queryset = Invoice.objects.all()
-    permission_classes = [IsAuthenticated,]
+    permission_classes = [IsAuthenticated]
     serializer_class = GetInvoiceSerializer
-
 
 class DeleteInvoiceAttachmentView(APIView):
     permission_classes = [IsAuthenticated]
