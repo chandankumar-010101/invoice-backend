@@ -72,6 +72,7 @@ class InvoiceCreateView(generics.CreateAPIView):
                         attachment = data
                     )
             return Response({
+                'data':invoice.data,
                 'message': 'Invoice created successfully.',
             }, status=status.HTTP_200_OK)
         except Exception as error:
