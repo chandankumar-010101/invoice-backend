@@ -3,12 +3,13 @@
 
 
 
-import os
+from decouple import config
+
 from twilio.rest import Client
 
 
-account_sid = os.environ['TWILIO_ACCOUNT_SID']
-auth_token = os.environ['TWILIO_AUTH_TOKEN']
+account_sid = config('TWILIO_ACCOUNT_SID')
+auth_token = config('TWILIO_AUTH_TOKEN')
 client = Client(account_sid, auth_token)
 
 def send_media_on_whatsapp(phone_no):
@@ -17,7 +18,6 @@ def send_media_on_whatsapp(phone_no):
         from_='whatsapp:+14155238886',
         to='whatsapp:{}'.format(phone_no)
     )
-
     print(message.sid)
 
 
