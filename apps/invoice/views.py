@@ -105,6 +105,7 @@ class InvoiceUpdateView(generics.UpdateAPIView):
                         attachment = data
                     )
             return Response({
+                'data':invoice.data,
                 'message': 'Invoice updated successfully.',
             }, status=status.HTTP_200_OK)
         except Exception as error:
