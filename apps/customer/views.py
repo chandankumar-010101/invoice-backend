@@ -25,13 +25,13 @@ from .models import Customer
 from apps.account.models import UserProfile
 from .pagination import CustomPagination
 import apps.customer.models as customer_models
+
 User = get_user_model()
 logger = logging.getLogger(__name__)
 
 # Create your views here.
 class CustomerListView(generics.ListAPIView):
-    """ Paginated customer list. 
-
+    """ Paginated customer list.
     Get list of Customer by user's organization with 
     pagination.
     """
@@ -57,8 +57,7 @@ class CustomerListView(generics.ListAPIView):
 
 
 class CustomerCreateView(generics.CreateAPIView):
-    """create customer record. 
-
+    """create customer record.
     create Customer and its alternate record.
     """
     queryset = Customer.objects.all()
@@ -151,7 +150,6 @@ class UpdateCustomerView(APIView):
 
 class RetrieveDeleteCustomer(generics.RetrieveDestroyAPIView):
     """Customer detail operations. 
-
     delete reterive view for a customer .
     """
 
@@ -173,8 +171,7 @@ class CustomerFilterView(APIView):
 
 
 class DeleteMultipleCustomerView(APIView):
-    """Customer delete operations. 
-
+    """Customer delete operations.
     Delete multiple customer at once.
     """
 
@@ -184,8 +181,7 @@ class DeleteMultipleCustomerView(APIView):
             return Response({
                 'detail': [resp_msg.CUSTOMER_DELETE_VALIDATION]
             },status=status.HTTP_400_BAD_REQUEST)
-        queryset = customer_models.Customer.objects.filter(
-            pk__in=customer_list)
+        queryset = customer_models.Customer.objects.filter(pk__in=customer_list)
         queryset.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 

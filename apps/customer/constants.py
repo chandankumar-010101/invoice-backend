@@ -28,5 +28,4 @@ PAYMENT_TERM_CHOICE = (
     (NET_90,"Net 90"),
     (OTHER,"Other"),
     (BLANK_PAYMENT,""),
-
 )

@@ -31,8 +31,7 @@ class InvoiceListView(generics.ListAPIView):
         return queryset
 
     def list(self, request, *args, **kwargs):
-        response = super(InvoiceListView, self).list(
-            request, *args, **kwargs)
+        response = super(InvoiceListView, self).list(request, *args, **kwargs)
         return Response({
             'message': "Data Fetched Successfully.",
             'data': response.data,
@@ -72,7 +71,7 @@ class InvoiceCreateView(generics.CreateAPIView):
                         attachment = data
                     )
             return Response({
-                'data':invoice.data,
+                'id':invoice.id,
                 'message': 'Invoice created successfully.',
             }, status=status.HTTP_200_OK)
         except Exception as error:
@@ -105,7 +104,7 @@ class InvoiceUpdateView(generics.UpdateAPIView):
                         attachment = data
                     )
             return Response({
-                'data':invoice.data,
+                'id':invoice.id,
                 'message': 'Invoice updated successfully.',
             }, status=status.HTTP_200_OK)
         except Exception as error:
