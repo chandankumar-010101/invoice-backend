@@ -31,6 +31,8 @@ class Invoice(models.Model):
     class Meta:
         verbose_name = 'Invoice'
         verbose_name_plural = 'Invoice'
+        ordering = ('-id',)
+        
 
     def __str__(self):
         return self.invoice_number
