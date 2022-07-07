@@ -128,5 +128,5 @@ class DeleteInvoiceAttachmentView(APIView):
     def delete(self,request,id):
         InvoiceAttachment.objects.filter(id=id).delete()
         return Response({
-                'message': 'Attachment deleted successfully.',
-            },status=status.HTTP_204_NO_CONTENT)
+            'message': 'Attachment deleted successfully.',
+        },status=status.HTTP_204_NO_CONTENT)
