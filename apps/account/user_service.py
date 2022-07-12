@@ -64,7 +64,7 @@ def create_admin_user(request, user_type):
 def create_user_with_role(request):
     """ Create an user for organization with role.
     
-    Args:
+    Args:password
         request: request object
     Return:
         user: organization object

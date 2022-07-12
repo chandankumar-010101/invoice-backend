@@ -19,9 +19,14 @@ class InvoiceAttachmentSerializer(serializers.ModelSerializer):
 class GetInvoiceSerializer(serializers.ModelSerializer):
 
     customer = serializers.SerializerMethodField()
+    customer_email = serializers.SerializerMethodField()
+
     customer_id = serializers.SerializerMethodField()
 
     invoice_attachment = InvoiceAttachmentSerializer(many=True)
+
+    def get_customer_email(self,obj):
+        return obj.customer.primary_email
 
     def get_customer(self,obj):
         return obj.customer.full_name
