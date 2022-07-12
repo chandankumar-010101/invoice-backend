@@ -1,4 +1,6 @@
 
+from drf_yasg.utils import swagger_auto_schema
+
 from rest_framework import status
 from rest_framework import generics
 from rest_framework.views import APIView
@@ -11,6 +13,7 @@ from rest_framework.parsers import FormParser, MultiPartParser
 from .models import Invoice,InvoiceAttachment
 from .serializer import InvoiceSerializer,GetInvoiceSerializer
 
+from .schema import  email_invoice_schema
 from apps.utility.filters import InvoiceFilter,invoice_filter
 from apps.customer.pagination import CustomPagination
 
@@ -130,4 +133,14 @@ class DeleteInvoiceAttachmentView(APIView):
         InvoiceAttachment.objects.filter(id=id).delete()
         return Response({
             'message': 'Attachment deleted successfully.',
+        },status=status.HTTP_204_NO_CONTENT)
+
+class SendInvoiceEmailView(APIView):
+    
+    @swagger_auto_schema(request_body=email_invoice_schema, operation_description='Email Invoice')
+    def post(self,request,id):
+        params = request.data
+
+        return Response({
+            'message': 'Email send successfully.',
         },status=status.HTTP_204_NO_CONTENT)
