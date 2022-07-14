@@ -49,7 +49,9 @@ class CustomerFilterSerializer(serializers.ModelSerializer):
 
 class CustomerListSerializer(serializers.ModelSerializer):
     """ List of Customer serializer. """
-
+    full_name = serializers.SerializerMethodField()
+    def get_full_name(self,obj):
+        return obj.full_name.title()
     class Meta:
         model = Customer
         fields = ('pk','full_name','outstanding_invoices',
