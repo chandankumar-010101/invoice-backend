@@ -48,6 +48,7 @@ class Customer(models.Model):
 
 
 class AlternateContact(models.Model):
+    
     """ Alternate contact for the customer."""
     customer = models.OneToOneField(Customer, on_delete=models.CASCADE,related_name='customer', default=None)
     alternate_name = models.CharField(max_length=30, null=True, blank=True)
