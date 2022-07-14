@@ -212,4 +212,4 @@ class DocwnloadCSVView(APIView):
         for data in queryset:
             writer.writerow(
                 [data.full_name, data.outstanding_invoices, data.open_balance, data.overdue_balance])
-            return response
+        return response
