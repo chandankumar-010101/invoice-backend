@@ -58,23 +58,20 @@ class CustomerListView(generics.ListAPIView):
 
 
 
-class CsvCustomerListView(generics.ListAPIView):
+class CsvCustomerListView(APIView):
     """ Paginated customer list.
     Get list of Customer by user's organization with 
     pagination.
     """
 
-    queryset = Customer.objects.all()
-    serializer_class = CustomerListSerializer
     permission_classes = (IsAuthenticated, )
 
 
-    def list(self, request, *args, **kwargs):
-        params = request.GET
+    def get(self, request):
         organization = request.user.profile.organization
         queryset = Customer.objects.filter(organization=organization)
-        serializer = self.serializer_class(queryset, many=True)
-        return serializer.data
+        serializer = CustomerListSerializer(queryset, many=True)
+        return Response({'data':serializer.data})
 
 
 
