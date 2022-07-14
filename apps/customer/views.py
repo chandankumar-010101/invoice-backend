@@ -185,3 +185,31 @@ class DeleteMultipleCustomerView(APIView):
         queryset.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
+
+
+
+class DocwnloadCSVView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        import csv
+        from django.http import HttpResponse
+        queryset = None
+        rows = tuple()
+        field_names = []
+        response = HttpResponse()
+        # force download.
+        response['Content-Disposition'] = 'attachment;filename=reports.csv'
+        # the csv writer
+        writer = csv.writer(response)
+        params = request.GET
+        organization = request.user.profile.organization
+        queryset = Customer.objects.filter(organization=organization)
+        
+        field_names = ["Customer", "Outstanding Invoices",
+                        "Open Balance", "Overdue Balance"]
+        writer.writerow(field_names)
+        for data in queryset:
+            writer.writerow(
+                [data.full_name, data.outstanding_invoices, data.open_balance, data.overdue_balance])
+            return response
