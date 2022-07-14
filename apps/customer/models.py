@@ -52,4 +52,5 @@ class AlternateContact(models.Model):
     alternate_name = models.CharField(max_length=30, null=True, blank=True)
     alternate_role = models.CharField(max_length=30, null=True, blank=True)
     alternate_email = models.EmailField(max_length=254,null=True, blank=True)
-    alternate_phone = models.CharField(max_length=30,null=True, blank=True)
+    alternate_phone = PhoneNumberField(null=True, blank=True,)
+
