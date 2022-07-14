@@ -29,7 +29,7 @@ class InvoiceListView(generics.ListAPIView):
 
 
     def get_queryset(self):
-        # organization = request.user.profile.organization
+        # organization = self.request.user.profile.organization
         queryset = Invoice.objects.all()
         queryset = invoice_filter(self.request,queryset)
         return queryset
