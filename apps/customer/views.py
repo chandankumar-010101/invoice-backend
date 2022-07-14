@@ -66,7 +66,6 @@ class CsvCustomerListView(APIView):
 
     permission_classes = (IsAuthenticated, )
 
-
     def get(self, request):
         organization = request.user.profile.organization
         queryset = Customer.objects.filter(organization=organization)
