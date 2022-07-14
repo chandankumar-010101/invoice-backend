@@ -13,4 +13,4 @@ class CustomerAdmin(admin.ModelAdmin):
 
 @admin.register(AlternateContact)
 class AlternateContactAdmin(admin.ModelAdmin):
-    list_display = ("alternate_email",)
+    list_display = ("id","alternate_email",)
