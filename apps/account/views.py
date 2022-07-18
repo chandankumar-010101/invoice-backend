@@ -263,7 +263,7 @@ class ForgotPasswordView(APIView):
         except Exception as error:
             logger.error([error.args[0]])
             return Response({
-                "detail": [error.args[0]]
+                "detail": ["Enter email doest not exist"]
             }, status=status.HTTP_400_BAD_REQUEST)
 
 
