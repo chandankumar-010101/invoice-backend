@@ -25,9 +25,7 @@ def send_message_on_whatsapp(invoice):
     attachment= []
     for data in invoice.invoice_attachment.all():
         attachment.append(data.attachment.url)
-
     msg = ' '.join(attachment)
-
     message = client.messages.create(
         from_='whatsapp:{}'.format(config('TWILIO_NUMBER')),
         body='Hi {}, Please find the invoice details. Invoice No: {}, Invoice Due Date: {}, Invoice Amount: {}. Here is the invoice attachment: {}'.format(
