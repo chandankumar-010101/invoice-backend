@@ -165,8 +165,9 @@ class CsvInvoiceListView(APIView):
     permission_classes = (IsAuthenticated, )
 
     def get(self, request):
-        customer_id = Customer.objects.filter(organization=request.user.profile.organization).values_list('id', flat=True)
+        customer_id = Customer.objects.filter(organization=self.request.user.profile.organization).values_list('id', flat=True)
         queryset = Invoice.objects.filter(customer__id__in=list(customer_id))
+        # queryset = Invoice.objects.all()
         serializer = GetInvoiceSerializer(queryset, many=True)
         return Response({'data':serializer.data})
 
