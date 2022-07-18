@@ -149,7 +149,7 @@ class SendInvoiceEmailView(APIView):
 
 
 class SendInvoiceWhatsView(APIView):
-    def post(self,request,id):
+    def get(self,request,id):
         params = request.data
 
         return Response({

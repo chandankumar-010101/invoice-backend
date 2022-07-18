@@ -21,11 +21,13 @@ def send_media_on_whatsapp(phone_no):
     print(message.sid)
 
 
-def send_message_on_whatsapp(phone_no):
+def send_message_on_whatsapp(user):
+
     message = client.messages.create(
-        from_='whatsapp:+14155238886',
+        from_='whatsapp:{}'.format(config('TWILIO_NUMBER')),
         body='Hey, I just met you, and this is crazy...',
         status_callback='http://postb.in/1234abcd',
         to='whatsapp:{}'.format(phone_no)
     )
+    
     print(message.sid)
