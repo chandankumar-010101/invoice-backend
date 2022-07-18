@@ -21,13 +21,24 @@ def send_media_on_whatsapp(phone_no):
     print(message.sid)
 
 
-def send_message_on_whatsapp(user):
+def send_message_on_whatsapp(invoice):
+    attachment= []
+    for data in invoice.invoice_attachment.all():
+        attachment.append(data.attachment.url)
+
+    msg = ' '.join(attachment)
 
     message = client.messages.create(
         from_='whatsapp:{}'.format(config('TWILIO_NUMBER')),
-        body='Hey, I just met you, and this is crazy...',
-        status_callback='http://postb.in/1234abcd',
-        to='whatsapp:{}'.format(phone_no)
+        body='Hi {}, Please find the invoice details. Invoice No: {}, Invoice Due Date: {}, Invoice Amount: {}. Here is the invoice attachment: {}'.format(
+            invoice.customer.full_name,
+            invoice.invoice_number,
+            invoice.due_date,
+            invoice.due_amount,
+            msg
+        ),
+        # status_callback='http://postb.in/1234abcd',
+        to='whatsapp:{}'.format(invoice.customer.primary_phone)
     )
-    
+
     print(message.sid)

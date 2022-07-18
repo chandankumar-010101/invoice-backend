@@ -18,6 +18,8 @@ from apps.utility.filters import InvoiceFilter,invoice_filter
 from apps.customer.pagination import CustomPagination
 from apps.customer.models import Customer
 
+
+from apps.utility.twilio import send_message_on_whatsapp
 # Create your views here.
 class InvoiceListView(generics.ListAPIView):
     filter_class = InvoiceFilter
@@ -151,7 +153,8 @@ class SendInvoiceEmailView(APIView):
 class SendInvoiceWhatsView(APIView):
     def get(self,request,id):
         params = request.data
-
+        invoice = Invoice.objects.get(id=id)
+        send_message_on_whatsapp(invoice)
         return Response({
             'message': 'Messgae sent on whats app successfully.',
         },status=status.HTTP_200_OK)
