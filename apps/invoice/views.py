@@ -16,6 +16,7 @@ from .serializer import InvoiceSerializer,GetInvoiceSerializer
 from .schema import  email_invoice_schema
 from apps.utility.filters import InvoiceFilter,invoice_filter
 from apps.customer.pagination import CustomPagination
+from apps.customer.models import Customer
 
 # Create your views here.
 class InvoiceListView(generics.ListAPIView):
@@ -29,8 +30,8 @@ class InvoiceListView(generics.ListAPIView):
 
 
     def get_queryset(self):
-        # organization = self.request.user.profile.organization
-        queryset = Invoice.objects.all()
+        customer_id = Customer.objects.filter(organization=self.request.user.profile.organization).values_list('id', flat=True)
+        queryset = Invoice.objects.filter(customer__id__in=list(customer_id))
         queryset = invoice_filter(self.request,queryset)
         return queryset
 
@@ -143,9 +144,17 @@ class SendInvoiceEmailView(APIView):
         params = request.data
 
         return Response({
-            'message': 'Email send successfully.',
+            'message': 'Message sent on email successfully.',
         },status=status.HTTP_200_OK)
 
+
+class SendInvoiceWhatsView(APIView):
+    def post(self,request,id):
+        params = request.data
+
+        return Response({
+            'message': 'Messgae sent on whats app successfully.',
+        },status=status.HTTP_200_OK)
 
 class CsvInvoiceListView(APIView):
     """ Paginated customer list.
@@ -153,11 +162,11 @@ class CsvInvoiceListView(APIView):
     pagination.
     """
 
-    # permission_classes = (IsAuthenticated, )
+    permission_classes = (IsAuthenticated, )
 
     def get(self, request):
-        # organization = request.user.profile.organization
-        queryset = Invoice.objects.all()
+        customer_id = Customer.objects.filter(organization=request.user.profile.organization).values_list('id', flat=True)
+        queryset = Invoice.objects.filter(customer__id__in=list(customer_id))
         serializer = GetInvoiceSerializer(queryset, many=True)
         return Response({'data':serializer.data})
 
