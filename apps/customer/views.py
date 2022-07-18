@@ -16,7 +16,6 @@ from apps.customer.serializers import (
     CustomerSerializer, CustomerFilterSerializer,
     AlternateContactSerializer, CustomerListSerializer,
     CustomerRetriveDestroySerializer,UpdateCustomerSerializer,
-    
 )
 from apps.customer.models import AlternateContact
 import apps.customer.response_messages as resp_msg
@@ -54,9 +53,6 @@ class CustomerListView(generics.ListAPIView):
         serializer = self.serializer_class(queryset, many=True)
         page = self.paginate_queryset(serializer.data)
         return self.get_paginated_response(page)
-
-
-
 
 class CsvCustomerListView(APIView):
     """ Paginated customer list.

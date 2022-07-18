@@ -145,3 +145,19 @@ class SendInvoiceEmailView(APIView):
         return Response({
             'message': 'Email send successfully.',
         },status=status.HTTP_200_OK)
+
+
+class CsvInvoiceListView(APIView):
+    """ Paginated customer list.
+    Get list of Customer by user's organization with 
+    pagination.
+    """
+
+    # permission_classes = (IsAuthenticated, )
+
+    def get(self, request):
+        # organization = request.user.profile.organization
+        queryset = Invoice.objects.all()
+        serializer = GetInvoiceSerializer(queryset, many=True)
+        return Response({'data':serializer.data})
+

@@ -5,6 +5,7 @@ from apps.invoice import views
 app_name= 'invoice'
 
 urlpatterns = [
+    path('csv', views.CsvInvoiceListView.as_view()),
     path('list', views.InvoiceListView.as_view()),
     path('create', views.InvoiceCreateView.as_view()),
     path('update/<str:pk>', views.InvoiceUpdateView.as_view()),

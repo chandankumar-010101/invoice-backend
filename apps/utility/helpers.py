@@ -32,7 +32,7 @@ class GenerateForgotLink(object):
     def generate(request,user):
         uid = urlsafe_base64_encode(force_bytes(user.uuid))
         time = urlsafe_base64_encode(force_bytes(datetime.datetime.now()))
-        url = "http://52.7.133.188/reset-password/?uuid={0}&time={1}".format(uid, time) 
+        url = "https://stage.jasiricap.com/reset-password/?uuid={0}&time={1}".format(uid, time) 
         return url
     
     def decode(uuid,time):
