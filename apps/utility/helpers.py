@@ -1,4 +1,5 @@
 import datetime
+# import bitly_api
 
 from decouple import config
 
@@ -72,3 +73,12 @@ class SiteUrl(object):
         else:
             site_url = 'http://' + request.get_host()
         return site_url
+
+
+def generate_bitly_link(url):
+    BITLY_ACCESS_TOKEN = "7c874b571dfac5419a41b1c72b98b3cdb1ffc59b"
+    x = bitly_api.Connection(access_token = BITLY_ACCESS_TOKEN)
+    response = x.shorten(url)
+    print(response)
+
+# generate_bitly_link("https://python.plainenglish.io/shorten-your-url-using-python-and-bitly-9767f70ed97e")

@@ -25,14 +25,14 @@ def send_message_on_whatsapp(invoice):
     attachment= []
     for data in invoice.invoice_attachment.all():
         attachment.append(data.attachment.url)
-    msg = ' '.join(attachment)
+    msg = ',\n'.join(attachment)
     message = client.messages.create(
         from_='whatsapp:{}'.format(config('TWILIO_NUMBER')),
-        body='Hi {}, Please find the invoice details. Invoice No: {}, Invoice Due Date: {}, Invoice Amount: {}. Here is the invoice attachment: {}'.format(
+        body='Hi {},\nPlease find the invoice details:\nInvoice No: {},\nInvoice Amount: {},\nInvoice Due Date: {},\nHere is the invoice attachment: {}'.format(
             invoice.customer.full_name,
             invoice.invoice_number,
-            invoice.due_date,
             invoice.due_amount,
+            invoice.due_date,
             msg
         ),
         # status_callback='http://postb.in/1234abcd',
@@ -40,3 +40,7 @@ def send_message_on_whatsapp(invoice):
     )
 
     print(message.sid)
+
+# from apps.invoice.models import Invoice
+# invoice = Invoice.objects.get(id=9)
+# send_message_on_whatsapp(invoice)
