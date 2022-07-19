@@ -91,6 +91,7 @@ class InvoiceCreateView(generics.CreateAPIView):
                 'detail': [error.args[0]]
             }, status=status.HTTP_400_BAD_REQUEST)
 
+
 class InvoiceUpdateView(generics.UpdateAPIView):
 
     queryset = Invoice.objects.all()
