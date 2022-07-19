@@ -85,7 +85,7 @@ class InvoiceCreateView(generics.CreateAPIView):
             return Response({
                 'id':invoice.id,
                 'message': 'Invoice created successfully.',
-            }, statuinvoices=status.HTTP_200_OK)
+            }, status=status.HTTP_200_OK)
         except Exception as error:
             return Response({
                 'detail': [error.args[0]]
