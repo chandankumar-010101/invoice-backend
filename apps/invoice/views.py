@@ -146,11 +146,11 @@ class DeleteInvoiceAttachmentView(APIView):
         },status=status.HTTP_204_NO_CONTENT)
 
 class SendInvoiceEmailView(APIView):
+    permission_classes = [IsAuthenticated]
     
     @swagger_auto_schema(request_body=email_invoice_schema, operation_description='Email Invoice')
     def post(self,request,id):
         params = request.data
-        print(params['cc'])
         invoice = Invoice.objects.get(id=id)
         context = {
             'invoice':invoice,
@@ -168,6 +168,7 @@ class SendInvoiceEmailView(APIView):
 
 
 class SendInvoiceWhatsView(APIView):
+    permission_classes = [IsAuthenticated]
     def get(self,request,id):
         params = request.data
         invoice = Invoice.objects.get(id=id)
@@ -187,6 +188,5 @@ class CsvInvoiceListView(APIView):
     def get(self, request):
         customer_id = Customer.objects.filter(organization=self.request.user.profile.organization).values_list('id', flat=True)
         queryset = Invoice.objects.filter(customer__id__in=list(customer_id))
-        # queryset = Invoice.objects.all()
         serializer = GetInvoiceSerializer(queryset, many=True)
         return Response({'data':serializer.data})
