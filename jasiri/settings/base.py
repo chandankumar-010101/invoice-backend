@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'drf_yasg',
     'django_filters',
+    'apps.utility'
 
 
 ]
@@ -55,7 +56,6 @@ PROJECT_APPS = [
     'apps.customer',
     'apps.account',
     'apps.invoice',
-    'apps.utility'
 ] 
 
 INSTALLED_APPS += PROJECT_APPS
@@ -182,8 +182,6 @@ STATIC_URL = 'static/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
-# EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-# EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_HOST = 'email-smtp.us-east-1.amazonaws.com'
 EMAIL_USE_TLS = True
 EMAIL_PORT = 587

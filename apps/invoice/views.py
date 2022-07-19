@@ -1,6 +1,9 @@
 
 from drf_yasg.utils import swagger_auto_schema
 
+from django.template.loader import render_to_string
+
+
 from rest_framework import status
 from rest_framework import generics
 from rest_framework.views import APIView
@@ -18,8 +21,10 @@ from apps.utility.filters import InvoiceFilter,invoice_filter
 from apps.customer.pagination import CustomPagination
 from apps.customer.models import Customer
 
-
+from apps.utility.helpers import SiteUrl,SendMail
 from apps.utility.twilio import send_message_on_whatsapp
+
+
 # Create your views here.
 class InvoiceListView(generics.ListAPIView):
     filter_class = InvoiceFilter
@@ -80,7 +85,7 @@ class InvoiceCreateView(generics.CreateAPIView):
             return Response({
                 'id':invoice.id,
                 'message': 'Invoice created successfully.',
-            }, status=status.HTTP_200_OK)
+            }, statuinvoices=status.HTTP_200_OK)
         except Exception as error:
             return Response({
                 'detail': [error.args[0]]
@@ -144,7 +149,18 @@ class SendInvoiceEmailView(APIView):
     @swagger_auto_schema(request_body=email_invoice_schema, operation_description='Email Invoice')
     def post(self,request,id):
         params = request.data
-
+        print(params['cc'])
+        invoice = Invoice.objects.get(id=id)
+        context = {
+            'invoice':invoice,
+            'subject':params['subject'],
+            'body':params['body'],
+            'site_url': str(SiteUrl.site_url(request)),
+        }
+        get_template = render_to_string(
+            'email_template/invoice.html', context)
+        SendMail.invoice(
+            "Email Invoice From Jasiri", "aftab.hussain@oodles.io", get_template,params['cc'])
         return Response({
             'message': 'Message sent on email successfully.',
         },status=status.HTTP_200_OK)
@@ -173,4 +189,3 @@ class CsvInvoiceListView(APIView):
         # queryset = Invoice.objects.all()
         serializer = GetInvoiceSerializer(queryset, many=True)
         return Response({'data':serializer.data})
-

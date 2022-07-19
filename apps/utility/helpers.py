@@ -1,5 +1,7 @@
+import random
 import datetime
 import requests
+import mimetypes
 
 from decouple import config
 
@@ -12,6 +14,8 @@ from django.utils.dateparse import parse_datetime
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 
 from apps.account.models import User
+
+
 
 def filename_path(folder, instance, filename) -> str:
     """
@@ -62,6 +66,31 @@ class SendMail(object):
             print("####",e)
             return False
 
+    @staticmethod
+    def invoice(subject,email,email_html,cc):
+        try:
+            to = [email]
+            from_email = settings.EMAIL_EMAIL_ID
+            msg = EmailMessage(
+                subject, email_html, to=to,
+                from_email=from_email,
+                cc=cc
+            )
+            # for data in invoice.invoice_attachment.all():
+            #     msg.attach(
+            #         str(data.attachment).split('/')[1], 
+            #         data.attachment.read(),
+            #         mimetypes.guess_type(data.attachment.name)[0]
+            #     )
+            msg.content_subtype = "html"
+            msg.send()
+            return True
+        except Exception as e:
+            print("####",e)
+            return False
+
+
+
 class SiteUrl(object):
 
     ''' Get secure and unsecure host name '''
@@ -91,3 +120,17 @@ def generate_bitly_link(url):
     if response.status_code == 200:
         return response.json()['link']
     return url
+
+
+def download_file_from_s3(url):
+    response = requests.get(url)
+    file_name = random.randint(11,99999999)
+    extension = 'pdf'
+    if 'png' in url:
+        extension = "png"
+    elif 'jpg' in url:
+        extension = "jpg"
+    elif 'jpeg' in url:
+        extension = "jpeg"
+    open("media/temp/{}.{}".format(file_name,extension), "wb").write(response.content)
+    return "media/temp/{}.{}".format(file_name,extension)

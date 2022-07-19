@@ -41,6 +41,4 @@ def send_message_on_whatsapp(invoice):
     )
     print(message.sid)
 
-# from apps.invoice.models import Invoice
-# invoice = Invoice.objects.get(id=9)
-# send_message_on_whatsapp(invoice)
+
