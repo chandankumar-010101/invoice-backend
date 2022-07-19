@@ -1,5 +1,5 @@
 import datetime
-# import bitly_api
+import requests
 
 from decouple import config
 
@@ -76,9 +76,18 @@ class SiteUrl(object):
 
 
 def generate_bitly_link(url):
-    BITLY_ACCESS_TOKEN = "7c874b571dfac5419a41b1c72b98b3cdb1ffc59b"
-    x = bitly_api.Connection(access_token = BITLY_ACCESS_TOKEN)
-    response = x.shorten(url)
-    print(response)
+    headers = {
+        'Authorization': 'Bearer 7c874b571dfac5419a41b1c72b98b3cdb1ffc59b',
+        'Content-Type': 'application/json',
+    }
 
-# generate_bitly_link("https://python.plainenglish.io/shorten-your-url-using-python-and-bitly-9767f70ed97e")
+    json_data = {
+        'long_url': url,
+        'domain': 'bit.ly',
+    }
+
+    response = requests.post('https://api-ssl.bitly.com/v4/bitlinks', headers=headers, json=json_data)
+    # print(response.json())
+    if response.status_code == 200:
+        return response.json()['link']
+    return url

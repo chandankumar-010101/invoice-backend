@@ -7,6 +7,7 @@ from decouple import config
 
 from twilio.rest import Client
 
+from .helpers import generate_bitly_link
 
 account_sid = config('TWILIO_ACCOUNT_SID')
 auth_token = config('TWILIO_AUTH_TOKEN')
@@ -24,7 +25,7 @@ def send_media_on_whatsapp(phone_no):
 def send_message_on_whatsapp(invoice):
     attachment= []
     for data in invoice.invoice_attachment.all():
-        attachment.append(data.attachment.url)
+        attachment.append(generate_bitly_link(data.attachment.url))
     msg = ',\n'.join(attachment)
     message = client.messages.create(
         from_='whatsapp:{}'.format(config('TWILIO_NUMBER')),
@@ -38,7 +39,6 @@ def send_message_on_whatsapp(invoice):
         # status_callback='http://postb.in/1234abcd',
         to='whatsapp:{}'.format(invoice.customer.primary_phone)
     )
-
     print(message.sid)
 
 # from apps.invoice.models import Invoice
