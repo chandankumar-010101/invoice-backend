@@ -55,7 +55,7 @@ class InvoiceListView(generics.ListAPIView):
         return Response({
             'message': "Data Fetched Successfully.",
             'data': response.data,
-            'outstanding_invoice':outstanding_invoice['total_amount__sum'] if outstanding_invoice['total_amount__sum'] else 00,
+            'outstanding_invoice':outstanding_invoice,
             'outstanding_balance':outstanding_balance['total_amount__sum'] if outstanding_balance['total_amount__sum'] else 00,
             'current_amount':0,
             'overdue_amount':0,
