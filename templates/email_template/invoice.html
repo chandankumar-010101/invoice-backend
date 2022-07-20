@@ -22,7 +22,7 @@
 
         body {
             margin: 0;
-            background-color:#f9f9f9!important;
+            background-color: #f9f9f9 !important;
             font-family: 'Roboto', sans-serif;
         }
 
@@ -51,47 +51,125 @@
             color: #555555;
         }
 
-       
+
         .main-content {
             text-align: center;
             box-shadow: 0 5px 10px #0000000d !important;
-            background-color:#fff;
-            border:2px solid #f3f5f9;
-            padding:30px 60px;
+            background-color: #fff;
+            border: 2px solid #f3f5f9;
+            padding: 30px 60px;
         }
-/*latest design*/
-.invoice-title{ font-size:21px; color:#000000; text-transform: capitalize;}
-.informative{ margin-top:30px; margin-bottom:10px; text-align:left;}
-.informative p{  font-size:16px;}
-.logoinfo img{ display:block; margin:auto;}
-.invoice-bnnr{ padding:15px; background:#277FFE; margin-top:24px; color:#fff; padding:36px;}
-.payemtbtn a{ background-color: #fff; padding:12px 45px; border-radius:5px; color:#000000; text-decoration: none; font-size:14px;}
-.payemtbtn{ margin-top:30px;}
-.payment-methods{ display:flex; flex-direction:row; justify-content: space-between;}
-.payment-methods img{ display:block; margin:auto; margin-bottom:15px;}
-.payment-methods a{ text-decoration: none; color:#555555;}
-.payment-methods>div{ width:25%; border:1px solid #f2f2f2;padding:10px; border-radius:5px; font-size:14px;}
-.payby{ margin-top:20px; margin-bottom:10px; font-weight:bold;}
-.scheduleinvoice{ margin-left:15px;}
-/*ends here*/
 
-/*Responsive starts from here*/
-@media screen and (max-width:588px)
-{
-    .invoice-bnnr{ padding:33px 15px;}
-}
+        /*latest design*/
+        .invoice-title {
+            font-size: 21px;
+            color: #000000;
+            text-transform: capitalize;
+        }
 
-@media screen and (max-width:547px)
-{
-    .payemtbtn a{ display:block; margin-bottom:15px;}
-    .scheduleinvoice{ margin-left:0px; margin-bottom:0px!important;}
-    .main-content{ padding:30px;}
-    .invoice-title{ text-align: left; font-size:18px;}
-}
+        .informative {
+            margin-top: 30px;
+            margin-bottom: 10px;
+            text-align: left;
+        }
 
-/*Responsive ends here*/
+        .informative p {
+            font-size: 16px;
+        }
 
-      </style>
+        .logoinfo img {
+            display: block;
+            margin: auto;
+        }
+
+        .invoice-bnnr {
+            padding: 15px;
+            background: #277FFE;
+            margin-top: 24px;
+            color: #fff;
+            padding: 36px;
+        }
+
+        .payemtbtn a {
+            background-color: #fff;
+            padding: 12px 45px;
+            border-radius: 5px;
+            color: #000000;
+            text-decoration: none;
+            font-size: 14px;
+        }
+
+        .payemtbtn {
+            margin-top: 30px;
+        }
+
+        .payment-methods {
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+        }
+
+        .payment-methods img {
+            display: block;
+            margin: auto;
+            margin-bottom: 15px;
+        }
+
+        .payment-methods a {
+            text-decoration: none;
+            color: #555555;
+        }
+
+        .payment-methods>div {
+            width: 25%;
+            border: 1px solid #f2f2f2;
+            padding: 10px;
+            border-radius: 5px;
+            font-size: 14px;
+        }
+
+        .payby {
+            margin-top: 20px;
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+
+        .scheduleinvoice {
+            margin-left: 15px;
+        }
+
+        /*ends here*/
+
+        /*Responsive starts from here*/
+        @media screen and (max-width:588px) {
+            .invoice-bnnr {
+                padding: 33px 15px;
+            }
+        }
+
+        @media screen and (max-width:547px) {
+            .payemtbtn a {
+                display: block;
+                margin-bottom: 15px;
+            }
+
+            .scheduleinvoice {
+                margin-left: 0px;
+                margin-bottom: 0px !important;
+            }
+
+            .main-content {
+                padding: 30px;
+            }
+
+            .invoice-title {
+                text-align: left;
+                font-size: 18px;
+            }
+        }
+
+        /*Responsive ends here*/
+    </style>
 </head>
 
 <body>
@@ -105,90 +183,106 @@
             <tr>
                 <td class="main-content">
                     <table style="width:100%; text-align: center;">
-                        
+
                         <tr>
                             <td>
-                              <h3 class="invoice-title">{{subject}}</h3>
-                            <div class="informative">
-                                {{body|safe}}
-                            </div>
-                        </td>
+                                <h3 class="invoice-title">{{subject}}</h3>
+                                <div class="informative">
+                                    {{body|safe}}
+                                </div>
+                            </td>
                         </tr>
-                        
+
                         <tr>
                             <td>
                                 <div class="table-responsive">
-                                <table  style="border-spacing: 5px 10px;border: 1px solid #f2f2f2;
+                                    <table style="border-spacing: 5px 10px;border: 1px solid #f2f2f2;
                                 width: 100%; border-radius:5px;">
-                                    <p style="text-align:left; margin-bottom:10px; font-weight:bold; margin-top:20px;">Attachments</p>
-                                    {% for data in invoice.invoice_attachment.all %}
+                                        <p
+                                            style="text-align:left; margin-bottom:10px; font-weight:bold; margin-top:20px;">
+                                            Attachments</p>
+                                        {% for data in invoice.invoice_attachment.all %}
                                         <tr>
                                             <td><a><img src="{{site_url}}/static/images/noun-pdf.png"></a></td>
-                                            <td><p class="dtstyle">{{data|get_file_name}}</p><span style="font-size:12px; color:#7D7D7D;">{{data|get_file_size}} KB</span></td>
+                                            <td>
+                                                <p class="dtstyle">{{data|get_file_name}}</p><span
+                                                    style="font-size:12px; color:#7D7D7D;">{{data|get_file_size}}
+                                                    KB</span>
+                                            </td>
                                             <td><span>{{invoice.created_on|date:"d-m-Y"}}</span></td>
-                                            <td><a href="{{data.attachment.url}}"><img src="{{site_url}}/static/images/Iconly-Light-Show.png"></a></td>
+                                            <td><a href="{{data.attachment.url}}"><img
+                                                        src="{{site_url}}/static/images/Iconly-Light-Show.png"></a></td>
                                         </tr>
-                                    {% endfor %}
+                                        {% endfor %}
                                     </table>
                                 </div>
                             </td>
                         </tr>
 
-                        
-                   <tr>
+
+                        <tr>
 
 
-                   <tr>
-                    <td>
-                        <table>
-                            <div class="invoice-bnnr">
-                                <p style="font-size:14px;">Due {{invoice.due_date}}</p>
-                                <p style="font-size:15px; margin-top:10px;">KES&nbsp;<span style="font-size:22px;">{{invoice.total_amount}}</span></p>
-                                <div class="payemtbtn">
-                                    <a href="#">View Invoice</a>
-                                    <a class="scheduleinvoice" href="#">Schedule Payment</a>
-                                </div>
-                                
-                            </div>
-                        </table>
-                    </td>
-                   </tr>
-                   <tr>
-                    <td>
-                        <p class="payby">Pay By</p>
+                        <tr>
+                            <td>
+                                <table>
+                                    <div class="invoice-bnnr">
+                                        <p style="font-size:14px;">Due {{invoice.due_date}}</p>
+                                        <p style="font-size:15px; margin-top:10px;">KES&nbsp;<span
+                                                style="font-size:22px;">{{invoice.total_amount}}</span></p>
+                                        <div class="payemtbtn">
+                                            <a href="#">View Invoice</a>
+                                            <a class="scheduleinvoice" href="#">Schedule Payment</a>
+                                        </div>
+
+                                    </div>
+                                </table>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <p class="payby">Pay By</p>
                                 <div class="payment-methods">
-                                   <div class="dbt-card">
-                                       <a href="#"> <img src="{{site_url}}/static/images/Icon-feather-credit-card.png"/>
-                                        Debit Card</a></div>
+                                    <div class="dbt-card">
+                                        <a href="#"> <img
+                                                src="{{site_url}}/static/images/Icon-feather-credit-card.png" />
+                                            Debit Card</a>
+                                    </div>
                                     <div class="bank-transfer">
-                                        <a href="#"><img src="{{site_url}}/static/images/Icon-metro-mobile.png"/>
-                                        Bank Transfer</a></div>
+                                        <a href="#"><img src="{{site_url}}/static/images/Icon-metro-mobile.png" />
+                                            Bank Transfer</a>
+                                    </div>
                                     <div class="m-pesa">
-                                        <a href="#"><img src="{{site_url}}/static/images/Icon-open-transfer.png"/>
-                                        M-Pesa</a></div>
+                                        <a href="#"><img src="{{site_url}}/static/images/Icon-open-transfer.png" />
+                                            M-Pesa</a>
+                                    </div>
                                 </div>
-                    </td>
-                   </tr>
-                            </table>
+                            </td>
+                        </tr>
+                    </table>
 
-                            
-                        </td>
-                    </tr>
 
-                           
+                </td>
+            </tr>
+
+
             <!-- Socialmedia icons-->
             <tr>
                 <td style="padding-top:45px; ">
-                    <div class="logoinfo"><a href="#"><img  src="{{site_url}}/static/images/Jasiri-Main-logo.png"></a></div>
-            
+                    <div class="logoinfo"><a href="#"><img src="{{site_url}}/static/images/Jasiri-Main-logo.png"></a>
+                    </div>
+
                 </td>
             </tr>
             <tr>
                 <td style="padding-top:25px;text-align: center;">
-                    <p style="color:#ababab; font-size:14px; padding:20px 30px;" >Jasiri is an online billing and collections platform enabling SMEs and corporates to seamlessly collect payments and manage receivables from their business customers. We help you reduce payment delays, get paid faster, and improve cash flow.</p>
-                 </td>
+                    <p style="color:#ababab; font-size:14px; padding:20px 30px;">Jasiri is an online billing and
+                        collections platform enabling SMEs and corporates to seamlessly collect payments and manage
+                        receivables from their business customers. We help you reduce payment delays, get paid faster,
+                        and improve cash flow.</p>
+                </td>
             </tr>
-            
+
         </table>
     </center>
 </body>
