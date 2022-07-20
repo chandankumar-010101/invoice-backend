@@ -59,7 +59,7 @@ class InvoiceListView(generics.ListAPIView):
             'outstanding_balance':outstanding_balance['total_amount__sum'] if outstanding_balance['total_amount__sum'] else 00,
             'current_amount':0,
             'overdue_amount':0,
-            'total':total
+            'total':total['total_amount__sum'] if total['total_amount__sum'] else 00
         }, status=status.HTTP_200_OK)
 
 class DeleteInvoiceView(APIView):
