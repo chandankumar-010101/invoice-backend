@@ -49,6 +49,7 @@ class InvoiceListView(generics.ListAPIView):
         response = super(InvoiceListView, self).list(request, *args, **kwargs)
         customer_id = Customer.objects.filter(organization=request.user.profile.organization).values_list('id', flat=True)
         queryset = Invoice.objects.filter(customer__id__in=list(customer_id))
+        total = queryset.aggregate(Sum('total_amount'))
         outstanding_invoice = queryset.filter(~Q(invoice_status='PAYMENT_DONE')).count()
         outstanding_balance = queryset.filter(~Q(invoice_status='PAYMENT_DONE')).aggregate(Sum('total_amount'))
         return Response({
@@ -57,7 +58,8 @@ class InvoiceListView(generics.ListAPIView):
             'outstanding_invoice':outstanding_invoice,
             'outstanding_balance':outstanding_balance,
             'current_amount':0,
-            'overdue_amount':0
+            'overdue_amount':0,
+            'total':total
         }, status=status.HTTP_200_OK)
 
 class DeleteInvoiceView(APIView):
