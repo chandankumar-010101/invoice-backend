@@ -99,7 +99,6 @@ SWAGGER_SETTINGS = {
 #         'rest_framework_simplejwt.authentication.JWTAuthentication',
 #     ],
 #     # 'EXCEPTION_HANDLER': ('apps.utility.exception.custom_exception_handler')
-    
 # }
 
 

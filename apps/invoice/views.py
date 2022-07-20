@@ -49,17 +49,17 @@ class InvoiceListView(generics.ListAPIView):
         response = super(InvoiceListView, self).list(request, *args, **kwargs)
         customer_id = Customer.objects.filter(organization=request.user.profile.organization).values_list('id', flat=True)
         queryset = Invoice.objects.filter(customer__id__in=list(customer_id))
-        total = queryset.aggregate(Sum('total_amount'))
+        total = queryset.aggregate(Sum('due_amount'))
         outstanding_invoice = queryset.filter(~Q(invoice_status='PAYMENT_DONE')).count()
-        outstanding_balance = queryset.filter(~Q(invoice_status='PAYMENT_DONE')).aggregate(Sum('total_amount'))
+        outstanding_balance = queryset.filter(~Q(invoice_status='PAYMENT_DONE')).aggregate(Sum('due_amount'))
         return Response({
             'message': "Data Fetched Successfully.",
             'data': response.data,
             'outstanding_invoice':outstanding_invoice,
-            'outstanding_balance':outstanding_balance['total_amount__sum'] if outstanding_balance['total_amount__sum'] else 00,
+            'outstanding_balance':outstanding_balance['due_amount__sum'] if outstanding_balance['due_amount__sum'] else 00,
             'current_amount':0,
             'overdue_amount':0,
-            'total':total['total_amount__sum'] if total['total_amount__sum'] else 00
+            'total':total['due_amount__sum'] if total['due_amount__sum'] else 00
         }, status=status.HTTP_200_OK)
 
 class DeleteInvoiceView(APIView):
