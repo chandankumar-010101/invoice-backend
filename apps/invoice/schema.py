@@ -11,9 +11,6 @@ email_invoice_schema = openapi.Schema(
         ),
         'subject': openapi.Schema(type=openapi.TYPE_STRING),
         'body': openapi.Schema(type=openapi.TYPE_STRING),
-        
-       
     },
     required=['subject','cc','body']
 )
-

@@ -13,6 +13,9 @@ from django_filters import rest_framework as filters
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.parsers import FormParser, MultiPartParser
 
+from django.db.models import Q,Sum
+
+
 from .models import Invoice,InvoiceAttachment
 from .serializer import InvoiceSerializer,GetInvoiceSerializer
 
@@ -35,7 +38,7 @@ class InvoiceListView(generics.ListAPIView):
     filter_backends = (filters.DjangoFilterBackend, SearchFilter)
     search_fields = ['customer__full_name',"invoice_number","invoice_id"]
 
-
+    
     def get_queryset(self):
         customer_id = Customer.objects.filter(organization=self.request.user.profile.organization).values_list('id', flat=True)
         queryset = Invoice.objects.filter(customer__id__in=list(customer_id))
@@ -44,9 +47,17 @@ class InvoiceListView(generics.ListAPIView):
 
     def list(self, request, *args, **kwargs):
         response = super(InvoiceListView, self).list(request, *args, **kwargs)
+        customer_id = Customer.objects.filter(organization=request.user.profile.organization).values_list('id', flat=True)
+        queryset = Invoice.objects.filter(customer__id__in=list(customer_id))
+        outstanding_invoice = queryset.filter(~Q(invoice_status='PAYMENT_DONE')).count()
+        outstanding_balance = queryset.filter(~Q(invoice_status='PAYMENT_DONE')).aggregate(Sum('total_amount'))
         return Response({
             'message': "Data Fetched Successfully.",
             'data': response.data,
+            'outstanding_invoice':outstanding_invoice,
+            'outstanding_balance':outstanding_balance,
+            'current_amount':0,
+            'overdue_amount':0
         }, status=status.HTTP_200_OK)
 
 class DeleteInvoiceView(APIView):
