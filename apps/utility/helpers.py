@@ -105,20 +105,20 @@ class SiteUrl(object):
 
 
 def generate_bitly_link(url):
-    headers = {
-        'Authorization': 'Bearer 7c874b571dfac5419a41b1c72b98b3cdb1ffc59b',
-        'Content-Type': 'application/json',
-    }
+    # headers = {
+    #     'Authorization': 'Bearer 7c874b571dfac5419a41b1c72b98b3cdb1ffc59b',
+    #     'Content-Type': 'application/json',
+    # }
 
-    json_data = {
-        'long_url': url,
-        'domain': 'bit.ly',
-    }
+    # json_data = {
+    #     'long_url': url,
+    #     'domain': 'bit.ly',
+    # }
 
-    response = requests.post('https://api-ssl.bitly.com/v4/bitlinks', headers=headers, json=json_data)
-    # print(response.json())
-    if response.status_code == 200:
-        return response.json()['link']
+    # response = requests.post('https://api-ssl.bitly.com/v4/bitlinks', headers=headers, json=json_data)
+    # # print(response.json())
+    # if response.status_code == 200:
+    #     return response.json()['link']
     return url
 
 
