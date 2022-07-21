@@ -141,7 +141,7 @@ class InvoiceUpdateView(generics.UpdateAPIView):
 class RetrieveInvoiceView(generics.RetrieveDestroyAPIView):
     """Customer detail operations. 
 
-    delete reterive view for a customer .
+    delete reterive view for a customer.
     """
 
     lookup_field = 'id'
@@ -187,7 +187,7 @@ class SendInvoiceWhatsView(APIView):
         invoice = Invoice.objects.get(id=id)
         send_message_on_whatsapp(invoice)
         return Response({
-            'message': 'Messgae sent on whats app successfully.',
+            'message': 'Messgae sent on whatsapp successfully.',
         },status=status.HTTP_200_OK)
 
 class CsvInvoiceListView(APIView):

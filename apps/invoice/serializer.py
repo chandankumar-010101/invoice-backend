@@ -15,7 +15,6 @@ class InvoiceAttachmentSerializer(serializers.ModelSerializer):
         model = InvoiceAttachment
         fields = ('id','attachment')
 
-
 class GetInvoiceSerializer(serializers.ModelSerializer):
 
     customer = serializers.SerializerMethodField()
