@@ -16,6 +16,8 @@ class PeachPay:
     def __init__(self):
         pass
 
+        
+
     def checkout(self,params):
         url = "https://eu-test.oppwa.com/v1/checkouts"
         data = {
@@ -30,9 +32,9 @@ class PeachPay:
             request.add_header('Authorization', 'Bearer {}'.format(config('PEACH_ACCESS_TOKEN')))
             request.get_method = lambda: 'POST'
             response = opener.open(request)
-            return json.loads(response.read());
+            return json.loads(response.read())
         except HTTPError as e:
-            return json.loads(e.read());
+            return json.loads(e.read())
         except URLError as e:
             return e.reason
 
