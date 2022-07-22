@@ -40,5 +40,3 @@ def send_message_on_whatsapp(invoice):
         to='whatsapp:{}'.format(invoice.customer.primary_phone)
     )
     print(message.sid)
-
-

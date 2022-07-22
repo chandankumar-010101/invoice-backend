@@ -134,3 +134,8 @@ def download_file_from_s3(url):
         extension = "jpeg"
     open("media/temp/{}.{}".format(file_name,extension), "wb").write(response.content)
     return "media/temp/{}.{}".format(file_name,extension)
+
+
+def ordinal(n): return "%d%s" % (
+    n, "tsnrhtdd"[(n//10 % 10 != 1)*(n % 10 < 4)*n % 10::4])
+

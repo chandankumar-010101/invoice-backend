@@ -2,7 +2,7 @@ from rest_framework import serializers
 
 from .models import Invoice,InvoiceAttachment
 
-
+from apps.utility.helpers import ordinal
 class InvoiceAttachmentSerializer(serializers.ModelSerializer):
 
     attachment = serializers.SerializerMethodField()
@@ -21,6 +21,12 @@ class GetInvoiceSerializer(serializers.ModelSerializer):
     customer_email = serializers.SerializerMethodField()
     customer_id = serializers.SerializerMethodField()
     invoice_attachment = InvoiceAttachmentSerializer(many=True)
+    reminder = InvoiceAttachmentSerializer(many=True)
+
+    def get_reminder(self,obj):
+        if obj.reminder == 0:
+            return 'Reminder Not Sent'
+        return '{} Reminder Sent'.format(ordinal(obj.reminder))
 
     def get_customer_email(self,obj):
         return obj.customer.primary_email
