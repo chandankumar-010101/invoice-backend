@@ -24,9 +24,10 @@ class GetInvoiceSerializer(serializers.ModelSerializer):
     reminder = serializers.SerializerMethodField()
 
     def get_reminder(self,obj):
-        if obj.reminder == 0:
-            return 'Reminder Not Sent'
-        return '{} Reminder Sent'.format(ordinal(obj.reminder))
+        return 'Reminder Not Sent'
+        # if obj.reminder == 0:
+        #     return 'Reminder Not Sent'
+        # return '{} Reminder Sent'.format(ordinal(obj.reminder))
 
     def get_customer_email(self,obj):
         return obj.customer.primary_email
