@@ -21,7 +21,7 @@ class GetInvoiceSerializer(serializers.ModelSerializer):
     customer_email = serializers.SerializerMethodField()
     customer_id = serializers.SerializerMethodField()
     invoice_attachment = InvoiceAttachmentSerializer(many=True)
-    reminder = InvoiceAttachmentSerializer(many=True)
+    reminder = serializers.SerializerMethodField()
 
     def get_reminder(self,obj):
         if obj.reminder == 0:
@@ -40,7 +40,7 @@ class GetInvoiceSerializer(serializers.ModelSerializer):
     class Meta:
         model = Invoice
         fields = '__all__'
-        read_only_fields = ('customer','untaxed_amount','vat_amount','notes','curreny')
+        read_only_fields = ('customer','untaxed_amount','vat_amount','notes','curreny',)
 
 
 class InvoiceSerializer(serializers.ModelSerializer):
