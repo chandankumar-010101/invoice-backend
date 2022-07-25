@@ -11,7 +11,7 @@ python manage.py makemigrations invoice --settings=jasiri.settings.local
 runserver local: 
 python manage.py runserver --settings=jasiri.settings.local
 
-python manage.py makemigrations --settings=jasiri.settings.local
+python manage.py makemigrations --settings=jasiri.settings.staging
 
 
 python manage.py migrate --settings=jasiri.settings.staging

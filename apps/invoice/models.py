@@ -27,7 +27,7 @@ class Invoice(models.Model):
     created_on = models.DateField(auto_now_add=True)
     updated_on = models.DateField(auto_now=True)
     curreny = models.CharField(max_length=255, default='KES')
-    reminders = models.IntegerField(null=True, blank=True, default=0)
+    # reminders = models.IntegerField(null=True, blank=True, default=0)
 
     class Meta:
         verbose_name = 'Invoice'
