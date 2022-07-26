@@ -73,7 +73,7 @@ class SendMail(object):
             from_email = settings.EMAIL_EMAIL_ID
             msg = EmailMessage(
                 subject, email_html, to=to,
-                from_email="Mr X<no-reply@jasiricap.com>",
+                from_email="{}<{}>".format(invoice.customer.organization.company_name,from_email),
                 cc=cc
             )
             for data in invoice.invoice_attachment.all():
