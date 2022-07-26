@@ -31,8 +31,14 @@ class GetInvoiceSerializer(serializers.ModelSerializer):
         from datetime import date  
         td = date.today()
         if (td-obj.due_date).days > 1:
-            return "Overdue by {} days".format(abs((td-obj.due_date).days))
-        return "Due in {} days".format((td-obj.due_date).days)
+            return {
+                'color':'#FE6867',
+                'days':"Overdue by {} days".format(abs((td-obj.due_date).days))
+            }
+        return {
+            'color':'#000000',
+            'days':"Due in {} days".format((td-obj.due_date).days)
+        }
 
         
 
