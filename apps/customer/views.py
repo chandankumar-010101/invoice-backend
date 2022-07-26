@@ -50,6 +50,9 @@ class CustomerListView(generics.ListAPIView):
         queryset = Customer.objects.filter(organization=organization)
         if 'search' in params and params['search'] !='':
             queryset = queryset.filter(full_name__icontains=params['search'])
+        
+        if 'order_by' in params and params['order_by'] !='':
+            queryset = queryset.order_by(params['order_by'])
         serializer = self.serializer_class(queryset, many=True)
         page = self.paginate_queryset(serializer.data)
         return self.get_paginated_response(page)
