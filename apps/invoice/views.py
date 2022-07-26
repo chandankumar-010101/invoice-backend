@@ -43,6 +43,9 @@ class InvoiceListView(generics.ListAPIView):
         customer_id = Customer.objects.filter(organization=self.request.user.profile.organization).values_list('id', flat=True)
         queryset = Invoice.objects.filter(customer__id__in=list(customer_id))
         queryset = invoice_filter(self.request,queryset)
+        params = self.request.GET
+        if 'order_by' in params and params['order_by'] !='':
+            queryset = queryset.order_by(params['order_by'])
         return queryset
 
     def list(self, request, *args, **kwargs):
