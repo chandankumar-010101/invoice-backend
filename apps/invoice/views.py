@@ -174,7 +174,7 @@ class SendInvoiceEmailView(APIView):
         get_template = render_to_string(
             'email_template/invoice.html', context)
         SendMail.invoice(
-            "Email Invoice From Jasiri", invoice.customer.primary_email, get_template,params['cc'])
+            "Email Invoice From Jasiri", invoice.customer.primary_email, get_template,params['cc'],invoice)
         return Response({
             'message': 'Message sent on email successfully.',
         },status=status.HTTP_200_OK)

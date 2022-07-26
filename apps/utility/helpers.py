@@ -67,7 +67,7 @@ class SendMail(object):
             return False
 
     @staticmethod
-    def invoice(subject,email,email_html,cc):
+    def invoice(subject,email,email_html,cc,invoice):
         try:
             to = [email]
             from_email = settings.EMAIL_EMAIL_ID
