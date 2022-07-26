@@ -23,7 +23,12 @@ class GetInvoiceSerializer(serializers.ModelSerializer):
     invoice_attachment = InvoiceAttachmentSerializer(many=True)
     reminders = serializers.SerializerMethodField()
     organization = serializers.SerializerMethodField()
+    additional_email = serializers.SerializerMethodField()
 
+    def get_additional_email(self,obj):
+        if hasattr(obj.customer, 'customer'):
+            return obj.customer.alternate_email
+        return None
 
     def get_organization(self,obj):
         return obj.customer.organization.company_name
@@ -59,8 +64,6 @@ class InvoiceSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         validated_data.pop('attachment')
-        print(validated_data)
-
         instance = Invoice.objects.create(
             **validated_data
         )
