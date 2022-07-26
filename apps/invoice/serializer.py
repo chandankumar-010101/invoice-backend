@@ -30,10 +30,9 @@ class GetInvoiceSerializer(serializers.ModelSerializer):
     def get_due_date_status(self,obj):
         from datetime import date  
         td = date.today()
-        instance = Invoice.objects.all().last()
-        if (td-instance.due_date).days > 1:
-            return "Due in {} days".format((td-instance.due_date).days)
-        return "Overdue by {} days".format(abs((td-instance.due_date).days))
+        if (td-obj.due_date).days > 1:
+            return "Due in {} days".format((td-obj.due_date).days)
+        return "Overdue by {} days".format(abs((td-obj.due_date).days))
 
         
 
