@@ -22,7 +22,12 @@ class GetInvoiceSerializer(serializers.ModelSerializer):
     customer_id = serializers.SerializerMethodField()
     invoice_attachment = InvoiceAttachmentSerializer(many=True)
     reminder = serializers.SerializerMethodField()
+    organization = serializers.SerializerMethodField()
 
+
+    def get_organization(self,obj):
+        return obj.customer.organization.company_name
+        
     def get_reminder(self,obj):
         if obj.reminders == 0:
             return 'Reminder Not Sent'
