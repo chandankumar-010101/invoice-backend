@@ -24,6 +24,18 @@ class GetInvoiceSerializer(serializers.ModelSerializer):
     reminders = serializers.SerializerMethodField()
     organization = serializers.SerializerMethodField()
     additional_email = serializers.SerializerMethodField()
+    due_date_status = serializers.SerializerMethodField()
+
+
+    def get_due_date_status(self,obj):
+        from datetime import date  
+        td = date.today()
+        instance = Invoice.objects.all().last()
+        if (td-instance.due_date).days > 1:
+            return "Due in {} days".format((td-instance.due_date).days)
+        return "Overdue by {} days".format(abs((td-instance.due_date).days))
+
+        
 
     def get_additional_email(self,obj):
         if hasattr(obj.customer, 'customer'):
@@ -73,3 +85,7 @@ class InvoiceSerializer(serializers.ModelSerializer):
         model = Invoice
         fields = '__all__'
         read_only_fields = ('untaxed_amount','vat_amount','notes','curreny')
+
+
+
+
