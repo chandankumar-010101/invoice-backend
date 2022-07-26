@@ -37,7 +37,7 @@ class GetInvoiceSerializer(serializers.ModelSerializer):
             }
         return {
             'color':'#000000',
-            'days':"Due in {} days".format((td-obj.due_date).days)
+            'days':"Due in {} days".format(abs((td-obj.due_date).days))
         }
 
         
