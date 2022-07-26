@@ -27,7 +27,7 @@ class GetInvoiceSerializer(serializers.ModelSerializer):
 
     def get_additional_email(self,obj):
         if hasattr(obj.customer, 'customer'):
-            return obj.customer.alternate_email
+            return obj.customer.customer.alternate_email
         return None
 
     def get_organization(self,obj):
