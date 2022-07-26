@@ -76,12 +76,12 @@ class SendMail(object):
                 from_email=from_email,
                 cc=cc
             )
-            # for data in invoice.invoice_attachment.all():
-            #     msg.attach(
-            #         str(data.attachment).split('/')[1], 
-            #         data.attachment.read(),
-            #         mimetypes.guess_type(data.attachment.name)[0]
-            #     )
+            for data in invoice.invoice_attachment.all():
+                msg.attach(
+                    str(data.attachment).split('/')[1], 
+                    data.attachment.read(),
+                    mimetypes.guess_type(data.attachment.name)[0]
+                )
             msg.content_subtype = "html"
             msg.send()
             return True
