@@ -52,7 +52,7 @@ class GetInvoiceSerializer(serializers.ModelSerializer):
 
     def get_reminders(self,obj):
         if obj.reminders == 0:
-            return 'Reminder Not Sent'
+            return 'No Reminder Sent'
         return '{} Reminder Sent'.format(ordinal(obj.reminders))
 
     def get_customer_email(self,obj):

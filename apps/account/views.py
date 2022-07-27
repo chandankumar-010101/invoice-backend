@@ -1,8 +1,8 @@
 import logging
 
-
-
 from django.template.loader import render_to_string
+from django.shortcuts import render
+from django.views.generic import View
 
 from rest_framework import status
 from rest_framework import generics
@@ -36,7 +36,11 @@ from .schema import (
 
 logger = logging.getLogger(__name__)
 
-# Create your views here.
+
+class PaymentView(View):
+    def get(self,request):
+        return render(request,'payment.html')
+
 
 class OrganizationListView(generics.ListAPIView):
 
