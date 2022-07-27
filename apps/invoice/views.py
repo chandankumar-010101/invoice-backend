@@ -16,10 +16,10 @@ from rest_framework.parsers import FormParser, MultiPartParser
 from django.db.models import Q,Sum
 
 
-from .models import Invoice,InvoiceAttachment
+from .models import Invoice,InvoiceAttachment,InvoiceTransaction
 from .serializer import InvoiceSerializer,GetInvoiceSerializer
 
-from .schema import  email_invoice_schema
+from .schema import  email_invoice_schema,record_payment_schema
 from apps.utility.filters import InvoiceFilter,invoice_filter
 from apps.customer.pagination import CustomPagination
 from apps.customer.models import Customer
@@ -42,7 +42,7 @@ class InvoiceListView(generics.ListAPIView):
     
     def get_queryset(self):
         customer_id = Customer.objects.filter(organization=self.request.user.profile.organization).values_list('id', flat=True)
-        queryset = Invoice.objects.filter(customer__id__in=list(customer_id))
+        queryset = Invoice.objects.filter(customer__id__in=list(customer_id)).exclude(invoice_status='PAYMENT_DONE')
         queryset = invoice_filter(self.request,queryset)
         params = self.request.GET
         if 'order_by' in params and params['order_by'] !='':
@@ -207,3 +207,25 @@ class CsvInvoiceListView(APIView):
         queryset = Invoice.objects.filter(customer__id__in=list(customer_id))
         serializer = GetInvoiceSerializer(queryset, many=True)
         return Response({'data':serializer.data})
+
+class RecordPaymentView(APIView):
+    permission_classes = [IsAuthenticated]
+    
+    @swagger_auto_schema(request_body=record_payment_schema, operation_description='Record Payment')
+    def post(self,request,pk):
+        params = request.data
+        try:
+            invoice = Invoice.objects.get(id=pk)
+            InvoiceTransaction.objects.create(
+                invoice = invoice,
+                payment_mode = 'Manually'
+            )
+            invoice.invoice_status = 'PAYMENT_DONE'
+            invoice.save()
+            return Response({
+                'message': 'Payment Recorded successfully.',
+            },status=status.HTTP_200_OK)
+        except Exception as error:
+            return Response({
+                'detail': [error.args[0]]
+            }, status=status.HTTP_400_BAD_REQUEST)
