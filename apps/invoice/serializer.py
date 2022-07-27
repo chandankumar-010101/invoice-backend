@@ -77,7 +77,7 @@ class InvoiceSerializer(serializers.ModelSerializer):
     due_date = serializers.DateField(required=True)
     total_amount = serializers.FloatField(required=True)
     due_amount = serializers.FloatField(required=True)
-
+    is_online_payment = serializers.BooleanField(required=True)
 
     def create(self, validated_data):
         validated_data.pop('attachment')
