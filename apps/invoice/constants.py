@@ -7,7 +7,17 @@ INVOICE_STATUS = (
 )
 
 
-PAYMENT_MODE = (
+PAYMENT_TYPE = (
     ('Manually', 'Manually'),
-    ('Card', 'Card'),
+    ('Online', 'Online'),
+)
+
+
+PAYMENT_MODE = (
+    ('Cash', 'Cash'),
+    ('Cheque', 'Cheque'),
+    ('Bank Transfer', 'Bank Transfer'),
+    ('M-Pesa', 'M-Pesa'),
+    ('Debit Card', 'Debit Card'),
+    ('Other', 'Other'),
 )

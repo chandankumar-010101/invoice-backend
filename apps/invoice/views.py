@@ -218,7 +218,8 @@ class RecordPaymentView(APIView):
             invoice = Invoice.objects.get(id=pk)
             InvoiceTransaction.objects.create(
                 invoice = invoice,
-                payment_mode = 'Manually'
+                payment_type = 'Manually',
+                payment_mode = params['payment_mode']
             )
             invoice.invoice_status = 'PAYMENT_DONE'
             invoice.save()

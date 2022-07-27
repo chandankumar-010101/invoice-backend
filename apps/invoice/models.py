@@ -2,7 +2,7 @@ import uuid
 
 from django.db import models
 from apps.customer.models import Customer
-from .constants import INVOICE_STATUS,PAYMENT_MODE
+from .constants import INVOICE_STATUS,PAYMENT_MODE,PAYMENT_TYPE
 
 
 from apps.utility.helpers import filename_path
@@ -48,7 +48,8 @@ class InvoiceAttachment(models.Model):
 
 class InvoiceTransaction(models.Model):
     invoice = models.ForeignKey(Invoice, on_delete=models.CASCADE,related_name="invoice_transaction")
-    payment_mode = models.CharField(max_length=255, choices=PAYMENT_MODE, default="Manually") 
+    payment_type = models.CharField(max_length=255, choices=PAYMENT_TYPE, default="Manually") 
+    payment_mode = models.CharField(max_length=255, choices=PAYMENT_MODE, default="Cash") 
     tx_id = models.CharField(max_length=255, null=True, blank=True)
     created_on = models.DateField(auto_now_add=True)
     updated_on = models.DateField(auto_now=True)
