@@ -212,10 +212,10 @@ class RecordPaymentView(APIView):
     permission_classes = [IsAuthenticated]
     
     @swagger_auto_schema(request_body=record_payment_schema, operation_description='Record Payment')
-    def post(self,request,pk):
+    def post(self,request,id):
         params = request.data
         try:
-            invoice = Invoice.objects.get(id=pk)
+            invoice = Invoice.objects.get(id=id)
             InvoiceTransaction.objects.create(
                 invoice = invoice,
                 payment_type = 'Manually',
