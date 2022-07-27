@@ -41,7 +41,6 @@ class GetInvoiceSerializer(serializers.ModelSerializer):
         }
 
         
-
     def get_additional_email(self,obj):
         if hasattr(obj.customer, 'customer'):
             return obj.customer.customer.alternate_email
@@ -90,7 +89,4 @@ class InvoiceSerializer(serializers.ModelSerializer):
         model = Invoice
         fields = '__all__'
         read_only_fields = ('untaxed_amount','vat_amount','notes','curreny')
-
-
-
 
