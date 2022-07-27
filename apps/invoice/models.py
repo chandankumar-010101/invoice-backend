@@ -28,7 +28,7 @@ class Invoice(models.Model):
     updated_on = models.DateField(auto_now=True)
     curreny = models.CharField(max_length=255, default='KES')
     reminders = models.IntegerField(null=True, blank=True, default=0)
-
+    is_online_payment = models.BooleanField(default=False)
     class Meta:
         verbose_name = 'Invoice'
         verbose_name_plural = 'Invoice'
