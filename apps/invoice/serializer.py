@@ -25,6 +25,9 @@ class GetInvoiceSerializer(serializers.ModelSerializer):
     organization = serializers.SerializerMethodField()
     additional_email = serializers.SerializerMethodField()
     additional_phone = serializers.SerializerMethodField()
+    primary_phone = serializers.SerializerMethodField()
+    additional_phone = serializers.SerializerMethodField()
+
     due_date_status = serializers.SerializerMethodField()
 
 
@@ -40,6 +43,10 @@ class GetInvoiceSerializer(serializers.ModelSerializer):
             'color':'#000000',
             'days':"Due in {} days".format(abs((td-obj.due_date).days))
         }
+
+    def get_primary_phone(self,obj):
+        return str(obj.customer.primary_phone)
+
 
     def get_additional_phone(self,obj):
         if hasattr(obj.customer, 'customer'):
