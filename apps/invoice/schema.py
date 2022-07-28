@@ -15,7 +15,6 @@ email_invoice_schema = openapi.Schema(
     required=['subject','cc','body']
 )
 
-
 record_payment_schema = openapi.Schema(
     type=openapi.TYPE_OBJECT, responses={200: 'OK'}, properties={
         'payment_mode': openapi.Schema(type=openapi.TYPE_STRING),
