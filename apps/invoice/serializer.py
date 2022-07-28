@@ -53,6 +53,7 @@ class GetInvoiceSerializer(serializers.ModelSerializer):
             return str(obj.customer.customer.alternate_phone)
         return None
 
+
     def get_additional_email(self,obj):
         if hasattr(obj.customer, 'customer'):
             return obj.customer.customer.alternate_email
