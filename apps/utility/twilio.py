@@ -44,7 +44,7 @@ def send_message_on_whatsapp(invoice,params):
 
     message = client.messages.create(
         from_='whatsapp:{}'.format(config('TWILIO_NUMBER')),
-        body='Hi {},{}\n,{},\nHere is the invoice attachment: {}'.format(
+        body='Hi {},{}\n\n,{},\nHere is the invoice attachment: {}'.format(
             invoice.customer.full_name,
             params['subject'],
             strip_tags(params['body']),
@@ -57,7 +57,7 @@ def send_message_on_whatsapp(invoice,params):
     if 'additional' in params and params['additional'] != '':
         message = client.messages.create(
             from_='whatsapp:{}'.format(config('TWILIO_NUMBER')),
-            body='Hi {},{}\n,{},\nHere is the invoice attachment: {}'.format(
+            body='Hi {},{}\n\n,{},\nHere is the invoice attachment: {}'.format(
                 invoice.customer.full_name,
                 params['subject'],
                 params['body'],
