@@ -197,7 +197,7 @@ class SendInvoiceWhatsView(APIView):
     permission_classes = [IsAuthenticated]
     @swagger_auto_schema(request_body=whats_invoice_schema, operation_description='Whatsapp Invoice')
 
-    def get(self,request,id):
+    def post(self,request,id):
         params = request.data
         invoice = Invoice.objects.get(id=id)
         send_message_on_whatsapp(invoice,params)
