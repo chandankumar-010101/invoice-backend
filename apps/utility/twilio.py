@@ -51,6 +51,7 @@ def send_message_on_whatsapp(invoice,params):
         ),
         to='whatsapp:{}'.format(params['to'])
     )
+    print(message.sid)
 
     if 'additional' in params and params['additional'] != '':
         message = client.messages.create(
@@ -63,4 +64,4 @@ def send_message_on_whatsapp(invoice,params):
             ),
             to='whatsapp:{}'.format(params['additional'])
         )
-    print(message.sid)
+        print(message.sid)
