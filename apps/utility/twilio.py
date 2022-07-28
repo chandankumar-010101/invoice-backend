@@ -22,21 +22,45 @@ client = Client(account_sid, auth_token)
 #     print(message.sid)
 
 
-def send_message_on_whatsapp(invoice):
+def send_message_on_whatsapp(invoice,params):
     attachment= []
     for data in invoice.invoice_attachment.all():
         attachment.append(generate_bitly_link(data.attachment.url))
     msg = ',\n'.join(attachment)
+    # message = client.messages.create(
+    #     from_='whatsapp:{}'.format(config('TWILIO_NUMBER')),
+    #     body='Hi {},\nPlease find the invoice details:\nInvoice No: {},\nInvoice Amount: {},\nInvoice Due Date: {},\nHere is the invoice attachment: {}'.format(
+    #         invoice.customer.full_name,
+    #         invoice.invoice_number,
+    #         invoice.due_amount,
+    #         invoice.due_date,
+    #         msg
+    #     ),
+    #     # status_callback='http://postb.in/1234abcd',
+    #     to='whatsapp:{}'.format(invoice.customer.primary_phone)
+    # )
+
+
     message = client.messages.create(
         from_='whatsapp:{}'.format(config('TWILIO_NUMBER')),
-        body='Hi {},\nPlease find the invoice details:\nInvoice No: {},\nInvoice Amount: {},\nInvoice Due Date: {},\nHere is the invoice attachment: {}'.format(
+        body='Hi {},{}\n,{},\nHere is the invoice attachment: {}'.format(
             invoice.customer.full_name,
-            invoice.invoice_number,
-            invoice.due_amount,
-            invoice.due_date,
+            params['subject'],
+            params['body'],
             msg
         ),
-        # status_callback='http://postb.in/1234abcd',
-        to='whatsapp:{}'.format(invoice.customer.primary_phone)
+        to='whatsapp:{}'.format(params['to'])
     )
+
+    if 'additional' in params and params['additional'] != '':
+        message = client.messages.create(
+            from_='whatsapp:{}'.format(config('TWILIO_NUMBER')),
+            body='Hi {},{}\n,{},\nHere is the invoice attachment: {}'.format(
+                invoice.customer.full_name,
+                params['subject'],
+                params['body'],
+                msg
+            ),
+            to='whatsapp:{}'.format(params['additional'])
+        )
     print(message.sid)

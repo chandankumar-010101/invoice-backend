@@ -21,7 +21,7 @@ from django.db.models import Q,Sum
 from .models import Invoice,InvoiceAttachment,InvoiceTransaction
 from .serializer import InvoiceSerializer,GetInvoiceSerializer
 
-from .schema import  email_invoice_schema,record_payment_schema
+from .schema import  email_invoice_schema,record_payment_schema,whats_invoice_schema
 from apps.utility.filters import InvoiceFilter,invoice_filter
 from apps.customer.pagination import CustomPagination
 from apps.customer.models import Customer
@@ -195,10 +195,12 @@ class SendInvoiceEmailView(APIView):
 
 class SendInvoiceWhatsView(APIView):
     permission_classes = [IsAuthenticated]
+    @swagger_auto_schema(request_body=whats_invoice_schema, operation_description='Whatsapp Invoice')
+
     def get(self,request,id):
         params = request.data
         invoice = Invoice.objects.get(id=id)
-        send_message_on_whatsapp(invoice)
+        send_message_on_whatsapp(invoice,params)
         return Response({
             'message': 'Messgae sent on whatsapp successfully.',
         },status=status.HTTP_200_OK)
