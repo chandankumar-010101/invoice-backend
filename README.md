@@ -16,5 +16,6 @@ python manage.py makemigrations --settings=jasiri.settings.staging
 
 python manage.py migrate --settings=jasiri.settings.staging
 
+
 before all these commands you need to setup postgres database.
 configuration are in .env file for database.
