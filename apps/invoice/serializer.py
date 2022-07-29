@@ -34,7 +34,13 @@ class GetInvoiceSerializer(serializers.ModelSerializer):
     def get_due_date_status(self,obj):
         from datetime import date  
         td = date.today()
-        if (td-obj.due_date).days > 1:
+
+        if (td-obj.due_date).days == 0:
+            return {
+                'color':'#FE6867',
+                'days':"Today is Due date."
+            }
+        elif (td-obj.due_date).days > 1:
             return {
                 'color':'#FE6867',
                 'days':"Overdue by {} days".format(abs((td-obj.due_date).days))
@@ -46,7 +52,6 @@ class GetInvoiceSerializer(serializers.ModelSerializer):
 
     def get_primary_phone(self,obj):
         return str(obj.customer.primary_phone)
-
 
     def get_additional_phone(self,obj):
         if hasattr(obj.customer, 'customer'):

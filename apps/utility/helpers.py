@@ -33,13 +33,14 @@ def filename_path(folder, instance, filename) -> str:
 
 
 class GenerateForgotLink(object):
-    
+    @staticmethod
     def generate(request,user):
         uid = urlsafe_base64_encode(force_bytes(user.uuid))
         time = urlsafe_base64_encode(force_bytes(datetime.datetime.now()))
         url = "https://stage.jasiricap.com/reset-password/?uuid={0}&time={1}".format(uid, time) 
         return url
-    
+        
+    @staticmethod
     def decode(uuid,time):
         decoded_time = parse_datetime(force_str(urlsafe_base64_decode(time)))
         minute = (datetime.datetime.now() - decoded_time).total_seconds()/60.0

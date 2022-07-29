@@ -32,6 +32,7 @@ from apps.utility.twilio import send_message_on_whatsapp
 # from apps.utility.peach import PeachPay
 
 # Create your views here.
+
 class InvoiceListView(generics.ListAPIView):
     filter_class = InvoiceFilter
     pagination_class = CustomPagination

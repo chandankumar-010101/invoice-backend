@@ -38,10 +38,10 @@ class CustomerListView(generics.ListAPIView):
     queryset = Customer.objects.all()
     serializer_class = CustomerListSerializer
     pagination_class = CustomPagination
-    permission_classes = (IsAuthenticated, )
+    permission_classes = (IsAuthenticated)
     pagination_class.page_size = 2
     search_fields = ['full_name']
-    filter_backends = (SearchFilter,)
+    filter_backends = (SearchFilter)
 
 
     def list(self, request, *args, **kwargs):
@@ -50,7 +50,7 @@ class CustomerListView(generics.ListAPIView):
         queryset = Customer.objects.filter(organization=organization)
         if 'search' in params and params['search'] !='':
             queryset = queryset.filter(full_name__icontains=params['search'])
-        
+
         if 'order_by' in params and params['order_by'] !='':
             queryset = queryset.order_by(params['order_by'])
         serializer = self.serializer_class(queryset, many=True)
@@ -72,14 +72,13 @@ class CsvCustomerListView(APIView):
         return Response({'data':serializer.data})
 
 
-
 class CustomerCreateView(generics.CreateAPIView):
     """create customer record.
     create Customer and its alternate record.
     """
     queryset = Customer.objects.all()
     serializer_class = CustomerSerializer
-    permission_classes = (IsAuthenticated, )
+    permission_classes = (IsAuthenticated)
 
     def create(self, serializer):
         params = serializer.data
@@ -162,7 +161,6 @@ class UpdateCustomerView(APIView):
             return Response({
                 'detail': [error.args[0]]
             }, status=status.HTTP_400_BAD_REQUEST)
-
 
 
 class RetrieveDeleteCustomer(generics.RetrieveDestroyAPIView):
