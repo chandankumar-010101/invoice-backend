@@ -58,12 +58,9 @@ class InvoiceListView(generics.ListAPIView):
         queryset = Invoice.objects.filter(customer__id__in=list(customer_id))
         outstanding_invoice = queryset.filter(~Q(invoice_status='PAYMENT_DONE')).count()
         outstanding_balance = queryset.filter(~Q(invoice_status='PAYMENT_DONE')).aggregate(Sum('due_amount'))
-
         queryset = queryset.exclude(invoice_status='PAYMENT_DONE')
-
         current_amount = queryset.filter(due_date__gte = date.today()).aggregate(Sum('due_amount'))
         overdue_amount = queryset.filter(due_date__lte = date.today()).aggregate(Sum('due_amount'))
-
         q = self.get_queryset()
         total = q.aggregate(Sum('due_amount'))
         return Response({
@@ -185,6 +182,8 @@ class SendInvoiceEmailView(APIView):
             'body':params['body'],
             'site_url': str(SiteUrl.site_url(request)),
         }
+        invoice.invoice_status = 'SENT'
+        invoice.save()
         get_template = render_to_string(
             'email_template/invoice.html', context)
         SendMail.invoice(
@@ -202,6 +201,8 @@ class SendInvoiceWhatsView(APIView):
         params = request.data
         invoice = Invoice.objects.get(id=id)
         send_message_on_whatsapp(invoice,params)
+        invoice.invoice_status = 'SENT'
+        invoice.save()
         return Response({
             'message': 'Messgae sent on whatsapp successfully.',
         },status=status.HTTP_200_OK)
