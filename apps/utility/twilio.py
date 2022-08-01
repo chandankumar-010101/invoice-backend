@@ -63,9 +63,3 @@ def send_message_on_whatsapp(invoice,params):
             to='whatsapp:{}'.format(params['additional'])
         )
         print(message.sid)
-
-
-# string = "<p>Dear Abc Ltd.</p>\n\n<p>Please find your invoice detail below. Feel free to contact us if you have any questions.</p>\n\n<p>&nbsp;</p>\n\n<p>Best,<br />\nJustin Enterprises</p>\n\n<p>&nbsp;</p>\n"
-
-# string = strip_tags(string)
-# print(string)

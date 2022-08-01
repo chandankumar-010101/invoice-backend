@@ -76,7 +76,7 @@ class CustomerCreateView(generics.CreateAPIView):
     """
     queryset = Customer.objects.all()
     serializer_class = CustomerSerializer
-    permission_classes = (IsAuthenticated)
+    permission_classes = (IsAuthenticated, )
 
     def create(self, serializer):
         params = serializer.data
