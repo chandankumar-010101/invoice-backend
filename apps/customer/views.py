@@ -34,7 +34,6 @@ class CustomerListView(generics.ListAPIView):
     Get list of Customer by user's organization with 
     pagination.
     """
-
     queryset = Customer.objects.all()
     serializer_class = CustomerListSerializer
     pagination_class = CustomPagination
