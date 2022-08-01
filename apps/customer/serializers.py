@@ -23,7 +23,7 @@ class CustomerSerializer(serializers.ModelSerializer):
     class Meta:
         model = Customer
         fields = '__all__' 
-        read_only_fields = ('user', 'organization', 'point')
+        read_only_fields = ('user', 'organization', 'point',)
 
     def validate_email(self, email):
         is_email_exist = Customer.objects.filter(email=email)

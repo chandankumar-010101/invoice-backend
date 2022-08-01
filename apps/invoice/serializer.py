@@ -27,7 +27,6 @@ class GetInvoiceSerializer(serializers.ModelSerializer):
     additional_phone = serializers.SerializerMethodField()
     primary_phone = serializers.SerializerMethodField()
     additional_phone = serializers.SerializerMethodField()
-
     due_date_status = serializers.SerializerMethodField()
 
 

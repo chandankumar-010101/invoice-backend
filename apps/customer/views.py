@@ -38,11 +38,10 @@ class CustomerListView(generics.ListAPIView):
     queryset = Customer.objects.all()
     serializer_class = CustomerListSerializer
     pagination_class = CustomPagination
-    permission_classes = (IsAuthenticated)
+    permission_classes = (IsAuthenticated, )
     pagination_class.page_size = 2
     search_fields = ['full_name']
-    filter_backends = (SearchFilter)
-
+    filter_backends = (SearchFilter,)
 
     def list(self, request, *args, **kwargs):
         params = request.GET
