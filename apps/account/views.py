@@ -192,8 +192,8 @@ class ProfileupdateView(APIView):
                     return Response({
                         "message": resp_msg.USER_ALREADY_EXISTS
                     }, status=status.HTTP_400_BAD_REQUEST)
-            if params['company'] != request.user.profile.organization.company_name:
-                if Organization.objects.filter(company_name = params['company']).exists():
+            if params['company_name'] != request.user.profile.organization.company_name:
+                if Organization.objects.filter(company_name = params['company_name']).exists():
                     return Response({
                         "message": resp_msg.COMPANY_ALREADY_EXISTS
                     }, status=status.HTTP_400_BAD_REQUEST)
@@ -202,7 +202,7 @@ class ProfileupdateView(APIView):
             request.user.profile.email = params['email']
             request.user.profile.full_name = params['full_name']
             request.user.profile.organization.email = params['email']
-            # request.user.profile.organization.company_name = validated_data.get('company_name', request.user.profile.organization.company_name)
+            request.user.profile.organization.company_name = validated_data.get('company_name', request.user.profile.organization.company_name)
             # request.user.profile.role = validated_data.get('role', request.user.profile.role)
             request.user.save()
             request.user.profile.save()
