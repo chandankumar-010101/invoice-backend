@@ -202,7 +202,7 @@ class ProfileupdateView(APIView):
             request.user.profile.email = params['email']
             request.user.profile.full_name = params['full_name']
             request.user.profile.organization.email = params['email']
-            request.user.profile.organization.company_name = validated_data.get('company_name', request.user.profile.organization.company_name)
+            request.user.profile.organization.company_name = params['company_name']
             # request.user.profile.role = validated_data.get('role', request.user.profile.role)
             request.user.save()
             request.user.profile.save()
