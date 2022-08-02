@@ -186,27 +186,34 @@ class ProfileupdateView(APIView):
     def post(self, request, *args, **kwargs):
         params = request.data
         User = get_user_model()
-        print("###############",request.user)
+        try:
+            if params['email'] != request.user.email:
+                if User.objects.filter(email = params['email']).exists():
+                    return Response({
+                        "message": resp_msg.USER_ALREADY_EXISTS
+                    }, status=status.HTTP_400_BAD_REQUEST)
+            if params['company'] != request.user.profile.organization.company_name:
+                if Organization.objects.filter(company_name = params['company']).exists():
+                    return Response({
+                        "message": resp_msg.COMPANY_ALREADY_EXISTS
+                    }, status=status.HTTP_400_BAD_REQUEST)
 
-        if params['email'] != request.user.email:
-            if User.objects.filter(email = params['email']).exists():
-                return Response({
-                    "message": resp_msg.USER_ALREADY_EXISTS
-                }, status=status.HTTP_400_BAD_REQUEST)
-        if params['company'] != request.user.profile.organization.company_name:
-            if Organization.objects.filter(company_name = params['company']).exists():
-                return Response({
-                    "message": resp_msg.COMPANY_ALREADY_EXISTS
-                }, status=status.HTTP_400_BAD_REQUEST)
-        serializer = ProfileupdateSerializer(request.user, data=params, partial=True)
-        if serializer.is_valid():
+            request.user.email = params['email']
+            request.user.profile.email = params['email']
+            request.user.profile.full_name = params['full_name']
+            request.user.profile.organization.email = params['email']
+            # request.user.profile.organization.company_name = validated_data.get('company_name', request.user.profile.organization.company_name)
+            # request.user.profile.role = validated_data.get('role', request.user.profile.role)
+            request.user.save()
+            request.user.profile.save()
+            request.user.profile.organization.save()
             return Response({
-                "data": serializer.data
-            }, status=status.HTTP_200_OK)
-        else:
-            logger.error(serializer.errors)
+                'message':"Profile updated sucessfully"
+            })
+        except Exception as error:
+            logger.error(error.args[0])
             return Response({
-                "data": serializer.errors
+                "data": [error.args[0]]
             }, status=status.HTTP_400_BAD_REQUEST)
 
 
@@ -236,7 +243,7 @@ class ChangePasswordView(APIView):
             }, status=status.HTTP_200_OK)
         logger.error(serializer.errors)
         return Response({
-            "data": serializer.errors
+            "detal": serializer.errors
         }, status=status.HTTP_400_BAD_REQUEST)
 
 
