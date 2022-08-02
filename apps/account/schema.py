@@ -56,8 +56,8 @@ profile_update_schema = openapi.Schema(
     type=openapi.TYPE_OBJECT, responses={200: 'OK'}, properties={
         'full_name': openapi.Schema(type=openapi.TYPE_STRING),
         'email': openapi.Schema(type=openapi.TYPE_STRING),
-        'company': openapi.Schema(type=openapi.TYPE_STRING),
+        'company_name': openapi.Schema(type=openapi.TYPE_STRING),
         'role': openapi.Schema(type=openapi.TYPE_STRING),
     },
-    required=['full_name','email','company','role']
+    required=['full_name','email','company_name','role']
 )
