@@ -139,7 +139,7 @@ class ProfileupdateSerializer(serializers.ModelSerializer):
         instance.email = validated_data.get('email', instance.email)
         instance.profile.email = validated_data.get('email', instance.profile.email)
         instance.profile.full_name = validated_data.get('full_name', instance.profile.full_name)
-        instance.profile.organization.email = validated_data.get('company', instance.profile.organization.email)
+        instance.profile.organization.email = validated_data.get('email', instance.profile.organization.email)
         instance.profile.organization.company_name = validated_data.get('company', instance.profile.organization.company_name)
         instance.profile.role = validated_data.get('role', instance.profile.role)
         instance.save()
