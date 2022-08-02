@@ -31,7 +31,8 @@ from .permissions import IsAdminOnly
 from .schema import (
     login_schema,
     change_password_schema,
-    forgot_password_schema,reset_password_schema
+    forgot_password_schema,reset_password_schema,
+    profile_update_schema
 )
 
 logger = logging.getLogger(__name__)
@@ -179,16 +180,25 @@ class LogoutView(APIView):
 
 
 class ProfileupdateView(APIView):
+    permission_classes = (IsAuthenticated, )
 
+    @swagger_auto_schema(request_body=profile_update_schema, operation_description='Profile Update')
     def post(self, request, *args, **kwargs):
-        user_name = request.data.get('user_name')
-        name = request.data.get('name')
-        email = request.data.get('email')
-        company = request.data.get('company')
-        role = request.data.get('role')
-        profile_status = request.data.get('status')
+        params = request.data
+        User = get_user_model()
+        print("###############",request.user)
 
-        serializer = ProfileupdateSerializer(data=request.data)
+        if params['email'] != request.user.email:
+            if User.objects.filter(email = params['email']).exists():
+                return Response({
+                    "message": resp_msg.USER_ALREADY_EXISTS
+                }, status=status.HTTP_400_BAD_REQUEST)
+        if params['company'] != request.user.profile.organization.company_name:
+            if Organization.objects.filter(company_name = params['company']).exists():
+                return Response({
+                    "message": resp_msg.COMPANY_ALREADY_EXISTS
+                }, status=status.HTTP_400_BAD_REQUEST)
+        serializer = ProfileupdateSerializer(request.user, data=params, partial=True)
         if serializer.is_valid():
             return Response({
                 "data": serializer.data

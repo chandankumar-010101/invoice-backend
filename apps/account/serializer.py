@@ -126,14 +126,30 @@ class UserProfileListSerializer(serializers.ModelSerializer):
         model = UserProfile
         fields = ('pk', 'full_name', 'email', 'organization', 'user')
 
-class ProfileupdateSerializer(serializers.Serializer):
+class ProfileupdateSerializer(serializers.ModelSerializer):
 
-    user_name = serializers.CharField(max_length=100)
-    name = serializers.CharField(max_length=100)
+    first_name = serializers.CharField(max_length=100)
+    last_name = serializers.CharField(max_length=100)
     email = serializers.CharField(max_length=50)
     company = serializers.CharField(max_length=100)
     role = serializers.CharField(max_length=100)
-    status = serializers.BooleanField(default=True)
+
+    def update(self, instance, validated_data):
+        print(validated_data)
+        instance.email = validated_data.get('email', instance.email)
+        instance.profile.email = validated_data.get('email', instance.profile.email)
+        instance.profile.full_name = validated_data.get('full_name', instance.profile.full_name)
+        instance.profile.organization.email = validated_data.get('company', instance.profile.organization.email)
+        instance.profile.organization.company_name = validated_data.get('company', instance.profile.organization.company_name)
+        instance.profile.role = validated_data.get('role', instance.profile.role)
+        instance.save()
+        instance.profile.save()
+        instance.profile.organization.save()
+        return instance
+
+    class Meta:
+        model = User
+        fields = ("first_name","last_name","email","company","role")
 
 class PasswordchangeSerializer(serializers.Serializer):
 
