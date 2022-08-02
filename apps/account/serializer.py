@@ -131,7 +131,7 @@ class ProfileupdateSerializer(serializers.ModelSerializer):
     first_name = serializers.CharField(max_length=100)
     last_name = serializers.CharField(max_length=100)
     email = serializers.CharField(max_length=50)
-    company = serializers.CharField(max_length=100)
+    company_name = serializers.CharField(max_length=100)
     role = serializers.CharField(max_length=100)
 
     def update(self, instance, validated_data):
@@ -140,7 +140,7 @@ class ProfileupdateSerializer(serializers.ModelSerializer):
         instance.profile.email = validated_data.get('email', instance.profile.email)
         instance.profile.full_name = validated_data.get('full_name', instance.profile.full_name)
         instance.profile.organization.email = validated_data.get('email', instance.profile.organization.email)
-        instance.profile.organization.company_name = validated_data.get('company', instance.profile.organization.company_name)
+        instance.profile.organization.company_name = validated_data.get('company_name', instance.profile.organization.company_name)
         instance.profile.role = validated_data.get('role', instance.profile.role)
         instance.save()
         instance.profile.save()
@@ -149,7 +149,7 @@ class ProfileupdateSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ("first_name","last_name","email","company","role")
+        fields = ("first_name","last_name","email","company_name","role")
 
 class PasswordchangeSerializer(serializers.Serializer):
 
