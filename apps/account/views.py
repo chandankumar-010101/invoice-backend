@@ -219,18 +219,15 @@ class ChangePasswordView(APIView):
                 return Response({
                     "detail": resp_msg.INCORRECT_PASSWORD
                 },status=status.HTTP_400_BAD_REQUEST)
-            else:
-                print(self)
-                self.get_object().set_password(new_password)
-                self.get_object().save()
+            self.get_object().set_password(new_password)
+            self.get_object().save()
             return Response({
                 "detail": resp_msg.PASSWORD_CHANGED
             }, status=status.HTTP_200_OK)
-        else:
-            logger.error(serializer.errors)
-            return Response({
-                "data": serializer.errors
-            }, status=status.HTTP_400_BAD_REQUEST)
+        logger.error(serializer.errors)
+        return Response({
+            "data": serializer.errors
+        }, status=status.HTTP_400_BAD_REQUEST)
 
 
 class StaticContentView(APIView):
