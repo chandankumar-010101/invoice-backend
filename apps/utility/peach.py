@@ -24,7 +24,7 @@ class PeachPay:
         data = {
             'entityId' : config('PEACH_ENTITY_ID'),
             'amount' : int(invoice.due_amount),
-            'currency' : 'KSH',
+            'currency' : 'KES',
             'paymentType' : 'DB'
         }
         try:
@@ -53,10 +53,10 @@ class PeachPay:
         except URLError as e:
             return e.reason
 
-# invoice = Invoice.objects.all().last()
-# obj = PeachPay()
-# responseData = obj.checkout(invoice)
-# print(responseData)
+invoice = Invoice.objects.all().last()
+obj = PeachPay()
+responseData = obj.checkout(invoice)
+print(responseData)
 
 # responseData = obj.status("24CC71D3DAC8C583A29CB9B06312888E.uat01-vm-tx01")
 # print(responseData)
