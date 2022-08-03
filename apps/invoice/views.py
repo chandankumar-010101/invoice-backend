@@ -217,7 +217,7 @@ class CsvInvoiceListView(APIView):
 
     def get(self, request):
         customer_id = Customer.objects.filter(organization=self.request.user.profile.organization).values_list('id', flat=True)
-        queryset = Invoice.objects.filter(customer__id__in=list(customer_id))
+        queryset = Invoice.objects.filter(customer__id__in=list(customer_id)).exclude(invoice_status='PAYMENT_DONE')
         serializer = GetInvoiceSerializer(queryset, many=True)
         return Response({'data':serializer.data})
 

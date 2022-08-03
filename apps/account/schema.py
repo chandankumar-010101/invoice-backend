@@ -46,7 +46,6 @@ reset_password_schema = openapi.Schema(
         'uuid': openapi.Schema(type=openapi.TYPE_STRING),
         'time': openapi.Schema(type=openapi.TYPE_STRING),
         'password': openapi.Schema(type=openapi.TYPE_STRING),
-
     },
     required=['uuid','time','password']
 )
