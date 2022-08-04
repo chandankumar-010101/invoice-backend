@@ -15,6 +15,8 @@ urlpatterns = [
     path('send-whats-invoice/<str:id>', views.SendInvoiceWhatsView.as_view()),
     path('attachment/delete/<int:id>', views.DeleteInvoiceAttachmentView.as_view()),
     path('record-payment/<str:id>', views.RecordPaymentView.as_view()),
+    
+    path('payment-method', views.PaymentMethodeView.as_view()),
 
 
 

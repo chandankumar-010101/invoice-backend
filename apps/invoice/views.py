@@ -18,10 +18,10 @@ from rest_framework.parsers import FormParser, MultiPartParser
 from django.db.models import Q,Sum
 
 
-from .models import Invoice,InvoiceAttachment,InvoiceTransaction
+from .models import Invoice,InvoiceAttachment,InvoiceTransaction,PaymentMethods
 from .serializer import InvoiceSerializer,GetInvoiceSerializer
 
-from .schema import  email_invoice_schema,record_payment_schema,whats_invoice_schema
+from .schema import  email_invoice_schema,record_payment_schema,whats_invoice_schema,payment_method_schema
 from apps.utility.filters import InvoiceFilter,invoice_filter
 from apps.customer.pagination import CustomPagination
 from apps.customer.models import Customer
@@ -29,7 +29,7 @@ from apps.customer.models import Customer
 from apps.utility.helpers import SiteUrl,SendMail
 from apps.utility.twilio import send_message_on_whatsapp
 
-# from apps.utility.peach import PeachPay
+from apps.utility.peach import PeachPay
 
 # Create your views here.
 
@@ -243,3 +243,22 @@ class RecordPaymentView(APIView):
             return Response({
                 'detail': [error.args[0]]
             }, status=status.HTTP_400_BAD_REQUEST)
+
+
+class PaymentMethodeView(APIView):
+    permission_classes = [IsAuthenticated]
+    
+    @swagger_auto_schema(request_body=payment_method_schema, operation_description='Payment Method')
+    def post(self,request):
+        params = request.data
+        instance,_ = PaymentMethods.objects.get_or_create(user=request.user)
+        if 'is_bank_transfer' in params and params['is_bank_transfer'] != '':
+            instance.is_bank_transfer = params['is_bank_transfer']
+        if 'is_card_payment' in params and params['is_card_payment'] != '':
+            instance.is_card_payment = params['is_card_payment']
+        if 'is_mobile_money' in params and params['is_mobile_money'] != '':
+            instance.is_mobile_money = params['is_mobile_money']
+        instance.save()
+        return Response({
+            'message': 'Payment method updated successfully.',
+        },status=status.HTTP_200_OK)

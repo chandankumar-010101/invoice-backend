@@ -18,3 +18,8 @@ PAYMENT_MODE = (
     ('Debit Card', 'Debit Card'),
     ('Other', 'Other'),
 )
+
+REMINDER_TYPE = (
+    ('Due In','Due In'),
+    ('Overdue By','Overdue By')
+)

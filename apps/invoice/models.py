@@ -2,8 +2,10 @@ import uuid
 
 from django.db import models
 from apps.customer.models import Customer
-from .constants import INVOICE_STATUS,PAYMENT_MODE,PAYMENT_TYPE
+from .constants import INVOICE_STATUS,PAYMENT_MODE,PAYMENT_TYPE,REMINDER_TYPE
+from django.contrib.auth import get_user_model
 
+User = get_user_model()
 
 from apps.utility.helpers import filename_path
 
@@ -53,3 +55,20 @@ class InvoiceTransaction(models.Model):
     tx_id = models.CharField(max_length=255, null=True, blank=True)
     created_on = models.DateField(auto_now_add=True)
     updated_on = models.DateField(auto_now=True)
+
+
+class PaymentMethods(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE,related_name="invoice")
+    is_bank_transfer = models.BooleanField(default=False)
+    is_card_payment = models.BooleanField(default=False)
+    is_mobile_money = models.BooleanField(default=False)
+
+
+class PaymentReminder(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE,related_name="reminder_user")
+    days = models.IntegerField(null=True, blank=True, default=0)
+    reminder_type = models.CharField(max_length=255, choices=REMINDER_TYPE, default="Due In") 
+    subject = models.CharField(max_length=255, null=True, blank=True,)
+    body = models.TextField(null=True,blank=True)
+    is_sent_on_whatsapp = models.BooleanField(default=False)
+    is_sent_on_email = models.BooleanField(default=False)
