@@ -21,12 +21,11 @@ urlpatterns = [
     path('payment-reminder', views.PaymentReminderView.as_view({
         "post": "create",
         "get": "list",
-        
     })),
-    # path('customer-veiwset/<int:id>', CustomerModelView.as_view({
-    #     "get": "retrieve",
-    #     "put":"partial_update",
-    #     "delete":"destroy",
-    # })),
+    path('payment-reminder/<int:id>', views.PaymentReminderView.as_view({
+        "get": "retrieve",
+        "put":"partial_update",
+        "delete":"destroy",
+    })),
 
 ]

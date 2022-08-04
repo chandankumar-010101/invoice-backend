@@ -203,13 +203,16 @@ class ProfileupdateView(APIView):
             request.user.profile.full_name = params['full_name']
             request.user.profile.organization.email = params['email']
             request.user.profile.organization.company_name = params['company_name']
-            # request.user.profile.role = validated_data.get('role', request.user.profile.role)
             request.user.save()
             request.user.profile.save()
             request.user.profile.organization.save()
-            return Response({
-                'message':"Profile updated sucessfully"
-            })
+
+            serializer = UserProfileSerializer(request.user.profile)
+            response['profile'] = serializer.data
+            response['organization'] = request.user.profile.organization.company_name
+            response['user_type'] = request.user.user_type
+            response['last_login'] = user.last_login.strftime("%m/%d/%Y, %H:%M:%S")
+            return Response(response, status=status.HTTP_200_OK)
         except Exception as error:
             logger.error(error.args[0])
             return Response({
