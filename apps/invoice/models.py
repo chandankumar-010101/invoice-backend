@@ -58,7 +58,7 @@ class InvoiceTransaction(models.Model):
 
 
 class PaymentMethods(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE,related_name="payment_method")
+    user = models.OneToOneField(User, on_delete=models.CASCADE,related_name="payment_method")
     is_bank_transfer = models.BooleanField(default=False)
     is_card_payment = models.BooleanField(default=False)
     is_mobile_money = models.BooleanField(default=False)
