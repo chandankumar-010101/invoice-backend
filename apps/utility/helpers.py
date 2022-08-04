@@ -16,7 +16,6 @@ from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from apps.account.models import User
 
 
-
 def filename_path(folder, instance, filename) -> str:
     """
     :param folder: the folder path
@@ -53,6 +52,12 @@ class GenerateLink(object):
         uid = urlsafe_base64_encode(force_bytes(invoice.invoice_id))
         url = "https://stage.jasiricap.com/login?invoice_id={0}".format(uid) 
         return url
+
+    @staticmethod
+    def decode_invoice_link(uuid):
+        from apps.invoice.models import Invoice
+        invoice = Invoice.objects.get(invoice_id=force_str(urlsafe_base64_decode(uuid)))
+        return invoice
 
 class SendMail(object):
 

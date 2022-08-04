@@ -315,5 +315,16 @@ class PaymentReminderView(ModelViewSet):
 
 class SchedulePaymentView(APIView):
     def get(self,request,uuid):
-        return Response({"message": "Payment schedule successfully"})
-
+        try:
+            invoice = GenerateLink.decode_invoice_link(uuid)
+            is_sent,data = PeachPay().generate_payment_link(invoice)
+            if is_sent:
+                return Response({"message": "Payment schedule successfully"})
+            return Response({
+                "message": data
+            }, status=status.HTTP_400_BAD_REQUEST)
+        except Exception as error:
+            logger.error([error.args[0]])
+            return Response({
+                "detail": [error.args[0]]
+            }, status=status.HTTP_400_BAD_REQUEST)
