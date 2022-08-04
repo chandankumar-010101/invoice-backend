@@ -109,6 +109,7 @@ class LoginView(APIView):
                 token = get_jwt_tokens_for_user(user)
                 response['profile'] = serializer.data
                 response['organization'] = queryset.organization.company_name
+                response['phone_number'] = queryset.organization.phone_number
                 response['user_type'] = user.user_type
                 response['access'] = token.get('access')
                 response['refresh'] = token.get('refresh')
@@ -192,16 +193,25 @@ class ProfileupdateView(APIView):
                     return Response({
                         "message": resp_msg.USER_ALREADY_EXISTS
                     }, status=status.HTTP_400_BAD_REQUEST)
+            
             if params['company_name'] != request.user.profile.organization.company_name:
                 if Organization.objects.filter(company_name = params['company_name']).exists():
                     return Response({
                         "message": resp_msg.COMPANY_ALREADY_EXISTS
                     }, status=status.HTTP_400_BAD_REQUEST)
+            
+            if params['phone_number'] != request.user.profile.phone:
+                if UserProfile.objects.filter(phone = params['phone_number']).exists():
+                    return Response({
+                        "message": resp_msg.PHONE_ALREADY_EXISTS
+                    }, status=status.HTTP_400_BAD_REQUEST)
 
             request.user.email = params['email']
             request.user.profile.email = params['email']
+            request.user.profile.phone = params['phone_number']
             request.user.profile.full_name = params['full_name']
             request.user.profile.organization.email = params['email']
+            request.user.profile.organization.phone_number = params['phone_number']
             request.user.profile.organization.company_name = params['company_name']
             request.user.save()
             request.user.profile.save()

@@ -21,29 +21,29 @@ class PeachPay:
     def generate_payment_link(self,invoice):
         url = "https://test.ppay.io/merchant/api/payments/generatePaymentLinkApi.json"
         payload = json.dumps({
-        "Authentication": {
-            "userid": config('PEACH_USER_ID'),
-            "password": config('PEACH_PASSWORD'),
-            "entityid": config('PEACH_ENTITY_ID')
-        },
-        "Payment": {
-            "merchantInvoiceId": invoice.invoice_number,
-            "amount": invoice.due_amount,
-            "currency": "KES",
-            "files": [],
-            "sendEmail": True,
-            "sendSms": True,
-            "emailCc": invoice.customer.customer.alternate_email if hasattr(invoice.customer, 'customer') else "",
-            "emailBcc": "",
-            "expiryTime": 3600,
-            "notes": "Payment"
-        },
-        "Customer": {
-            "givenName": invoice.customer.full_name,
-            "surname": "",
-            "email": invoice.customer.primary_email,
-            "mobile": "917278737088"
-        }
+            "Authentication": {
+                "userid": config('PEACH_USER_ID'),
+                "password": config('PEACH_PASSWORD'),
+                "entityid": config('PEACH_ENTITY_ID')
+            },
+            "Payment": {
+                "merchantInvoiceId": invoice.invoice_number,
+                "amount": invoice.due_amount,
+                "currency": "KES",
+                "files": [],
+                "sendEmail": True,
+                "sendSms": True,
+                "emailCc": invoice.customer.customer.alternate_email if hasattr(invoice.customer, 'customer') else "",
+                "emailBcc": "",
+                "expiryTime": 3600,
+                "notes": "Payment"
+            },
+            "Customer": {
+                "givenName": invoice.customer.full_name,
+                "surname": "",
+                "email": invoice.customer.primary_email,
+                "mobile": "917278737088"
+            }
         })
         headers = {
             'Content-Type': 'application/json',
