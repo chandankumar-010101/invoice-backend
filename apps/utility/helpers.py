@@ -32,7 +32,8 @@ def filename_path(folder, instance, filename) -> str:
 
 
 
-class GenerateForgotLink(object):
+class GenerateLink(object):
+
     @staticmethod
     def generate(request,user):
         uid = urlsafe_base64_encode(force_bytes(user.uuid))
@@ -46,6 +47,12 @@ class GenerateForgotLink(object):
         minute = (datetime.datetime.now() - decoded_time).total_seconds()/60.0
         user = User.objects.get(uuid=force_str(urlsafe_base64_decode(uuid)))
         return user,minute
+
+    @staticmethod
+    def generate_invoice_link(invoice):
+        uid = urlsafe_base64_encode(force_bytes(invoice.invoice_id))
+        url = "https://stage.jasiricap.com/login?invoice_id={0}".format(uid) 
+        return url
 
 class SendMail(object):
 

@@ -26,7 +26,7 @@ from .serializer import (
     PasswordchangeSerializer
 )
 
-from apps.utility.helpers import SiteUrl,SendMail,GenerateForgotLink
+from apps.utility.helpers import SiteUrl,SendMail,GenerateLink
 from .permissions import IsAdminOnly
 from .schema import (
     login_schema,
@@ -282,7 +282,7 @@ class ForgotPasswordView(APIView):
             user = User.objects.get(email = params['email'])
             context = {
                 'name': user.profile.full_name,
-                'url':GenerateForgotLink.generate(request,user),
+                'url':GenerateLink.generate(request,user),
                 'site_url': str(SiteUrl.site_url(request)),
             }
             get_template = render_to_string(
@@ -304,7 +304,7 @@ class ResetPasswordView(APIView):
     def post(self,request):
         params = request.data
         try:
-            user,minutes = GenerateForgotLink.decode(params['uuid'],params['time'])
+            user,minutes = GenerateLink.decode(params['uuid'],params['time'])
             if minutes > 15:
                 return Response({"message":"Link is Expired."
                 },status=status.HTTP_400_BAD_REQUEST)

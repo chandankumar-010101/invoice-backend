@@ -17,7 +17,6 @@ urlpatterns = [
     path('record-payment/<str:id>', views.RecordPaymentView.as_view()),
 
     path('payment-method', views.PaymentMethodeView.as_view()),
-
     path('payment-reminder', views.PaymentReminderView.as_view({
         "post": "create",
         "get": "list",
@@ -27,5 +26,7 @@ urlpatterns = [
         "put":"partial_update",
         "delete":"destroy",
     })),
+    path('schedule-payment/<str:uuid>', views.SchedulePaymentView.as_view()),
+
 
 ]

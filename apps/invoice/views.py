@@ -27,7 +27,7 @@ from apps.utility.filters import InvoiceFilter,invoice_filter
 from apps.customer.pagination import CustomPagination
 from apps.customer.models import Customer
 
-from apps.utility.helpers import SiteUrl,SendMail
+from apps.utility.helpers import SiteUrl,SendMail,GenerateLink
 from apps.utility.twilio import send_message_on_whatsapp
 
 from apps.utility.peach import PeachPay
@@ -182,6 +182,7 @@ class SendInvoiceEmailView(APIView):
             'subject':params['subject'],
             'body':params['body'],
             'site_url': str(SiteUrl.site_url(request)),
+            'payment_schedule':GenerateLink.generate_invoice_link(invoice)
         }
         invoice.invoice_status = 'SENT'
         invoice.save()
@@ -310,3 +311,9 @@ class PaymentReminderView(ModelViewSet):
     def destroy(self, request, *args, **kwargs):
         PaymentReminder.objects.filter(id=kwargs["id"]).delete()
         return Response({"message": "Customer delete successfully"})
+
+
+class SchedulePaymentView(APIView):
+    def get(self,request,uuid):
+        return Response({"message": "Payment schedule successfully"})
+
