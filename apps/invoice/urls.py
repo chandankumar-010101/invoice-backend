@@ -15,9 +15,18 @@ urlpatterns = [
     path('send-whats-invoice/<str:id>', views.SendInvoiceWhatsView.as_view()),
     path('attachment/delete/<int:id>', views.DeleteInvoiceAttachmentView.as_view()),
     path('record-payment/<str:id>', views.RecordPaymentView.as_view()),
-    
+
     path('payment-method', views.PaymentMethodeView.as_view()),
 
-
+    path('payment-reminder', views.PaymentReminderView.as_view({
+        "post": "create",
+        "get": "list",
+        
+    })),
+    # path('customer-veiwset/<int:id>', CustomerModelView.as_view({
+    #     "get": "retrieve",
+    #     "put":"partial_update",
+    #     "delete":"destroy",
+    # })),
 
 ]

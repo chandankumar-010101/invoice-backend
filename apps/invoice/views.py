@@ -16,10 +16,11 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.parsers import FormParser, MultiPartParser
 
 from django.db.models import Q,Sum
+from rest_framework.viewsets import ModelViewSet
 
 
-from .models import Invoice,InvoiceAttachment,InvoiceTransaction,PaymentMethods
-from .serializer import InvoiceSerializer,GetInvoiceSerializer
+from .models import Invoice,InvoiceAttachment,InvoiceTransaction,PaymentMethods,PaymentReminder
+from .serializer import InvoiceSerializer,GetInvoiceSerializer,PaymentReminderSerializer
 
 from .schema import  email_invoice_schema,record_payment_schema,whats_invoice_schema,payment_method_schema
 from apps.utility.filters import InvoiceFilter,invoice_filter
@@ -253,12 +254,56 @@ class PaymentMethodeView(APIView):
         params = request.data
         instance,_ = PaymentMethods.objects.get_or_create(user=request.user)
         if 'is_bank_transfer' in params and params['is_bank_transfer'] != '':
-            instance.is_bank_transfer = params['is_bank_transfer']
+            instance.is_bank_transfer = params['is_bank_transfer'].capitalize() 
         if 'is_card_payment' in params and params['is_card_payment'] != '':
-            instance.is_card_payment = params['is_card_payment']
+            instance.is_card_payment = params['is_card_payment'].capitalize() 
         if 'is_mobile_money' in params and params['is_mobile_money'] != '':
-            instance.is_mobile_money = params['is_mobile_money']
+            instance.is_mobile_money = params['is_mobile_money'].capitalize() 
         instance.save()
         return Response({
             'message': 'Payment method updated successfully.',
         },status=status.HTTP_200_OK)
+
+
+class PaymentReminderView(ModelViewSet):
+    permission_classes = [IsAuthenticated]
+    queryset = PaymentReminder.objects.all()
+    serializer_class = PaymentReminderSerializer
+    lookup_field='id'
+
+    def get_queryset(self):
+        return PaymentReminder.objects.filter(user=self.request.user)
+    
+    def get_serializer_context(self):
+        return {'request': self.request}
+
+    def create(self, request, *args, **kwargs):
+        instance = super(PaymentReminderView, self).create(request, *args, **kwargs)
+        return Response({"message": "Customer Create successfully", "data": instance.data})
+
+
+    def list(self, request, *args, **kwargs):
+        results = super(PaymentReminderView, self).list(
+            request, *args, **kwargs)
+        return Response({
+            'data': results.data,
+            'message': 'Data fetched successfully'
+        }, status=status.HTTP_200_OK)
+    
+    def retrieve(self, request, *args, **kwargs):
+        results = super(PaymentReminderView, self).retrieve(
+            request, *args, **kwargs)
+        return Response({
+            'data': results.data,
+            'message': 'Particular Data fetched successfully'
+        }, status=status.HTTP_200_OK)
+
+    
+    def update(self, request, *args, **kwargs):
+       
+        instance = super(PaymentReminderView, self).update(request, *args, **kwargs)
+        return Response({"message": "Customer Update successfully", "data": instance.data})
+
+    def destroy(self, request, *args, **kwargs):
+        PaymentReminder.objects.filter(id=kwargs["id"]).delete()
+        return Response({"message": "Customer delete successfully"})

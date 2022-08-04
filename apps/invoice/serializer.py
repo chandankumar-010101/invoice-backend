@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from .models import Invoice,InvoiceAttachment
+from .models import Invoice,InvoiceAttachment,PaymentReminder
 
 from apps.utility.helpers import ordinal
 class InvoiceAttachmentSerializer(serializers.ModelSerializer):
@@ -107,3 +107,20 @@ class InvoiceSerializer(serializers.ModelSerializer):
         fields = '__all__'
         read_only_fields = ('untaxed_amount','vat_amount','notes','curreny')
 
+
+
+class PaymentReminderSerializer(serializers.ModelSerializer):
+
+    def create(self,validated_data):
+        request = self.context.get('request')
+        instance = PaymentReminder.objects.create(
+            user = request.user,
+            **validate_data
+        )
+        return instance
+
+
+    class Meta:
+        model = PaymentReminder
+        fields = '__all__'
+        read_only_fields = ('user',)
