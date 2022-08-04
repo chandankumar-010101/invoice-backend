@@ -89,6 +89,10 @@
             color: #fff;
             padding: 36px;
         }
+        .msg2965160725115545457 table {
+    border-spacing: 0;
+    width: 100%;
+}
 
         .payemtbtn a {
             background-color: #fff;
@@ -222,7 +226,6 @@
                                                 style="font-size:22px;">{{invoice.due_amount|get_amount_in_number}}</span></p>
                                         {% if invoice.is_online_payment %}
                                         <div class="payemtbtn">
-                                            <!-- <a href="https://stage.jasiricap.com/admin/invoice/preview/{{invoice.id}}">View Invoice</a> -->
                                             <a class="scheduleinvoice" href="#">Schedule Payment</a>
                                         </div>
                                         {% endif %}
