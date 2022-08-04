@@ -115,7 +115,7 @@ class PaymentReminderSerializer(serializers.ModelSerializer):
         request = self.context.get('request')
         instance = PaymentReminder.objects.create(
             user = request.user,
-            **validate_data
+            **validated_data
         )
         return instance
 
