@@ -208,6 +208,7 @@ class ProfileupdateView(APIView):
             request.user.profile.organization.save()
 
             serializer = UserProfileSerializer(request.user.profile)
+            response={}
             response['profile'] = serializer.data
             response['organization'] = request.user.profile.organization.company_name
             response['user_type'] = request.user.user_type
