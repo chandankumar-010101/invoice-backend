@@ -212,7 +212,7 @@ class ProfileupdateView(APIView):
             response['profile'] = serializer.data
             response['organization'] = request.user.profile.organization.company_name
             response['user_type'] = request.user.user_type
-            response['last_login'] = user.last_login.strftime("%m/%d/%Y, %H:%M:%S")
+            response['last_login'] = request.user.last_login.strftime("%m/%d/%Y, %H:%M:%S")
             return Response(response, status=status.HTTP_200_OK)
         except Exception as error:
             logger.error(error.args[0])
