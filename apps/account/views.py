@@ -329,6 +329,7 @@ class GetDetailsView(APIView):
         serializer = UserProfileSerializer(request.user.profile)
         response['profile'] = serializer.data
         response['organization'] = request.user.profile.organization.company_name
+        response['phone_number'] = request.user.profile.organization.phone_number
         response['user_type'] = request.user.user_type
         response['last_login'] = request.user.last_login.strftime("%m/%d/%Y, %H:%M:%S")
         response['payment_reminder'] = PaymentReminderSerializer(request.user.reminder_user.all(),many=True).data
