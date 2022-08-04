@@ -38,5 +38,6 @@ payment_method_schema = openapi.Schema(
         'is_bank_transfer': openapi.Schema(type=openapi.TYPE_STRING),
         'is_card_payment': openapi.Schema(type=openapi.TYPE_STRING),
         'is_mobile_money': openapi.Schema(type=openapi.TYPE_STRING),
+        'auto_payment_reminder': openapi.Schema(type=openapi.TYPE_STRING),
     }
 )

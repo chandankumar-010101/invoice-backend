@@ -259,6 +259,9 @@ class PaymentMethodeView(APIView):
             instance.is_card_payment = params['is_card_payment'].capitalize() 
         if 'is_mobile_money' in params and params['is_mobile_money'] != '':
             instance.is_mobile_money = params['is_mobile_money'].capitalize() 
+        if 'auto_payment_reminder' in params and params['auto_payment_reminder'] != '':
+            instance.auto_payment_reminder = params['auto_payment_reminder'].capitalize() 
+
         instance.save()
         return Response({
             'message': 'Payment method updated successfully.',

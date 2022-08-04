@@ -62,7 +62,7 @@ class PaymentMethods(models.Model):
     is_bank_transfer = models.BooleanField(default=False)
     is_card_payment = models.BooleanField(default=False)
     is_mobile_money = models.BooleanField(default=False)
-
+    auto_payment_reminder = models.BooleanField(default=False)
 
 class PaymentReminder(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE,related_name="reminder_user")
