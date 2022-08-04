@@ -34,7 +34,7 @@ from .schema import (
     forgot_password_schema,reset_password_schema,
     profile_update_schema
 )
-
+from apps.invoice.serializer import PaymentReminderSerializer
 logger = logging.getLogger(__name__)
 
 
@@ -310,3 +310,20 @@ class ResetPasswordView(APIView):
             }, status=status.HTTP_400_BAD_REQUEST)
 
 
+class GetDetailsView(APIView):
+    permission_classes = (IsAuthenticated, )
+
+    def get(self,request):
+        response={}
+        payment_method = {}
+        serializer = UserProfileSerializer(request.user.profile)
+        response['profile'] = serializer.data
+        response['organization'] = request.user.profile.organization.company_name
+        response['user_type'] = request.user.user_type
+        response['last_login'] = request.user.last_login.strftime("%m/%d/%Y, %H:%M:%S")
+        response['payment_reminder'] = PaymentReminderSerializer(request.user).data
+        payment_method['is_bank_transfer']= request.user.payment_method.is_bank_transfer if hasattr(request.user,'payment_method') else False
+        payment_method['is_card_payment']= request.user.payment_method.is_card_payment if hasattr( request.user,'payment_method') else False
+        payment_method['is_mobile_money']= request.user.payment_method.is_mobile_money if hasattr(request.user,'payment_method') else False
+        response['payment_method'] = payment_method
+        return Response(response, status=status.HTTP_200_OK)
