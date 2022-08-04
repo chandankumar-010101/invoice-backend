@@ -21,3 +21,7 @@ def get_file_name(invoice):
 def get_file_size(invoice):
     size = invoice.attachment.size
     return size/1000
+
+@register.filter
+def get_amount_in_number(amount):
+    return '{:,}'.format(amount)

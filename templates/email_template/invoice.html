@@ -219,7 +219,7 @@
                                     <div class="invoice-bnnr">
                                         <p style="font-size:14px;">Due {{invoice.due_date}}</p>
                                         <p style="font-size:15px; margin-top:10px;">KES&nbsp;<span
-                                                style="font-size:22px;">{{invoice.due_amount}}</span></p>
+                                                style="font-size:22px;">{{invoice.due_amount|get_amount_in_number}}</span></p>
                                         {% if invoice.is_online_payment %}
                                         <div class="payemtbtn">
                                             <!-- <a href="https://stage.jasiricap.com/admin/invoice/preview/{{invoice.id}}">View Invoice</a> -->
