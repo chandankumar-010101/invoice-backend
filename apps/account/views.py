@@ -321,7 +321,7 @@ class GetDetailsView(APIView):
         response['organization'] = request.user.profile.organization.company_name
         response['user_type'] = request.user.user_type
         response['last_login'] = request.user.last_login.strftime("%m/%d/%Y, %H:%M:%S")
-        response['payment_reminder'] = PaymentReminderSerializer(request.user,many=True).data
+        response['payment_reminder'] = PaymentReminderSerializer(request.user.reminder_user.all(),many=True).data
         payment_method['is_bank_transfer']= request.user.payment_method.is_bank_transfer if hasattr(request.user,'payment_method') else False
         payment_method['is_card_payment']= request.user.payment_method.is_card_payment if hasattr( request.user,'payment_method') else False
         payment_method['is_mobile_money']= request.user.payment_method.is_mobile_money if hasattr(request.user,'payment_method') else False
