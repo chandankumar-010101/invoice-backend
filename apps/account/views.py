@@ -348,6 +348,6 @@ class GetDetailsView(APIView):
         payment_method['is_card_payment']= request.user.payment_method.is_card_payment if hasattr( request.user,'payment_method') else False
         payment_method['is_mobile_money']= request.user.payment_method.is_mobile_money if hasattr(request.user,'payment_method') else False
         payment_method['auto_payment_reminder']= request.user.payment_method.auto_payment_reminder if hasattr(request.user,'payment_method') else False
-        response['roles'] = user.roles_permission_user.roles
+        response['roles'] = request.user.roles_permission_user.roles
         response['payment_method'] = payment_method
         return Response(response, status=status.HTTP_200_OK)
