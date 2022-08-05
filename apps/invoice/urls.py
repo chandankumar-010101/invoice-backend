@@ -27,6 +27,7 @@ urlpatterns = [
         "delete":"destroy",
     })),
     path('schedule-payment/<str:uuid>', views.SchedulePaymentView.as_view()),
+    path('update-role-permissions', views.UpdateRolesAndPermissionsView.as_view()),
 
     path('peach-webhook', views.peach_webhook),
 

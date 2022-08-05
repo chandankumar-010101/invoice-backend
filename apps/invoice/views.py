@@ -22,7 +22,11 @@ from rest_framework.viewsets import ModelViewSet
 from .models import Invoice,InvoiceAttachment,InvoiceTransaction,PaymentMethods,PaymentReminder
 from .serializer import InvoiceSerializer,GetInvoiceSerializer,PaymentReminderSerializer
 
-from .schema import  email_invoice_schema,record_payment_schema,whats_invoice_schema,payment_method_schema
+from .schema import  (
+    email_invoice_schema,
+    record_payment_schema,whats_invoice_schema,
+    payment_method_schema,roles_permissions_schema
+)
 from apps.utility.filters import InvoiceFilter,invoice_filter
 from apps.customer.pagination import CustomPagination
 from apps.customer.models import Customer
@@ -328,6 +332,16 @@ class SchedulePaymentView(APIView):
             return Response({
                 "detail": [error.args[0]]
             }, status=status.HTTP_400_BAD_REQUEST)
+
+class UpdateRolesAndPermissionsView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    @swagger_auto_schema(request_body=roles_permissions_schema, operation_description='Roles and Permission')
+    def post(self,request):
+        params = request.data
+        request.user.roles_permission_user.roles = params['roles']
+        request.user.roles_permission_user.save()
+        return Response({"message": "Roles and Permissions updated successfully"})
 
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST

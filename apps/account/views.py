@@ -22,7 +22,7 @@ from .serializer import (
     OrganizationSerializer,
     SignupSerializer, LoginSerializers,
     UserProfileSerializer, UserCreateSerializer,
-    UserProfileListSerializer, ProfileupdateSerializer,
+    UserProfileListSerializer, 
     PasswordchangeSerializer
 )
 

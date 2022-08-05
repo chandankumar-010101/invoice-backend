@@ -41,3 +41,17 @@ payment_method_schema = openapi.Schema(
         'auto_payment_reminder': openapi.Schema(type=openapi.TYPE_STRING),
     }
 )
+
+
+roles_permissions_schema = openapi.Schema(
+    type=openapi.TYPE_OBJECT, responses={200: 'OK'}, properties={
+        'roles':  openapi.Parameter('cc email list',
+            in_=openapi.IN_QUERY,
+            description='CC email list',
+            type=openapi.TYPE_ARRAY,
+            items=openapi.Items(type=openapi.TYPE_OBJECT),
+            required=True
+        ),
+    },
+    required=['roles',]
+)
