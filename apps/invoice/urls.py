@@ -28,5 +28,7 @@ urlpatterns = [
     })),
     path('schedule-payment/<str:uuid>', views.SchedulePaymentView.as_view()),
 
+    path('peach-webhook', views.peach_webhook),
+
 
 ]

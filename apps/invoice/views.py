@@ -328,3 +328,13 @@ class SchedulePaymentView(APIView):
             return Response({
                 "detail": [error.args[0]]
             }, status=status.HTTP_400_BAD_REQUEST)
+
+from django.views.decorators.csrf import csrf_exempt
+from django.views.decorators.http import require_POST
+@csrf_exempt
+@require_POST
+def peach_webhook(request):
+    jsondata = request.body
+    data = json.loads(jsondata)
+    print("data",data)
+    return HttpResponse(status=200)
