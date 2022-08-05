@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Invoice,InvoiceAttachment,InvoiceTransaction
+from .models import Invoice,InvoiceAttachment,InvoiceTransaction,RolesAndPermissions
 
 # Register your models here.
 @admin.register(Invoice)
@@ -21,6 +21,13 @@ class InvoiceAttachmentAdmin(admin.ModelAdmin):
         "id",
     )
 
+
+@admin.register(RolesAndPermissions)
+class RolesAndPermissionsAdmin(admin.ModelAdmin):
+
+    list_display = (
+        "id",
+    )
 
 @admin.register(InvoiceTransaction)
 class InvoiceTransactionAdmin(admin.ModelAdmin):

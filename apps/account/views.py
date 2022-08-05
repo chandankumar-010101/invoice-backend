@@ -35,6 +35,7 @@ from .schema import (
     profile_update_schema
 )
 from apps.invoice.serializer import PaymentReminderSerializer
+from apps.invoice.models import RolesAndPermissions
 logger = logging.getLogger(__name__)
 
 
@@ -56,6 +57,14 @@ class SignupView(APIView):
     a user profile.
     """
 
+    def save_roles(self,user):
+        import json
+        data = json.load(open('json/roles.json'))
+        RolesAndPermissions.objects.create(
+            user=user,
+            roles = data
+        )
+        
     def post(self, request, *args, **kwargs):
         response = {}
         serializer = SignupSerializer(data=request.data)
@@ -80,6 +89,7 @@ class SignupView(APIView):
                     profile is not None):
                 queryset = UserProfile.objects.get(email=profile.email)
                 serializer = UserProfileSerializer(queryset)
+                self.save_roles(user)
                 response['profile'] = serializer.data
                 response['organization'] = queryset.organization.company_name
                 response['user_type'] = user.user_type

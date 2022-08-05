@@ -51,7 +51,7 @@ def create_admin_user(request, user_type):
     """ Create a admin user while registration 
     
     Args:
-        request: request object
+        request:create_admin_user request object
     Return:
         user: organization object
     """

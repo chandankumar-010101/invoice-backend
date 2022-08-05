@@ -31,6 +31,7 @@ class Invoice(models.Model):
     curreny = models.CharField(max_length=255, default='KES')
     reminders = models.IntegerField(null=True, blank=True, default=0)
     is_online_payment = models.BooleanField(default=False)
+
     class Meta:
         verbose_name = 'Invoice'
         verbose_name_plural = 'Invoice'
@@ -56,7 +57,6 @@ class InvoiceTransaction(models.Model):
     created_on = models.DateField(auto_now_add=True)
     updated_on = models.DateField(auto_now=True)
 
-
 class PaymentMethods(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE,related_name="payment_method")
     is_bank_transfer = models.BooleanField(default=False)
@@ -72,3 +72,9 @@ class PaymentReminder(models.Model):
     body = models.TextField(null=True,blank=True)
     is_sent_on_whatsapp = models.BooleanField(default=False)
     is_sent_on_email = models.BooleanField(default=False)
+
+class RolesAndPermissions(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE,related_name="roles_permission_user")
+    roles = models.JSONField(default=dict)
+
+

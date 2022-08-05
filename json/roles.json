@@ -1,0 +1,150 @@
+[
+    {
+        "roles":"Admin",
+        "child":[
+            {
+                "permission":"Dashboard",
+                "access":"Full access"
+            },
+            {
+                "permission":"Customers",
+                "access":"Full access"
+            },
+            {
+                "permission":"Invoices",
+                "access":"Full access"
+            },
+            {
+                "permission":"Payments",
+                "access":"Full access"
+            },
+            {
+                "permission":"Reports",
+                "access":"Full access"
+            },
+            {
+                "permission":"Billing & Subscriptions",
+                "access":"Full access"
+            },
+            {
+                "permission":"Activate online payments",
+                "access":"Full access"
+            },
+            {
+                "permission":"Roles & Permissions",
+                "access":"Full access"
+            }
+        ]
+    },
+    {
+        "roles":"Accounting",
+        "child":[
+            {
+                "permission":"Dashboard",
+                "access":"Full access"
+            },
+            {
+                "permission":"Customers",
+                "access":"Full access"
+            },
+            {
+                "permission":"Invoices",
+                "access":"Full access"
+            },
+            {
+                "permission":"Payments",
+                "access":"Full access"
+            },
+            {
+                "permission":"Reports",
+                "access":"Full access"
+            },
+            {
+                "permission":"Billing & Subscriptions",
+                "access":"No access"
+            },
+            {
+                "permission":"Activate online payments",
+                "access":"View-only access"
+            },
+            {
+                "permission":"Roles & Permissions",
+                "access":"No access"
+            }
+        ]
+    },
+    {
+        "roles":"Sales",
+        "child":[
+            {
+                "permission":"Dashboard",
+                "access":"View-only access"
+            },
+            {
+                "permission":"Customers",
+                "access":"View-only access"
+            },
+            {
+                "permission":"Invoices",
+                "access":"View-only access"
+            },
+            {
+                "permission":"Payments",
+                "access":"View-only access"
+            },
+            {
+                "permission":"Reports",
+                "access":"View-only access"
+            },
+            {
+                "permission":"Billing & Subscriptions",
+                "access":"No access"
+            },
+            {
+                "permission":"Activate online payments",
+                "access":"No access"
+            },
+            {
+                "permission":"Roles & Permissions",
+                "access":"No access"
+            }
+        ]
+    },
+    {
+        "roles":"Support",
+        "child":[
+            {
+                "permission":"Dashboard",
+                "access":"View-only access"
+            },
+            {
+                "permission":"Customers",
+                "access":"View-only access"
+            },
+            {
+                "permission":"Invoices",
+                "access":"View-only access"
+            },
+            {
+                "permission":"Payments",
+                "access":"View-only access"
+            },
+            {
+                "permission":"Reports",
+                "access":"View-only access"
+            },
+            {
+                "permission":"Billing & Subscriptions",
+                "access":"No access"
+            },
+            {
+                "permission":"Activate online payments",
+                "access":"No access"
+            },
+            {
+                "permission":"Roles & Permissions",
+                "access":"No access"
+            }
+        ]
+    }
+]
