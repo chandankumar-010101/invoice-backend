@@ -228,6 +228,9 @@ class UserListView(generics.ListAPIView):
         if 'search' in params and params['search'] !='':
             queryset = queryset.filter(full_name__icontains=params['search'])
 
+        if 'filter' in params and params['filter'] !='':
+            queryset = queryset.filter(user__user_type=params['filter'])
+
         if 'order_by' in params and params['order_by'] !='':
             queryset = queryset.order_by(params['order_by'])
         serializer = self.serializer_class(queryset, many=True)
