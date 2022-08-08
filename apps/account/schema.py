@@ -60,3 +60,16 @@ profile_update_schema = openapi.Schema(
     },
     required=['full_name','email','company_name','phone_number']
 )
+
+
+create_user_schema = openapi.Schema(
+    type=openapi.TYPE_OBJECT, responses={200: 'OK'}, properties={
+        'full_name': openapi.Schema(type=openapi.TYPE_STRING),
+        'email': openapi.Schema(type=openapi.TYPE_STRING),
+        'role': openapi.Schema(type=openapi.TYPE_STRING),
+        'phone_number': openapi.Schema(type=openapi.TYPE_STRING),
+        'password': openapi.Schema(type=openapi.TYPE_STRING),
+
+    },
+    required=['full_name','email','role','phone_number',"password"]
+)

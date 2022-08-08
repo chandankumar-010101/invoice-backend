@@ -32,7 +32,7 @@ from .schema import (
     login_schema,
     change_password_schema,
     forgot_password_schema,reset_password_schema,
-    profile_update_schema
+    profile_update_schema,create_user_schema
 )
 from apps.invoice.serializer import PaymentReminderSerializer
 from apps.invoice.models import RolesAndPermissions
@@ -140,7 +140,7 @@ class UserCreateView(APIView):
     """
 
     permission_classes = (IsAuthenticated & IsAdminOnly,)
-
+    @swagger_auto_schema(request_body=create_user_schema, operation_description='Create User')
     def post(self, request, *args, **kwargs):
         serializer = UserCreateSerializer(data=request.data)
         if serializer.is_valid():
