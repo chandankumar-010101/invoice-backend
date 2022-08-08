@@ -217,12 +217,22 @@ class UserListView(generics.ListAPIView):
     serializer_class = UserProfileListSerializer
     permission_classes = (IsAuthenticated & IsAdminOnly,)
     pagination_class = CustomPagination
-    pagination_class.page_size = 2
-    def get_queryset(self):
-        user = self.request.user
+    pagination_class.page_size = 10
+
+    def list(self, request, *args, **kwargs):
+        params = request.GET
+        user = request.user
         organization = UserProfile.objects.get(user=user).organization
         queryset = UserProfile.objects.filter(organization=organization).exclude(user=self.request.user.profile)
-        return queryset
+
+        if 'search' in params and params['search'] !='':
+            queryset = queryset.filter(full_name__icontains=params['search'])
+
+        if 'order_by' in params and params['order_by'] !='':
+            queryset = queryset.order_by(params['order_by'])
+        serializer = self.serializer_class(queryset, many=True)
+        page = self.paginate_queryset(serializer.data)
+        return self.get_paginated_response(page)
 
 
 class LogoutView(APIView):
