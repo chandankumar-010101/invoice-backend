@@ -140,6 +140,7 @@ class UserCreateView(APIView):
     """
 
     permission_classes = (IsAuthenticated & IsAdminOnly,)
+    
     @swagger_auto_schema(request_body=create_user_schema, operation_description='Create User')
     def post(self, request, *args, **kwargs):
         serializer = UserCreateSerializer(data=request.data)
