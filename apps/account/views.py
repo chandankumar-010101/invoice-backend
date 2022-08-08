@@ -140,7 +140,7 @@ class UserCreateView(APIView):
     """
 
     permission_classes = (IsAuthenticated & IsAdminOnly,)
-    
+
     @swagger_auto_schema(request_body=create_user_schema, operation_description='Create User')
     def post(self, request, *args, **kwargs):
         serializer = UserCreateSerializer(data=request.data)
@@ -177,7 +177,7 @@ class UserListView(generics.ListAPIView):
     def get_queryset(self):
         user = self.request.user
         organization = UserProfile.objects.get(user=user).organization
-        queryset = UserProfile.objects.filter(organization=organization)
+        queryset = UserProfile.objects.filter(organization=organization).exclude(user=request.user.profile)
         return queryset
 
 
