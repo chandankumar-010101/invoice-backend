@@ -45,9 +45,9 @@ payment_method_schema = openapi.Schema(
 
 roles_permissions_schema = openapi.Schema(
     type=openapi.TYPE_OBJECT, responses={200: 'OK'}, properties={
-        'roles':  openapi.Parameter('cc email list',
+        'roles':  openapi.Parameter('Roles',
             in_=openapi.IN_QUERY,
-            description='CC email list',
+            description='Roles',
             type=openapi.TYPE_ARRAY,
             items=openapi.Items(type=openapi.TYPE_OBJECT),
             required=True

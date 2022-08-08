@@ -6,6 +6,7 @@ class IsAdminOnly(BasePermission):
 
     message = resp_msg.NOT_ADMIN
     def has_permission( self, request, view ):
+        print(request.user.user_type)
         if request.user.user_type != 2:
             self.message = resp_msg.ADMIN_ONLY_PERMISSION
             return False
