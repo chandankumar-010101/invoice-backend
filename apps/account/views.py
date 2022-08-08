@@ -169,7 +169,6 @@ class UserUpdateView(APIView):
     """
 
     permission_classes = (IsAuthenticated & IsAdminOnly,)
-
     @swagger_auto_schema(request_body=create_user_schema, operation_description='Update User')
     def post(self, request,pk, *args, **kwargs):
         serializer = UserCreateSerializer(data=request.data)
