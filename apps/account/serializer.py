@@ -118,7 +118,7 @@ class UserSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ('id','email', 'user_type', )
+        fields = ('email', 'user_type', )
 
 class UserProfileListSerializer(serializers.ModelSerializer):
 
@@ -126,7 +126,7 @@ class UserProfileListSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = UserProfile
-        fields = ('pk', 'full_name', 'email','user',)
+        fields = ('id', 'full_name', 'email','user',)
 
 
 class PasswordchangeSerializer(serializers.Serializer):

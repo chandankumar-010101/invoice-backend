@@ -162,6 +162,37 @@ class UserCreateView(APIView):
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+class UserUpdateView(APIView):
+    """ Create new User for an organization.
+    Register a user and create a user profile.
+    validation for only admin user can create new user.
+    """
+
+    permission_classes = (IsAuthenticated & IsAdminOnly,)
+
+    @swagger_auto_schema(request_body=create_user_schema, operation_description='Update User')
+    def post(self, request,id, *args, **kwargs):
+        serializer = UserCreateSerializer(data=request.data)
+        if serializer.is_valid():
+            try:
+                params = request.data
+                instance = UserProfile.objects.get(id=id)
+                instance.full_name = params['full_name']
+                instance.email = params['email']
+                instance.phone = params['phone_number']
+                instance.user.email = params['email']
+                instance.user.user_type = params['role']
+                instance.user.set_password(params['password'])
+                instance.save()
+                instance.user.save()
+                return Response({"message": "User updated successfully"})
+            except Exception as error:
+                logger.error(error)
+                return Response({
+                    'detail': [error.args[0]]
+                }, status=status.HTTP_400_BAD_REQUEST)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
 
 class UserListView(generics.ListAPIView):
     """ List of user from an organization.
