@@ -177,7 +177,7 @@ class UserListView(generics.ListAPIView):
     def get_queryset(self):
         user = self.request.user
         organization = UserProfile.objects.get(user=user).organization
-        queryset = UserProfile.objects.filter(organization=organization).exclude(user=request.user.profile)
+        queryset = UserProfile.objects.filter(organization=organization).exclude(user=self.request.user.profile)
         return queryset
 
 
