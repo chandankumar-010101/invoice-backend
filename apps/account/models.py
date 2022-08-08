@@ -43,6 +43,7 @@ class User(AbstractUser):
     basic info of the user.
     """
     username = None
+    parent = models.ForeignKey('self', null=True, blank=True,on_delete=models.SET_NULL, related_name='parent_user')
     uuid = models.UUIDField(default=uuid.uuid4, editable=False)
     email = models.EmailField(unique=True, null=True, db_index=True)
     is_active = models.BooleanField(default=True)

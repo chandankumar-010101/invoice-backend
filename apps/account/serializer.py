@@ -123,12 +123,10 @@ class UserSerializer(serializers.ModelSerializer):
 class UserProfileListSerializer(serializers.ModelSerializer):
 
     user = UserSerializer()
-    user_type = serializers.CharField(source='user_get_user_type_display')
-
 
     class Meta:
         model = UserProfile
-        fields = ('pk', 'full_name', 'email','user','user_type')
+        fields = ('pk', 'full_name', 'email','user',)
 
 
 class PasswordchangeSerializer(serializers.Serializer):
