@@ -114,7 +114,7 @@ class UserCreateSerializer(serializers.Serializer):
             raise serializers.ValidationError(resp_msg.PASSWORD_VALIDATION)
        
 class UserSerializer(serializers.ModelSerializer):
-    user_type = serializers.CharField(source='get_type_type_display')
+    user_type = serializers.CharField(source='get_user_type_display')
 
     class Meta:
         model = User
