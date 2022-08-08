@@ -171,12 +171,12 @@ class UserUpdateView(APIView):
     permission_classes = (IsAuthenticated & IsAdminOnly,)
 
     @swagger_auto_schema(request_body=create_user_schema, operation_description='Update User')
-    def post(self, request,id, *args, **kwargs):
+    def post(self, request,pk, *args, **kwargs):
         serializer = UserCreateSerializer(data=request.data)
         if serializer.is_valid():
             try:
                 params = request.data
-                instance = UserProfile.objects.get(id=id)
+                instance = UserProfile.objects.get(pk=pk)
                 instance.full_name = params['full_name']
                 instance.email = params['email']
                 instance.phone = params['phone_number']

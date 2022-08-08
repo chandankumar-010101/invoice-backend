@@ -126,7 +126,7 @@ class UserProfileListSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = UserProfile
-        fields = ('id', 'full_name', 'email','user',)
+        fields = ('pk', 'full_name', 'email','user',)
 
 
 class PasswordchangeSerializer(serializers.Serializer):

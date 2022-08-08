@@ -15,7 +15,7 @@ urlpatterns = [
     path('get-details', views.GetDetailsView.as_view(), name="login"),
 
     path('create-user', views.UserCreateView.as_view(), name="create_user"),
-    path('update-user/<int:id>', views.UserUpdateView.as_view(), name="create_user"),
+    path('update-user/<int:pk>', views.UserUpdateView.as_view(), name="create_user"),
 
     path('users/list', views.UserListView.as_view(), name="users_list"),
     path('logout', views.LogoutView.as_view(), name="logout"),
