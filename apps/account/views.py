@@ -177,10 +177,22 @@ class UserUpdateView(APIView):
             try:
                 params = request.data
                 instance = UserProfile.objects.get(pk=pk)
+                if instance.email != params['email']:
+                    if UserProfile.objects.filter(email=params['email']).exists():
+                        return Response({
+                            'detail': [resp_msg.EMAIL_ALREADY_EXISTS]
+                        },status=status.HTTP_400_BAD_REQUEST)
+                    else:
+                        instance.email = params['email']
+                        instance.user.email = params['email']
+                if instance.phone != params['phone_number']:
+                        if UserProfile.objects.filter(phone=params['phone_number']).exists():
+                            return Response({
+                                'detail': [resp_msg.PHONE_ALREADY_EXISTS]
+                            },status=status.HTTP_400_BAD_REQUEST)
+                        else:
+                            instance.phone = params['phone_number']
                 instance.full_name = params['full_name']
-                instance.email = params['email']
-                instance.phone = params['phone_number']
-                instance.user.email = params['email']
                 instance.user.user_type = params['role']
                 instance.user.set_password(params['password'])
                 instance.save()
