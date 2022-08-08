@@ -232,7 +232,10 @@ class UserListView(generics.ListAPIView):
             queryset = queryset.filter(user__user_type=params['filter'])
 
         if 'order_by' in params and params['order_by'] !='':
-            queryset = queryset.order_by(params['order_by'])
+            if params['order_by'] in 'user_type':
+                queryset = queryset.filter(user__user_type__icontains=params['order_by'])
+            else:
+                queryset = queryset.order_by(params['order_by'])
         serializer = self.serializer_class(queryset, many=True)
         page = self.paginate_queryset(serializer.data)
         return self.get_paginated_response(page)
