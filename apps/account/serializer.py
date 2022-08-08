@@ -123,7 +123,7 @@ class UserSerializer(serializers.ModelSerializer):
 class UserProfileListSerializer(serializers.ModelSerializer):
 
     user = UserSerializer()
-    user_type = serializers.CharField(source='user__get_user_type_display')
+    user_type = serializers.CharField(source='user_get_user_type_display')
 
 
     class Meta:
