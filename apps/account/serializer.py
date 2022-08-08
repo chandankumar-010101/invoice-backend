@@ -88,15 +88,15 @@ class UserCreateSerializer(serializers.Serializer):
     role = serializers.IntegerField()
     password = serializers.CharField(max_length=255)
 
-    def validate_email(self, email):
-        is_email_exist = User.objects.filter(email=email).exists()
-        if is_email_exist:
-            raise serializers.ValidationError(resp_msg.USER_ALREADY_EXISTS)
+    # def validate_email(self, email):
+    #     is_email_exist = User.objects.filter(email=email).exists()
+    #     if is_email_exist:
+    #         raise serializers.ValidationError(resp_msg.USER_ALREADY_EXISTS)
 
-    def validate_phone(self, phone):
-        is_phone_exist = UserProfile.objects.filter(phone=phone)
-        if len(is_phone_exist) > 0:
-            raise serializers.ValidationError(resp_msg.PHONE_ALREADY_EXISTS)
+    # def validate_phone(self, phone):
+    #     is_phone_exist = UserProfile.objects.filter(phone=phone)
+    #     if len(is_phone_exist) > 0:
+    #         raise serializers.ValidationError(resp_msg.PHONE_ALREADY_EXISTS)
 
     def validate_role(self, role):
         if role < 1 or role > 6:
