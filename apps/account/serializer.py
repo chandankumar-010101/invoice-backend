@@ -85,6 +85,7 @@ class UserCreateSerializer(serializers.Serializer):
     email = serializers.EmailField(max_length=50)
     phone_number = serializers.CharField(max_length=255)
     role = serializers.IntegerField()
+    role = serializers.IntegerField()
     password = serializers.CharField(max_length=255)
 
     def validate_email(self, email):
@@ -120,11 +121,12 @@ class UserSerializer(serializers.ModelSerializer):
 
 class UserProfileListSerializer(serializers.ModelSerializer):
 
-    user = UserSerializer()
+    # user = UserSerializer()
+    user_type = serializers.CharField(source='user__get_type_type_display')
 
     class Meta:
         model = UserProfile
-        fields = ('pk', 'full_name', 'email', 'organization', 'user')
+        fields = ('pk', 'full_name', 'email', 'user_type')
 
 
 class PasswordchangeSerializer(serializers.Serializer):
