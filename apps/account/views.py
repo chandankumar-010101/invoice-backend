@@ -25,6 +25,7 @@ from .serializer import (
     UserProfileListSerializer, 
     PasswordchangeSerializer
 )
+from apps.customer.pagination import CustomPagination
 
 from apps.utility.helpers import SiteUrl,SendMail,GenerateLink
 from .permissions import IsAdminOnly
@@ -215,7 +216,8 @@ class UserListView(generics.ListAPIView):
     queryset = UserProfile.objects.all()
     serializer_class = UserProfileListSerializer
     permission_classes = (IsAuthenticated & IsAdminOnly,)
-
+    pagination_class = CustomPagination
+    pagination_class.page_size = 2
     def get_queryset(self):
         user = self.request.user
         organization = UserProfile.objects.get(user=user).organization
