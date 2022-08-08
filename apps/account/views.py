@@ -205,6 +205,11 @@ class UserUpdateView(APIView):
                 }, status=status.HTTP_400_BAD_REQUEST)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+    def delete(self,request,pk):
+        instance = UserProfile.objects.get(pk=pk)
+        instance.user.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
 
 class UserListView(generics.ListAPIView):
     """ List of user from an organization.
