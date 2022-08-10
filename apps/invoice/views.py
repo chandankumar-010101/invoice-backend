@@ -36,6 +36,7 @@ from apps.utility.helpers import SiteUrl,SendMail,GenerateLink
 from apps.utility.twilio import send_message_on_whatsapp
 
 from apps.utility.peach import PeachPay
+logger = logging.getLogger(__name__)
 
 # Create your views here.
 
