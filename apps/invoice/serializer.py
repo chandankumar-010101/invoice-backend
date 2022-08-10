@@ -32,7 +32,6 @@ class GetInvoiceSerializer(serializers.ModelSerializer):
     def get_due_date_status(self,obj):
         from datetime import date  
         td = date.today()
-
         if (td-obj.due_date).days == 0:
             return {
                 'color':'#000000',
@@ -161,11 +160,10 @@ class CardSerializer(serializers.Serializer):
         if len(card_number) != 16:
             raise serializers.ValidationError("Card No must be 16 digits.")
 
-    # def validate_expiry_date(self, expiry_date):
-    #     today = date.today()
-    #     expiry = today.year - expiry_date.year - ((today.month, today.year) < (expiry_date.month, expiry_date.year))
-    #     if (not(21 < expiry < 99)):
-    #         raise serializers.ValidationError("hello")
+    def validate_expiry_date(self, expiry_date):
+        from datetime import date  
+        if (expiry_date-date.today()).days < 1:
+            raise serializers.ValidationError("Expiry date should be future date.")
 
     def validate_cvv_code(self, cvv_code):
         if len(cvv_code) != 3:
