@@ -1,7 +1,6 @@
 from rest_framework import serializers
 
-from .models import Invoice,InvoiceAttachment,PaymentReminder
-
+from .models import Invoice,InvoiceAttachment,PaymentReminder,CardDetail
 from apps.utility.helpers import ordinal
 class InvoiceAttachmentSerializer(serializers.ModelSerializer):
 
@@ -136,7 +135,7 @@ class CardSerializer(serializers.Serializer):
 
     def create(self,validated_data):
         request = self.context.get('request')
-        return Payment.objects.create(
+        return CardDetail.objects.create(
             user=request.user,
             **validated_data
         )
