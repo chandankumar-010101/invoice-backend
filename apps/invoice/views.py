@@ -355,9 +355,8 @@ class BillingPaymentView(APIView):
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_200_OK)
-        else:
-            logger.error(serializer.errors)
-            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        logger.error(serializer.errors)
+        return Response({'detail':serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
 
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST
