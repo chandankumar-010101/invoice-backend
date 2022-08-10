@@ -115,10 +115,13 @@ class UserCreateSerializer(serializers.Serializer):
        
 class UserSerializer(serializers.ModelSerializer):
     user_type = serializers.CharField(source='get_user_type_display')
+    role = serializers.SerializerMethodField()
+    def get_role(self,obj):
+        return obj.user_type
 
     class Meta:
         model = User
-        fields = ('email', 'user_type', )
+        fields = ('email', 'user_type', 'role')
 
 class UserProfileListSerializer(serializers.ModelSerializer):
 
