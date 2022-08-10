@@ -140,6 +140,18 @@ class CardSerializer(serializers.Serializer):
             **validated_data
         )
     
+    def update(self, instance, validated_data):
+        request = self.context.get('request')
+        params = request.data
+        instance.payment_type = params['payment_type']
+        instance.holder_name = params['holder_name']
+        instance.card_number = params['card_number']
+        instance.expiry_date = params['expiry_date']
+        instance.cvv_code = params['cvv_code']
+        instance.save()
+        return instance
+
+    
     def validate_card_number(self, card_number):
         if len(card_number) != 16:
             raise serializers.ValidationError("Card No must be 16 digits.")

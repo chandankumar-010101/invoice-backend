@@ -85,7 +85,6 @@ class UserCreateSerializer(serializers.Serializer):
     email = serializers.EmailField(max_length=50)
     phone_number = serializers.CharField(max_length=255)
     role = serializers.IntegerField()
-    role = serializers.IntegerField()
     password = serializers.CharField(max_length=255)
 
     # def validate_email(self, email):
