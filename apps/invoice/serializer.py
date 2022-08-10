@@ -136,7 +136,6 @@ class CardSerializer(serializers.Serializer):
     def create(self,validated_data):
         request = self.context.get('request')
         params = request.data
-
         return CardDetail.objects.create(
             user=request.user,
             payment_type = params['payment_type'],
