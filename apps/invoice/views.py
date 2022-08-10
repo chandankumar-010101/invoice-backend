@@ -240,12 +240,15 @@ class RecordPaymentView(APIView):
             invoice = Invoice.objects.get(id=id)
             InvoiceTransaction.objects.create(
                 invoice = invoice,
+                amount = params['amount'],
                 payment_type = 'Manually',
                 payment_mode = params['payment_mode']
             )
             if invoice.due_amount == params['amount']:
                 invoice.invoice_status = 'PARTIALLY_DONE'
+                invoice.due_amount -= params['amount']
             else:
+                invoice.due_amount = 0
                 invoice.invoice_status = 'PAYMENT_DONE'
             invoice.save()
             return Response({

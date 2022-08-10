@@ -54,6 +54,7 @@ class InvoiceTransaction(models.Model):
     payment_type = models.CharField(max_length=255, choices=PAYMENT_TYPE, default="Manually") 
     payment_mode = models.CharField(max_length=255, choices=PAYMENT_MODE, default="Cash") 
     tx_id = models.CharField(max_length=255, null=True, blank=True)
+    amount = models.FloatField(max_length=255, default=0.0, null=True, blank=True)
     created_on = models.DateField(auto_now_add=True)
     updated_on = models.DateField(auto_now=True)
 
