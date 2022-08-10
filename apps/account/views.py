@@ -206,12 +206,18 @@ class UserUpdateView(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     def get(self,request,pk):
-        queryset = UserProfile.objects.get(pk=pk)
-        serializer = UserProfileListSerializer(queryset)
-        return Response({
-            'message':"Data fatched sucessfully",
-            'data':serializer.data
-        })
+        try:
+            queryset = UserProfile.objects.get(pk=pk)
+            serializer = UserProfileListSerializer(queryset)
+            return Response({
+                'message':"Data fatched sucessfully",
+                'data':serializer.data
+            })
+        except Exception as error:
+            logger.error(error.args[0])
+            return Response({
+                "data": [error.args[0]]
+            }, status=status.HTTP_400_BAD_REQUEST)
 
     def delete(self,request,pk):
         instance = UserProfile.objects.get(pk=pk)
