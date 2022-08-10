@@ -446,5 +446,5 @@ class GetDetailsView(APIView):
         payment_method['auto_payment_reminder']= request.user.payment_method.auto_payment_reminder if hasattr(request.user,'payment_method') else False
         response['roles'] = request.user.roles_permission_user.roles
         response['payment_method'] = payment_method
-        response['card_details'] = CardSerializer(request.user.card_details_user) if hasattr(request.user, 'card_details_user') else {}
+        response['card_details'] = CardSerializer(request.user.card_details_user).data if hasattr(request.user, 'card_details_user') else {}
         return Response(response, status=status.HTTP_200_OK)
