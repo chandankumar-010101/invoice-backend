@@ -352,7 +352,10 @@ class BillingPaymentView(APIView):
     @swagger_auto_schema(request_body=card_schema, operation_description='Save Card Details')
     def post(self, request):
         params = request.data
-        serializer = CardSerializer(data=params,context={'request':request})
+        if hasattr(request.user, 'card_details_user'):
+            serializer = CardSerializer(data=params,context={'request':request})
+        else:
+            serializer = CardSerializer(request.user.card_details_user,data=params,partial=True)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_200_OK)
