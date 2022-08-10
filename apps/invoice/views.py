@@ -67,8 +67,8 @@ class InvoiceListView(generics.ListAPIView):
         outstanding_invoice = queryset.filter(~Q(invoice_status='PAYMENT_DONE')).count()
         outstanding_balance = queryset.filter(~Q(invoice_status='PAYMENT_DONE')).aggregate(Sum('due_amount'))
         queryset = queryset.exclude(invoice_status='PAYMENT_DONE')
-        current_amount = queryset.filter(due_date__gte = date.today()).aggregate(Sum('due_amount'))
-        overdue_amount = queryset.filter(due_date__lte = date.today()).aggregate(Sum('due_amount'))
+        current_amount = queryset.filter(due_date__gt = date.today()).aggregate(Sum('due_amount'))
+        overdue_amount = queryset.filter(due_date__lt = date.today()).aggregate(Sum('due_amount'))
         q = self.get_queryset()
         total = q.aggregate(Sum('due_amount'))
         return Response({
