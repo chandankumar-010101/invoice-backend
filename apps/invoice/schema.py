@@ -28,8 +28,9 @@ whats_invoice_schema = openapi.Schema(
 record_payment_schema = openapi.Schema(
     type=openapi.TYPE_OBJECT, responses={200: 'OK'}, properties={
         'payment_mode': openapi.Schema(type=openapi.TYPE_STRING),
+        'amount': openapi.Schema(type=openapi.TYPE_NUMBER),
     },
-    required=['payment_mode',]
+    required=['payment_mode','amount']
 )
 
 
