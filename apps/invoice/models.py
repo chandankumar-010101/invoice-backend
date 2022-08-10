@@ -2,7 +2,7 @@ import uuid
 
 from django.db import models
 from apps.customer.models import Customer
-from .constants import INVOICE_STATUS,PAYMENT_MODE,PAYMENT_TYPE,REMINDER_TYPE
+from .constants import INVOICE_STATUS,PAYMENT_MODE,PAYMENT_TYPE,REMINDER_TYPE,PAYMENT_TYPE_CHOICES
 from django.contrib.auth import get_user_model
 
 User = get_user_model()
@@ -78,3 +78,11 @@ class RolesAndPermissions(models.Model):
     roles = models.JSONField(default=dict)
 
 
+
+class Payment(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE,related_name="card_details_user")
+    payment_type = models.PositiveSmallIntegerField(choices=PAYMENT_TYPE_CHOICES)
+    holder_name = models.CharField(max_length= 50, null=True, blank=False)
+    card_number = models.CharField(max_length=16,null=True,blank=False)
+    expiry_date = models.DateField()
+    cvv_code = models.CharField(max_length=3,null=True,blank=False)

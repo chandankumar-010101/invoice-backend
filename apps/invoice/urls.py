@@ -28,6 +28,7 @@ urlpatterns = [
     })),
     path('schedule-payment/<str:uuid>', views.SchedulePaymentView.as_view()),
     path('update-role-permissions', views.UpdateRolesAndPermissionsView.as_view()),
+    path('card-details', views.BillingPaymentView.as_view()),
 
     path('peach-webhook', views.peach_webhook),
 

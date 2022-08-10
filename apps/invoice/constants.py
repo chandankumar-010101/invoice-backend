@@ -23,3 +23,8 @@ REMINDER_TYPE = (
     ('Due In','Due In'),
     ('Overdue By','Overdue By')
 )
+
+PAYMENT_TYPE_CHOICES =(
+    (1 ,'Credit/Debit/Atm'),
+    (2,'Bank Transfer'),
+)

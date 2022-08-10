@@ -20,12 +20,13 @@ from rest_framework.viewsets import ModelViewSet
 
 
 from .models import Invoice,InvoiceAttachment,InvoiceTransaction,PaymentMethods,PaymentReminder
-from .serializer import InvoiceSerializer,GetInvoiceSerializer,PaymentReminderSerializer
+from .serializer import InvoiceSerializer,GetInvoiceSerializer,PaymentReminderSerializer,CardSerializer
 
 from .schema import  (
     email_invoice_schema,
     record_payment_schema,whats_invoice_schema,
-    payment_method_schema,roles_permissions_schema
+    payment_method_schema,roles_permissions_schema,
+    card_schema
 )
 from apps.utility.filters import InvoiceFilter,invoice_filter
 from apps.customer.pagination import CustomPagination
@@ -342,6 +343,20 @@ class UpdateRolesAndPermissionsView(APIView):
         request.user.roles_permission_user.roles = params['roles']
         request.user.roles_permission_user.save()
         return Response({"message": "Roles and Permissions updated successfully"})
+
+class BillingPaymentView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    @swagger_auto_schema(request_body=card_schema, operation_description='Save Card Details')
+    def post(self, request, args, *kwargs):
+        params = request.data
+        serializer = CardSerializer(data=params,context={'request':request})
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        else:
+            logger.error(serializer.errors)
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST

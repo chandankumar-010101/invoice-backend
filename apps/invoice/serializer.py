@@ -124,3 +124,33 @@ class PaymentReminderSerializer(serializers.ModelSerializer):
         model = PaymentReminder
         fields = '__all__'
         read_only_fields = ('user',)
+
+class CardSerializer(serializers.Serializer):
+    
+    payment_type = serializers.CharField(max_length=255)
+    holder_name = serializers.CharField(max_length=255)
+    card_number = serializers.CharField()
+    expiry_date= serializers.DateField()
+    cvv_code  = serializers.CharField()
+
+
+    def create(self,validated_data):
+        request = self.context.get('request')
+        return Payment.objects.create(
+            user=request.user,
+            **validated_data
+        )
+    
+    def validate_card_number(self, card_number):
+        if len(card_number) != 16:
+            raise serializers.ValidationError("Card No must be 16 digits.")
+
+    # def validate_expiry_date(self, expiry_date):
+    #     today = date.today()
+    #     expiry = today.year - expiry_date.year - ((today.month, today.year) < (expiry_date.month, expiry_date.year))
+    #     if (not(21 < expiry < 99)):
+    #         raise serializers.ValidationError("hello")
+
+    def validate_cvv_code(self, cvv_code):
+        if len(cvv_code) != 3:
+            raise serializers.ValidationError("Cvv No must be 3 digits.")

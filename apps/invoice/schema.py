@@ -55,3 +55,15 @@ roles_permissions_schema = openapi.Schema(
     },
     required=['roles',]
 )
+
+
+card_schema = openapi.Schema(
+    type=openapi.TYPE_OBJECT, responses={200: 'OK'}, properties={
+        'payment_type': openapi.Schema(type=openapi.TYPE_STRING),
+        'holder_name': openapi.Schema(type=openapi.TYPE_STRING),
+        'card_number': openapi.Schema(type=openapi.TYPE_STRING),
+        'expiry_date': openapi.Schema(type=openapi.TYPE_STRING),
+        'cvv_code': openapi.Schema(type=openapi.TYPE_STRING),
+
+    }
+)
