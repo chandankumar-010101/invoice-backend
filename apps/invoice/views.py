@@ -348,7 +348,7 @@ class BillingPaymentView(APIView):
     permission_classes = [IsAuthenticated]
 
     @swagger_auto_schema(request_body=card_schema, operation_description='Save Card Details')
-    def post(self, request, args, *kwargs):
+    def post(self, request):
         params = request.data
         serializer = CardSerializer(data=params,context={'request':request})
         if serializer.is_valid():
