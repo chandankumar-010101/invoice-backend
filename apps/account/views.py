@@ -36,7 +36,7 @@ from .schema import (
     profile_update_schema,create_user_schema
 )
 from apps.invoice.serializer import PaymentReminderSerializer
-from apps.invoice.models import RolesAndPermissions
+from apps.invoice.models import RolesAndPermissions,PaymentReminder
 logger = logging.getLogger(__name__)
 
 
@@ -49,7 +49,6 @@ class OrganizationListView(generics.ListAPIView):
 
     queryset = Organization.objects.all()
     serializer_class = OrganizationSerializer
-
 
 class SignupView(APIView):
     """ Create new User and organization.
@@ -65,7 +64,26 @@ class SignupView(APIView):
             user=user,
             roles = data
         )
-        
+    
+    def save_reminder(self,user):
+        subject = "Invoice No {{invoice_no}} from {{organization}} is {{reminder_type}} {{day}} day"
+        body = """<p>Dear {{customer}},</p>
+
+<p>We want to remind you that invoice {{invoice_no}} is due, with an outstanding balance of {{amount}} due.</p>
+
+<p>Please see the link below to quick and securely remit payment electronically at no cost to you. Feel free to contact us if you have any questions.</p>
+
+<p>Best,<br />
+{{organization}}</p>"""
+        for days in [3,7,14,21,30]:
+            PaymentReminder.objects.create(
+                user = user,
+                days = days,
+                reminder_type = 'Due In' if days ==3 else 'Overdue By',
+                subject = subject,
+                body = body
+            )
+
     def post(self, request, *args, **kwargs):
         response = {}
         serializer = SignupSerializer(data=request.data)
@@ -91,6 +109,7 @@ class SignupView(APIView):
                 queryset = UserProfile.objects.get(email=profile.email)
                 serializer = UserProfileSerializer(queryset)
                 self.save_roles(user)
+                self.save_reminder(user)
                 response['profile'] = serializer.data
                 response['organization'] = queryset.organization.company_name
                 response['user_type'] = user.user_type
