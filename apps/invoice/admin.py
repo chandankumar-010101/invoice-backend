@@ -3,7 +3,7 @@ from .models import (
     Invoice,
     InvoiceAttachment,
     InvoiceTransaction,RolesAndPermissions,
-    PaymentReminder
+    PaymentReminder,CardDetail
 )
 
 # Register your models here.
@@ -21,6 +21,14 @@ class InvoiceAdmin(admin.ModelAdmin):
 
 @admin.register(PaymentReminder)
 class PaymentReminderAdmin(admin.ModelAdmin):
+
+    list_display = (
+        "id",
+    )
+
+
+@admin.register(CardDetail)
+class CardDetailAdmin(admin.ModelAdmin):
 
     list_display = (
         "id",
