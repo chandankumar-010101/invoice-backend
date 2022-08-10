@@ -137,7 +137,11 @@ class CardSerializer(serializers.Serializer):
         request = self.context.get('request')
         return CardDetail.objects.create(
             user=request.user,
-            **validated_data
+            payment_type = params['payment_type'],
+            holder_name = params['holder_name'],
+            card_number = params['card_number'],
+            expiry_date = params['expiry_date'],
+            cvv_code = params['cvv_code'],
         )
     
     def update(self, instance, validated_data):
