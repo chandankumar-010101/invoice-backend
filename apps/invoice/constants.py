@@ -3,6 +3,8 @@ INVOICE_STATUS = (
     ('PAYMENT_SCHEDULED', 'Payment Scheduled'),
     ('UNSENT', 'Unsent'),
     ('PAYMENT_DONE', 'Payment Done'),
+    ('PARTIALLY_DONE', 'Partially Done'),
+
 )
 
 PAYMENT_TYPE = (
