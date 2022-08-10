@@ -64,8 +64,7 @@ card_schema = openapi.Schema(
         'card_number': openapi.Schema(type=openapi.TYPE_STRING),
         'expiry_date': openapi.Schema(type=openapi.TYPE_STRING),
         'cvv_code': openapi.Schema(type=openapi.TYPE_STRING),
-
-    }
+    },
     required=['payment_type','holder_name','card_number','expiry_date','cvv_code']
 
 )
