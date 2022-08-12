@@ -55,3 +55,5 @@ class PeachPay:
             return True,response.json()['response']['url']
         return  False,response.json()
 
+# invoice = Invoice.objects.all().last()
+# PeachPay().generate_payment_link(invoice)

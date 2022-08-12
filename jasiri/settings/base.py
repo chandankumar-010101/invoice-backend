@@ -9,8 +9,8 @@ https://docs.djangoproject.com/en/4.0/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.0/ref/settings/
 """
+import os
 import datetime
-
 from pathlib import Path
 from posixpath import abspath
 from decouple import config
@@ -233,3 +233,15 @@ DATE_INPUT_FORMATS = ('%d-%m-%Y','%Y-%m-%d')
 #     },
 # }
 # ADMINS = [("Aftab Hussain", "aftab.hussain@oodles.io")]
+
+
+# BROKER_URL = 'redis://localhost:6379'
+# CELERY_RESULT_BACKEND = 'redis://localhost:6379'
+# CELERY_ACCEPT_CONTENT = ['application/json']
+# CELERY_TASK_SERIALIZER = 'json'
+# CELERY_RESULT_SERIALIZER = 'json'
+# CELERY_TIMEZONE = 'UTC'
+
+CRONJOBS = [
+    ('*/1 * * * *', 'utility.cron.send_reminder','>>' + os.path.join(BASE_DIR, 'log/update_status.log 2>&1')),
+]
