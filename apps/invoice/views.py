@@ -244,7 +244,7 @@ class RecordPaymentView(APIView):
                 payment_type = 'Manually',
                 payment_mode = params['payment_mode']
             )
-            if invoice.due_amount == float(params['amount']):
+            if invoice.due_amount != float(params['amount']):
                 invoice.invoice_status = 'PARTIALLY_DONE'
                 invoice.due_amount -= float(params['amount'])
             else:
