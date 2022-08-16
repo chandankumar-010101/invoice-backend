@@ -17,8 +17,8 @@ from decouple import config
 from datetime import timedelta
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
+MAIN_DIR = Path(__file__).resolve().parent.parent.parent
 BASE_DIR = Path(__file__).resolve().parent.parent
-
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.0/howto/deployment/checklist/
@@ -35,6 +35,7 @@ CORS_ALLOWED_ORIGINS = [
 # Application definition
 
 INSTALLED_APPS = [
+    'django_crontab',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -59,6 +60,7 @@ PROJECT_APPS = [
 ] 
 
 INSTALLED_APPS += PROJECT_APPS
+
 
 AUTH_USER_MODEL = 'account.User'
 AUTH_PROFILE_MODULE = 'account.UserProfile'
@@ -126,7 +128,7 @@ ROOT_URLCONF = 'jasiri.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': ['templates'],
+        'DIRS': [os.path.join(MAIN_DIR, 'templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -177,9 +179,9 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/4.0/howto/static-files/
 
 STATIC_URL = 'static/'
-STATICFILES_DIRS = [
-    "static",
-]
+# STATICFILES_DIRS = [
+#     "static",
+# ]
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
 
@@ -243,5 +245,5 @@ DATE_INPUT_FORMATS = ('%d-%m-%Y','%Y-%m-%d')
 # CELERY_TIMEZONE = 'UTC'
 
 CRONJOBS = [
-    ('*/1 * * * *', 'utility.cron.send_reminder','>>' + os.path.join(BASE_DIR, 'log/update_status.log 2>&1')),
+    ('* * * * *', 'apps.utility.cron.send_reminder','>>' + os.path.join(MAIN_DIR, 'log/update_status.log 2>&1')),
 ]

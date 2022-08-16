@@ -20,3 +20,6 @@ python manage.py migrate --settings=jasiri.settings.staging
 
 before all these commands you need to setup postgres database.
 configuration are in .env file for database.
+
+
+export DJANGO_SETTINGS_MODULE=jasiri.settings.local
