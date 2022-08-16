@@ -140,12 +140,12 @@ class LoginView(APIView):
                 response['profile'] = serializer.data
                 response['organization'] = queryset.organization.company_name
                 response['phone_number'] = queryset.organization.phone_number
-                response['user_type'] = user.user_type
+                response['user_type'] = user.get_user_type_display()
                 response['access'] = token.get('access')
                 response['refresh'] = token.get('refresh')
                 response['roles'] = user.roles_permission_user.roles
                 response['last_login'] = user.last_login.strftime("%m/%d/%Y, %H:%M:%S")
-                response['permission'] =  user.parent.roles_permission_user.role if hasattr(user.parent,'roles_permission_user') else None
+                response['permission'] =  user.parent.roles_permission_user if hasattr(user.parent,'roles_permission_user') else None
                 return Response(response, status=status.HTTP_200_OK)
             return Response({
                 'detail': [resp_msg.INVALID_EMAIL_PASSWORD]
