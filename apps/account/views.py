@@ -145,7 +145,7 @@ class LoginView(APIView):
                 response['refresh'] = token.get('refresh')
                 response['roles'] = user.roles_permission_user.roles
                 response['last_login'] = user.last_login.strftime("%m/%d/%Y, %H:%M:%S")
-                
+                response['permission'] =  user.parent.roles_permission_user.role if hasattr(user.parent,'roles_permission_user') else None
                 return Response(response, status=status.HTTP_200_OK)
             return Response({
                 'detail': [resp_msg.INVALID_EMAIL_PASSWORD]

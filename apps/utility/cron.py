@@ -30,7 +30,7 @@ def send_email(invoice,reminder):
             # 'reminder_type':reminder.reminder_type,
             # 'day':reminder.days,
             'invoice':invoice,
-            # 'subject':subject,
+            'subject':subject,
             'body':body,
             'site_url': 'https://stage.api.jasiricap.com',
             'payment':url
