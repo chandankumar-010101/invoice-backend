@@ -137,13 +137,18 @@ class LoginView(APIView):
                 queryset = UserProfile.objects.get(email=email)
                 serializer = UserProfileSerializer(queryset)
                 token = get_jwt_tokens_for_user(user)
+                roles = []
+                if user.get_user_type_display() == 'Admin':
+                    roles = user.roles_permission_user.roles
+                else:
+                    roles = user.parent.roles_permission_user.roles
                 response['profile'] = serializer.data
                 response['organization'] = queryset.organization.company_name
                 response['phone_number'] = queryset.organization.phone_number
                 response['user_type'] = user.get_user_type_display()
                 response['access'] = token.get('access')
                 response['refresh'] = token.get('refresh')
-                response['roles'] = user.parent.roles_permission_user.roles  if hasattr(user.parent,'roles_permission_user') else []
+                response['roles'] = roles
                 response['last_login'] = user.last_login.strftime("%m/%d/%Y, %H:%M:%S")
                 # response['permission'] =  user.parent.roles_permission_user if hasattr(user.parent,'roles_permission_user') else None
                 return Response(response, status=status.HTTP_200_OK)
