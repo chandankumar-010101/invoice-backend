@@ -54,7 +54,6 @@ def send_reminder():
     invoices = Invoice.objects.filter(is_online_payment=True).exclude(invoice_status='PAYMENT_DONE')
     for invoice in invoices:
         # print("####invoices",invoice.invoice_number)
-
         difference = (today-invoice.due_date).days
         user = invoice.customer.user
         reminder = user.reminder_user.all()
@@ -75,7 +74,4 @@ def send_reminder():
                     #TODO send rmonder
                     # print("Due in sent")
                     send_email(invoice,rem)
-
-                    
-
     print("Ending Timing:", now.strftime("%Y-%m-%d %H:%M:%S"))

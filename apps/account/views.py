@@ -143,7 +143,7 @@ class LoginView(APIView):
                 response['user_type'] = user.get_user_type_display()
                 response['access'] = token.get('access')
                 response['refresh'] = token.get('refresh')
-                response['roles'] = user.roles_permission_user.roles  if hasattr(user.parent,'roles_permission_user') else []
+                response['roles'] = user.parent.roles_permission_user.roles  if hasattr(user.parent,'roles_permission_user') else []
                 response['last_login'] = user.last_login.strftime("%m/%d/%Y, %H:%M:%S")
                 # response['permission'] =  user.parent.roles_permission_user if hasattr(user.parent,'roles_permission_user') else None
                 return Response(response, status=status.HTTP_200_OK)
@@ -449,3 +449,9 @@ class GetDetailsView(APIView):
         response['payment_method'] = payment_method
         response['card_details'] = CardSerializer(request.user.card_details_user).data if hasattr(request.user, 'card_details_user') else {}
         return Response(response, status=status.HTTP_200_OK)
+
+
+# from apps.account.models import User
+# user= User.objects.get(email='akshay@oodles.io')
+# user.set_password('1234578aA')
+# user.save()
