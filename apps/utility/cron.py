@@ -24,11 +24,6 @@ def send_email(invoice,reminder):
 
         context = {
             'amount':invoice.due_amount,
-            # 'customer':invoice.customer.full_name,
-            # 'invoice_no':invoice.invoice_number,
-            # 'organization':invoice.customer.organization.company_name,
-            # 'reminder_type':reminder.reminder_type,
-            # 'day':reminder.days,
             'invoice':invoice,
             'subject':subject,
             'body':body,
@@ -53,25 +48,15 @@ def send_reminder():
     today = datetime.datetime.now().date()
     invoices = Invoice.objects.filter(is_online_payment=True).exclude(invoice_status='PAYMENT_DONE')
     for invoice in invoices:
-        # print("####invoices",invoice.invoice_number)
         difference = (today-invoice.due_date).days
         user = invoice.customer.user
         reminder = user.reminder_user.all()
         if difference < 0:
-            # print("Overdue By",difference)
-            # print("reminder",reminder)
             for rem in reminder.filter(reminder_type='Overdue By'):
-                # print("#####rem.days",rem.days)
                 if rem.days == abs(difference):
-                    #TODO send rmonder
-                    # print("Overdue sent")
                     send_email(invoice,rem)
         elif difference >= 1:
-            # print("Due in",difference)
             for rem in reminder.filter(reminder_type='Due In'):
-                # print("#####rem.days",rem.days)
                 if rem.days == abs(difference):
-                    #TODO send rmonder
-                    # print("Due in sent")
                     send_email(invoice,rem)
     print("Ending Timing:", now.strftime("%Y-%m-%d %H:%M:%S"))

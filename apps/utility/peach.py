@@ -35,7 +35,7 @@ class PeachPay:
                 "sendSms": False,
                 "emailCc": invoice.customer.customer.alternate_email if hasattr(invoice.customer, 'customer') else "",
                 "emailBcc": "",
-                "expiryTime": 3600,
+                "expiryTime": 86400,
                 "notes": "Payment"
             },
             "Customer": {
