@@ -260,6 +260,26 @@ class RecordPaymentView(APIView):
             }, status=status.HTTP_400_BAD_REQUEST)
 
 
+class SendReminderView(APIView):
+    permission_classes = [IsAuthenticated]
+    
+    def get(self,request,id):
+        from apps.utility.cron import send_email
+        try:
+            user = request.user.parent if request.user.parent else request.user
+            invoice = Invoice.objectsget(id=id)
+            reminder = user.reminder_user.all().first()
+            send_email(invoice,reminder)
+            return Response({
+                'message': 'Reminder sent successfully.',
+            },status=status.HTTP_200_OK)
+        except Exception as e:
+            return Response({
+                'detail': [error.args[0]]
+            }, status=status.HTTP_400_BAD_REQUEST)
+
+        
+
 class PaymentMethodeView(APIView):
     permission_classes = [IsAuthenticated]
     
