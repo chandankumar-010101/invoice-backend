@@ -68,9 +68,9 @@ def create_admin_user(request, user_type):
     """
     User = get_user_model()
     email = request.data.get('email')
-    password = generate_password()
+    password = request.data.get('password')
     user = User.objects.create_user(email, password, user_type=user_type,parent=None)
-    return user,password
+    return user
 
 def create_user_with_role(request):
     """ Create an user for organization with role.
@@ -82,7 +82,7 @@ def create_user_with_role(request):
     """
     User = get_user_model()
     email = request.data.get('email')
-    password = request.data.get('password')
+    password = generate_password()
     role = request.data.get('role')
     user = User.objects.create_user(email, password, user_type=role,parent=request.user)
-    return user
+    return user,password

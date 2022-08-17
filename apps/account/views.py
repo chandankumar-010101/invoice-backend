@@ -182,7 +182,7 @@ class UserCreateView(APIView):
                 print(str(e))
                 logger.error(e)
                 return Response({
-                    'error': resp_msg.USER_CREATION_UNSUCCESSFULL
+                    'error': str(e)
                 },status=status.HTTP_400_BAD_REQUEST)
             if user:
                 profile = user_service.create_user_profile(
