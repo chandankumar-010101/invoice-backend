@@ -273,7 +273,7 @@ class SendReminderView(APIView):
             return Response({
                 'message': 'Reminder sent successfully.',
             },status=status.HTTP_200_OK)
-        except Exception as e:
+        except Exception as error:
             return Response({
                 'detail': [error.args[0]]
             }, status=status.HTTP_400_BAD_REQUEST)
