@@ -190,6 +190,7 @@ class UserCreateView(APIView):
                 queryset = UserProfile.objects.get(pk=profile.pk)
                 serializer = UserProfileSerializer(queryset)
             context = {
+                'email':user.email,
                 'password': password,
                 'site_url': str(SiteUrl.site_url(request)),
             }
@@ -454,6 +455,7 @@ class GetDetailsView(APIView):
         admin_user = request.user.parent if request.user.parent else request.user
 
         serializer = UserProfileSerializer(request.user.profile)
+        response['is_editable'] = False if request.user.parent else True
         response['profile'] = serializer.data
         response['organization'] = admin_user.profile.organization.company_name
         response['phone_number'] = request.user.profile.organization.phone_number
