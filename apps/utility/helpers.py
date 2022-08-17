@@ -70,7 +70,7 @@ class SendMail(object):
             from_email = settings.EMAIL_EMAIL_ID
             msg = EmailMessage(
                 subject, email_html, to=to,
-                from_email=from_email
+                from_email="{}<{}>".format('Jasiri',from_email)
             )
             msg.content_subtype = "html"
             msg.send()
