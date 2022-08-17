@@ -1,0 +1,213 @@
+
+<!DOCTYPE html
+PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<title>Welcome</title>
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@100;300&display=swap');
+
+    * {
+        margin: 0px;
+        padding: 0px;
+        letter-spacing: 0.28px;
+    }
+
+    .body_cls {
+        margin: 0;
+        background-color: #f3f5f9 !important;
+        font-family: 'Roboto', sans-serif;
+    }
+
+    table {
+        border-spacing: 0;
+    }
+
+    td {
+        padding: 0;
+    }
+
+    img {
+        border: 0;
+    }
+
+    .wrapper {
+        width: 100%;
+        table-layout: fixed;
+        padding: 60px 0px;
+        
+    }
+
+    .main {
+        max-width: 600px;
+        width: 100%;
+        font-family: sans-serif;
+        color: #4a4a4a;
+    }
+
+    .rpwd {
+        font-size: 26px;
+        margin-top: 0;
+        margin-bottom: 15px;
+        font-family: 'Roboto', sans-serif;
+        font-weight: bold;
+    }
+
+    .main-content {
+        text-align: center;
+        box-shadow: 0 5px 10px #0000000d !important;
+        background-color: #fff !important;
+        padding: 60px;
+    }
+
+    .main-content p {
+        color: #7a7979;
+    }
+
+    .reset-link {
+        background-color: #277ffe;
+        transition: all .35s linear;
+        border: 1px solid #277ffe;
+        text-decoration: none;
+        color: #fff !important;
+        padding: 10px 25px;
+        border-radius: 5px;
+        margin-top: 40px;
+        display: inline-block;
+    }
+
+    .reset-link:hover {
+        background-color: #206edf;
+        border: 1px solid #206edf;
+    }
+
+    .imgtd img {
+        margin-bottom: 45px;
+    }
+
+    .social-icons {
+        margin-top: 45px;
+    }
+
+    .d-flex {
+        display: flex;
+        justify-content: center;
+    }
+
+    .d-flex p {
+        color: #a29f9f;
+        text-align: center;
+        margin-bottom: 10px;
+        font-size: 15px;
+    }
+
+    .social-icons a {
+        transition: all .35slinear;
+    }
+
+    .social-icons a i {
+        font-size: 24px;
+        margin: 0px 10px;
+        color: #a29f9f;
+        transition: all .35slinear;
+    }
+
+    .social-icons a:hover i {
+        color: #277ffe;
+    }
+
+    @media scren and (max-width:767px) {
+        .rpwd {
+            font-size: 23px;
+        }
+
+        .reset-link {
+            padding: 10px 15px;
+        }
+    }
+
+    @media scren and (max-width:480px) {
+        .main-content {
+            padding: 30px;
+        }
+    }
+
+    @media screen and (max-width:330px) {
+        .rpwd {
+            font-size: 20px;
+        }
+
+        .main-content {
+            padding: 30px 20px;
+        }
+
+        .reset-link {
+            padding: 10px 5px;
+        }
+    }
+</style>
+</head>
+
+<body class="body_cls">
+<center class="wrapper">
+
+    <table class="main">
+        <tr>
+            <td class="imgtd" style="text-align:center;">
+                <a href="">
+                    <img src="{{site_url}}/static/images/Jasiri Main logo.png" alt="">
+                </a>
+            </td>
+        </tr>
+        <!-- Html Template text-->
+        <tr>
+            <td class="main-content">
+                <table style="width:100%; text-align: center;">
+                    <h3 class="rpwd">Welcome To Jasiri</h3>
+                    <p>I'm so glad you decided to try out Jaisiri.</p>
+                    <a class="reset-link" href="javascript:void(0)">{{password}}</a>
+                </table>
+            </td>
+        </tr>
+        <!-- Socialmedia icons-->
+        <tr>
+            <td class="social-icons">
+                <table class="d-flex">
+                    <tr>
+                        <td style="padding-top:45px;">
+                            <a href="#"><i class="fa fa-facebook-square"></i></a>
+                            <a href="#"><i class="fa fa-twitter-square"></i></a>
+                            <a href="#"><i class="fa fa-linkedin-square"></i></a>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <table class="d-flex">
+                    <tr>
+                        <td style="padding-top:45px;">
+                            <p>Problem or Questions , Call us at 21828990
+                                or email at hello@jaisiri.com
+                            </p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <p>&copy; Jaisiri, Urban State USA, 1122001</p>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+    </table>
+</center>
+</body>
+</html>

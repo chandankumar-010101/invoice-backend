@@ -85,7 +85,7 @@ class UserCreateSerializer(serializers.Serializer):
     email = serializers.EmailField(max_length=50)
     phone_number = serializers.CharField(max_length=255)
     role = serializers.IntegerField()
-    password = serializers.CharField(max_length=255)
+    # password = serializers.CharField(max_length=255)
 
     # def validate_email(self, email):
     #     is_email_exist = User.objects.filter(email=email).exists()
@@ -101,16 +101,16 @@ class UserCreateSerializer(serializers.Serializer):
         if role < 1 or role > 6:
             raise serializers.ValidationError(resp_msg.INVALID_ROLE_SELECTED)
 
-    def validate_password(self, password):
-        if len(password) < 8:
-            raise serializers.ValidationError(resp_msg.PASSWORD_VALIDATION)
+    # def validate_password(self, password):
+    #     if len(password) < 8:
+    #         raise serializers.ValidationError(resp_msg.PASSWORD_VALIDATION)
 
-        lower = any(letter.islower() for letter in password)
-        upper = any(letter.isupper() for letter in password)
-        if not upper:
-            raise serializers.ValidationError(resp_msg.PASSWORD_VALIDATION)
-        if not lower:
-            raise serializers.ValidationError(resp_msg.PASSWORD_VALIDATION)
+    #     lower = any(letter.islower() for letter in password)
+    #     upper = any(letter.isupper() for letter in password)
+    #     if not upper:
+    #         raise serializers.ValidationError(resp_msg.PASSWORD_VALIDATION)
+    #     if not lower:
+    #         raise serializers.ValidationError(resp_msg.PASSWORD_VALIDATION)
        
 class UserSerializer(serializers.ModelSerializer):
     user_type = serializers.CharField(source='get_user_type_display')

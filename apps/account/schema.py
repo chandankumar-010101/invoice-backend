@@ -68,8 +68,7 @@ create_user_schema = openapi.Schema(
         'email': openapi.Schema(type=openapi.TYPE_STRING),
         'role': openapi.Schema(type=openapi.TYPE_STRING),
         'phone_number': openapi.Schema(type=openapi.TYPE_STRING),
-        'password': openapi.Schema(type=openapi.TYPE_STRING),
 
     },
-    required=['full_name','email','role','phone_number',"password"]
+    required=['full_name','email','role','phone_number',]
 )

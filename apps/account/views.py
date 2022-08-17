@@ -113,6 +113,7 @@ class SignupView(APIView):
                 response['profile'] = serializer.data
                 response['organization'] = queryset.organization.company_name
                 response['user_type'] = user.user_type
+                #TODO send email
                 return Response(response, status=status.HTTP_201_CREATED)
         logger.error(serializer.errors)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
@@ -169,11 +170,14 @@ class UserCreateView(APIView):
 
     @swagger_auto_schema(request_body=create_user_schema, operation_description='Create User')
     def post(self, request, *args, **kwargs):
+        admin_user = request.user.parent if request.user.parent else request.user
+
         serializer = UserCreateSerializer(data=request.data)
+        password = ''
         if serializer.is_valid():
-            user_org = UserProfile.objects.get(user=request.user).organization
             try:
-                user = user_service.create_user_with_role(request)
+                user_org = UserProfile.objects.get(user=admin_user).organization
+                user,password = user_service.create_user_with_role(request)
             except Exception as e:
                 print(str(e))
                 logger.error(e)
@@ -185,6 +189,14 @@ class UserCreateView(APIView):
                     request, user, user_org)
                 queryset = UserProfile.objects.get(pk=profile.pk)
                 serializer = UserProfileSerializer(queryset)
+            context = {
+                'password': password,
+                'site_url': str(SiteUrl.site_url(request)),
+            }
+            get_template = render_to_string(
+                'email_template/welcome.html', context)
+            SendMail.mail(
+                "User Onboard", user.email, get_template)
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
@@ -219,7 +231,6 @@ class UserUpdateView(APIView):
                             instance.phone = params['phone_number']
                 instance.full_name = params['full_name']
                 instance.user.user_type = params['role']
-                instance.user.set_password(params['password'])
                 instance.save()
                 instance.user.save()
                 return Response({"message": "User updated successfully"})

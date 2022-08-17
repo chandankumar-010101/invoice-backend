@@ -1,3 +1,6 @@
+import string
+import random
+
 import profile
 from django.contrib.auth import get_user_model
 from .models import Organization
@@ -47,6 +50,14 @@ def create_user_profile(request, user, org):
     )
     return profile
 
+
+ 
+def generate_password():
+    characters = string.ascii_letters + string.digits + string.punctuation
+    password = ''.join(random.choice(characters) for i in range(8))
+    print("Random password is:", password)
+
+generate_password()
 def create_admin_user(request, user_type):
     """ Create a admin user while registration 
     
@@ -57,9 +68,9 @@ def create_admin_user(request, user_type):
     """
     User = get_user_model()
     email = request.data.get('email')
-    password = request.data.get('password')
+    password = generate_password()
     user = User.objects.create_user(email, password, user_type=user_type,parent=None)
-    return user
+    return user,password
 
 def create_user_with_role(request):
     """ Create an user for organization with role.
