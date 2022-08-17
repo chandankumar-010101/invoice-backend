@@ -56,6 +56,7 @@ def generate_password():
     characters = string.ascii_letters + string.digits + string.punctuation
     password = ''.join(random.choice(characters) for i in range(8))
     print("Random password is:", password)
+    return password
 
 generate_password()
 def create_admin_user(request, user_type):

@@ -178,7 +178,6 @@ class UserCreateView(APIView):
             try:
                 user_org = UserProfile.objects.get(user=admin_user).organization
                 user,password = user_service.create_user_with_role(request)
-                print("######password",password)
             except Exception as e:
                 print(str(e))
                 logger.error(e)
@@ -194,7 +193,6 @@ class UserCreateView(APIView):
                 'password': password,
                 'site_url': str(SiteUrl.site_url(request)),
             }
-            print("###context",context)
             get_template = render_to_string(
                 'email_template/welcome.html', context)
             SendMail.mail(
