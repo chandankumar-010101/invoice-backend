@@ -239,6 +239,7 @@ DATE_INPUT_FORMATS = ('%d-%m-%Y','%Y-%m-%d')
 
 #MID NIGHT 0 0 * * *  
 #https://crontab.guru/every-midnight
+# + os.path.join(MAIN_DIR, 'log/update_status.log 2>&1')
 CRONJOBS = [
-    ('* * * * *', 'apps.utility.cron.send_reminder','>>' + os.path.join(MAIN_DIR, 'log/update_status.log 2>&1')),
+    ('* * * * *', 'apps.utility.cron.send_reminder','>>' +'/var/log/ 2>&1'),
 ]
