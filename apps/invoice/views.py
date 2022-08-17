@@ -404,11 +404,16 @@ class BillingPaymentView(APIView):
 class PeachWebhookView(APIView):
     def get(self,request):
         print(request.GET)
-        return HttpResponse(status=200)
+        return Response({
+            "message": 'ok'
+        }, status=status.HTTP_200_OK)
+
 
     def post(self,request):
         print(request.data)
-        return HttpResponse(status=200)
+        return Response({
+            "message": 'ok'
+        }, status=status.HTTP_200_OK)
 
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST
