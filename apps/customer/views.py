@@ -44,7 +44,9 @@ class CustomerListView(generics.ListAPIView):
 
     def list(self, request, *args, **kwargs):
         params = request.GET
-        organization = request.user.profile.organization
+        admin_user = request.user.parent if request.user.parent else request.user
+
+        organization = admin_user.profile.organization
         queryset = Customer.objects.filter(organization=organization)
         if 'search' in params and params['search'] !='':
             queryset = queryset.filter(full_name__icontains=params['search'])
@@ -64,7 +66,8 @@ class CsvCustomerListView(APIView):
     permission_classes = (IsAuthenticated, )
 
     def get(self, request):
-        organization = request.user.profile.organization
+        admin_user = request.user.parent if request.user.parent else request.user
+        organization = admin_user.profile.organization
         queryset = Customer.objects.filter(organization=organization)
         serializer = CustomerListSerializer(queryset, many=True)
         return Response({'data':serializer.data})

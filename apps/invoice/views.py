@@ -52,7 +52,9 @@ class InvoiceListView(generics.ListAPIView):
 
     
     def get_queryset(self):
-        customer_id = Customer.objects.filter(organization=self.request.user.profile.organization).values_list('id', flat=True)
+        admin_user = self.request.user.parent if self.request.user.parent else self.request.user
+
+        customer_id = Customer.objects.filter(organization=admin_user.profile.organization).values_list('id', flat=True)
         queryset = Invoice.objects.filter(customer__id__in=list(customer_id)).exclude(invoice_status='PAYMENT_DONE')
         queryset = invoice_filter(self.request,queryset)
         params = self.request.GET
@@ -62,7 +64,9 @@ class InvoiceListView(generics.ListAPIView):
 
     def list(self, request, *args, **kwargs):
         response = super(InvoiceListView, self).list(request, *args, **kwargs)
-        customer_id = Customer.objects.filter(organization=request.user.profile.organization).values_list('id', flat=True)
+        admin_user = request.user.parent if request.user.parent else request.user
+
+        customer_id = Customer.objects.filter(organization=admin_user.profile.organization).values_list('id', flat=True)
         queryset = Invoice.objects.filter(customer__id__in=list(customer_id))
         outstanding_invoice = queryset.filter(~Q(invoice_status='PAYMENT_DONE')).count()
         outstanding_balance = queryset.filter(~Q(invoice_status='PAYMENT_DONE')).aggregate(Sum('due_amount'))
@@ -225,7 +229,8 @@ class CsvInvoiceListView(APIView):
     permission_classes = (IsAuthenticated, )
 
     def get(self, request):
-        customer_id = Customer.objects.filter(organization=self.request.user.profile.organization).values_list('id', flat=True)
+        admin_user = request.user.parent if request.user.parent else request.user
+        customer_id = Customer.objects.filter(organization=admin_user.profile.organization).values_list('id', flat=True)
         queryset = Invoice.objects.filter(customer__id__in=list(customer_id)).exclude(invoice_status='PAYMENT_DONE')
         serializer = GetInvoiceSerializer(queryset, many=True)
         return Response({'data':serializer.data})
