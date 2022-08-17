@@ -269,7 +269,7 @@ class SendReminderView(APIView):
             user = request.user.parent if request.user.parent else request.user
             invoice = Invoice.objects.get(id=id)
             reminder = user.reminder_user.all().first()
-            send_email(invoice,reminder)
+            send_email(invoice,reminder,manually=True)
             return Response({
                 'message': 'Reminder sent successfully.',
             },status=status.HTTP_200_OK)
