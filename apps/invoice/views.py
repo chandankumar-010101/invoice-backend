@@ -217,7 +217,7 @@ class SendInvoiceWhatsView(APIView):
         invoice.invoice_status = 'SENT'
         invoice.save()
         return Response({
-            'message': 'Messgae sent on whatsapp successfully.',
+            'message': 'Messgae sent on WhatsApp successfully.',
         },status=status.HTTP_200_OK)
 
 class CsvInvoiceListView(APIView):

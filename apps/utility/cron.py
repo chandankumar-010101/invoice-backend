@@ -10,8 +10,13 @@ from apps.invoice.models import Invoice
 from apps.utility.helpers import SiteUrl,SendMail,GenerateLink
 from apps.utility.peach import PeachPay
 
+
+def send_reminder_on_whats_app(invoice,reminder):
+    pass
+
 def send_email(invoice,reminder,manually=False):
     is_sucess, url = PeachPay().generate_payment_link(invoice)
+    user = reminder.user
     from datetime import date  
     td = date.today()
     msg_type = "Due in "
@@ -69,13 +74,18 @@ def send_reminder():
         difference = (today-invoice.due_date).days
         user = invoice.customer.user
         reminder = user.reminder_user.all()
-        if difference < 0:
-            for rem in reminder.filter(reminder_type='Overdue By'):
-                if rem.days == abs(difference):
-                    send_email(invoice,rem)
-        elif difference >= 1:
-            for rem in reminder.filter(reminder_type='Due In'):
-                if rem.days == abs(difference):
-                    send_email(invoice,rem)
+        try:
+            user = reminder.user
+            if hasattr(user, 'payment_method') and user.payment_method.auto_payment_reminder:
+                if difference < 0:
+                    for rem in reminder.filter(reminder_type='Overdue By'):
+                        if rem.days == abs(difference):
+                            send_email(invoice,rem)
+                elif difference >= 1:
+                    for rem in reminder.filter(reminder_type='Due In'):
+                        if rem.days == abs(difference):
+                            send_email(invoice,rem)
+        except Exception as e:
+            print("Error",e)
     print("Ending Timing:", now.strftime("%Y-%m-%d %H:%M:%S"))
     print("==================================\n")
