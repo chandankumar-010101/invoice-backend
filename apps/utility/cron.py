@@ -12,11 +12,11 @@ from apps.utility.peach import PeachPay
 
 def send_email(invoice,reminder,manually=False):
     is_sucess, url = PeachPay().generate_payment_link(invoice)
+    td = date.today()
     msg_type = "Due in "
     msg = abs((td-invoice.due_date).days)
     if manually:
         from datetime import date  
-        td = date.today()
         if (td-invoice.due_date).days == 0:
             msg_type = 'Due '
             msg = "Today"
