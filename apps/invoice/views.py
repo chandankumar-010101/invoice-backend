@@ -400,6 +400,16 @@ class BillingPaymentView(APIView):
         logger.error(serializer.errors)
         return Response({'detail':serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
 
+
+class PeachWebhookView(APIView):
+    def get(self,request):
+        print(request.GET)
+        return HttpResponse(status=200)
+
+    def post(self,request):
+        print(request.data)
+        return HttpResponse(status=200)
+
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST
 @csrf_exempt
