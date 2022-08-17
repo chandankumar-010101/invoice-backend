@@ -452,9 +452,9 @@ class GetDetailsView(APIView):
         payment_method['auto_payment_reminder']= request.user.payment_method.auto_payment_reminder if hasattr(request.user,'payment_method') else False
         roles = []
         if user.get_user_type_display() == 'Admin':
-            roles = user.roles_permission_user.roles
+            roles = request.user.roles_permission_user.roles
         else:
-            roles = user.parent.roles_permission_user.roles
+            roles = request.user.parent.roles_permission_user.roles
         response['roles'] = roles
         response['payment_method'] = payment_method
         response['card_details'] = CardSerializer(request.user.card_details_user).data if hasattr(request.user, 'card_details_user') else {}
