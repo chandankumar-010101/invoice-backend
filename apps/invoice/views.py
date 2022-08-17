@@ -368,8 +368,9 @@ class UpdateRolesAndPermissionsView(APIView):
     @swagger_auto_schema(request_body=roles_permissions_schema, operation_description='Roles and Permission')
     def post(self,request):
         params = request.data
-        request.user.roles_permission_user.roles = params['roles']
-        request.user.roles_permission_user.save()
+        admin_user = request.user.parent if request.user.parent else request.user
+        admin_user.roles_permission_user.roles = params['roles']
+        admin_user.roles_permission_user.save()
         return Response({"message": "Roles and Permissions updated successfully"})
 
 class BillingPaymentView(APIView):
@@ -378,8 +379,10 @@ class BillingPaymentView(APIView):
     @swagger_auto_schema(request_body=card_schema, operation_description='Save Card Details')
     def post(self, request):
         params = request.data
-        if hasattr(request.user, 'card_details_user'):
-            serializer = CardSerializer(request.user.card_details_user,data=params,context={'request':request},partial=True)
+        admin_user = request.user.parent if request.user.parent else request.user
+
+        if hasattr(admin_user, 'card_details_user'):
+            serializer = CardSerializer(admin_user.card_details_user,data=params,context={'request':request},partial=True)
         else:
             serializer = CardSerializer(data=params,context={'request':request})
         if serializer.is_valid():

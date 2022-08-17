@@ -135,8 +135,10 @@ class CardSerializer(serializers.Serializer):
     def create(self,validated_data):
         request = self.context.get('request')
         params = request.data
+        admin_user = request.user.parent if request.user.parent else request.user
+
         return CardDetail.objects.create(
-            user=request.user,
+            user=admin_user,
             payment_type = params['payment_type'],
             holder_name = params['holder_name'],
             card_number = params['card_number'],

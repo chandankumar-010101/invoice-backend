@@ -439,17 +439,19 @@ class GetDetailsView(APIView):
     def get(self,request):
         response={}
         payment_method = {}
+        admin_user = request.user.parent if request.user.parent else request.user
+
         serializer = UserProfileSerializer(request.user.profile)
         response['profile'] = serializer.data
-        response['organization'] = request.user.profile.organization.company_name
+        response['organization'] = admin_user.profile.organization.company_name
         response['phone_number'] = request.user.profile.organization.phone_number
         response['user_type'] = request.user.user_type
         response['last_login'] = request.user.last_login.strftime("%m/%d/%Y, %H:%M:%S")
-        response['payment_reminder'] = PaymentReminderSerializer(request.user.reminder_user.all(),many=True).data
-        payment_method['is_bank_transfer']= request.user.payment_method.is_bank_transfer if hasattr(request.user,'payment_method') else False
-        payment_method['is_card_payment']= request.user.payment_method.is_card_payment if hasattr( request.user,'payment_method') else False
-        payment_method['is_mobile_money']= request.user.payment_method.is_mobile_money if hasattr(request.user,'payment_method') else False
-        payment_method['auto_payment_reminder']= request.user.payment_method.auto_payment_reminder if hasattr(request.user,'payment_method') else False
+        response['payment_reminder'] = PaymentReminderSerializer(admin_user.reminder_user.all(),many=True).data
+        payment_method['is_bank_transfer']= admin_user.payment_method.is_bank_transfer if hasattr(admin_user,'payment_method') else False
+        payment_method['is_card_payment']= admin_user.payment_method.is_card_payment if hasattr( admin_user,'payment_method') else False
+        payment_method['is_mobile_money']= admin_user.payment_method.is_mobile_money if hasattr(admin_user,'payment_method') else False
+        payment_method['auto_payment_reminder']= admin_user.payment_method.auto_payment_reminder if hasattr(admin_user,'payment_method') else False
         roles = []
         if request.user.get_user_type_display() == 'Admin':
             roles = request.user.roles_permission_user.roles
@@ -457,7 +459,7 @@ class GetDetailsView(APIView):
             roles = request.user.parent.roles_permission_user.roles
         response['roles'] = roles
         response['payment_method'] = payment_method
-        response['card_details'] = CardSerializer(request.user.card_details_user).data if hasattr(request.user, 'card_details_user') else {}
+        response['card_details'] = CardSerializer(admin_user.card_details_user).data if hasattr(admin_user, 'card_details_user') else {}
         return Response(response, status=status.HTTP_200_OK)
 
 
