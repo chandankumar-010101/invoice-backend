@@ -313,6 +313,9 @@ class ProfileupdateView(APIView):
     def post(self, request, *args, **kwargs):
         params = request.data
         User = get_user_model()
+        is_admin = False if request.user.parent else True
+        admin_user = request.user.parent if request.user.parent else request.user
+
         try:
             if params['email'] != request.user.email:
                 if User.objects.filter(email = params['email']).exists():
@@ -320,7 +323,7 @@ class ProfileupdateView(APIView):
                         "message": resp_msg.USER_ALREADY_EXISTS
                     }, status=status.HTTP_400_BAD_REQUEST)
             
-            if params['company_name'] != request.user.profile.organization.company_name:
+            if is_admin and  params['company_name'] != request.user.profile.organization.company_name:
                 if Organization.objects.filter(company_name = params['company_name']).exists():
                     return Response({
                         "message": resp_msg.COMPANY_ALREADY_EXISTS
@@ -336,19 +339,20 @@ class ProfileupdateView(APIView):
             request.user.profile.email = params['email']
             request.user.profile.phone = params['phone_number']
             request.user.profile.full_name = params['full_name']
-            request.user.profile.organization.email = params['email']
-            request.user.profile.organization.phone_number = params['phone_number']
-            request.user.profile.organization.company_name = params['company_name']
+            if is_admin:
+                request.user.profile.organization.email = params['email']
+                request.user.profile.organization.phone_number = params['phone_number']
+                request.user.profile.organization.company_name = params['company_name']
+                request.user.profile.organization.save()
             request.user.save()
             request.user.profile.save()
-            request.user.profile.organization.save()
 
             serializer = UserProfileSerializer(request.user.profile)
             response={}
             response['profile'] = serializer.data
-            response['organization'] = request.user.profile.organization.company_name
-            response['user_type'] = request.user.user_type
-            response['last_login'] = request.user.last_login.strftime("%m/%d/%Y, %H:%M:%S")
+            response['organization'] = admin_user.profile.organization.company_name
+            response['user_type'] = admin_user.user_type
+            response['last_login'] = admin_user.last_login.strftime("%m/%d/%Y, %H:%M:%S")
             return Response(response, status=status.HTTP_200_OK)
         except Exception as error:
             logger.error(error.args[0])
