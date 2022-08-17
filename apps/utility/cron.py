@@ -21,6 +21,7 @@ def send_email(invoice,reminder):
         body = body.replace('{{invoice_no}}',invoice.invoice_number)
         body = body.replace('{{amount}}',str(invoice.due_amount))
         body = body.replace('{{organization}}',invoice.customer.organization.company_name)
+        body = body.replace('{{company_name}}',invoice.customer.organization.company_name)
 
         context = {
             'amount':invoice.due_amount,
