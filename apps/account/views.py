@@ -259,13 +259,14 @@ class UserListView(generics.ListAPIView):
 
     queryset = UserProfile.objects.all()
     serializer_class = UserProfileListSerializer
-    permission_classes = (IsAuthenticated & IsAdminOnly,)
+    permission_classes = (IsAuthenticated,)
+    # permission_classes = (IsAuthenticated & IsAdminOnly,)
     pagination_class = CustomPagination
     pagination_class.page_size = 10
 
     def list(self, request, *args, **kwargs):
         params = request.GET
-        user = request.user
+        user = request.user.parent if request.user.parent else request.user
         organization = UserProfile.objects.get(user=user).organization
         queryset = UserProfile.objects.filter(organization=organization).exclude(user=self.request.user.profile)
 
