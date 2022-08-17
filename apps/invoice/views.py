@@ -267,7 +267,7 @@ class SendReminderView(APIView):
         from apps.utility.cron import send_email
         try:
             user = request.user.parent if request.user.parent else request.user
-            invoice = Invoice.objectsget(id=id)
+            invoice = Invoice.objects.get(id=id)
             reminder = user.reminder_user.all().first()
             send_email(invoice,reminder)
             return Response({
@@ -286,7 +286,9 @@ class PaymentMethodeView(APIView):
     @swagger_auto_schema(request_body=payment_method_schema, operation_description='Payment Method')
     def post(self,request):
         params = request.data
-        instance,_ = PaymentMethods.objects.get_or_create(user=request.user)
+        admin_user = request.user.parent if request.user.parent else request.user
+
+        instance,_ = PaymentMethods.objects.get_or_create(user=admin_user)
         if 'is_bank_transfer' in params and params['is_bank_transfer'] != '':
             instance.is_bank_transfer = params['is_bank_transfer'].capitalize() 
         if 'is_card_payment' in params and params['is_card_payment'] != '':
@@ -309,7 +311,9 @@ class PaymentReminderView(ModelViewSet):
     lookup_field='id'
 
     def get_queryset(self):
-        return PaymentReminder.objects.filter(user=self.request.user)
+        admin_user = self.request.user.parent if self.request.user.parent else self.request.user
+
+        return PaymentReminder.objects.filter(user=admin_user)
     
     def get_serializer_context(self):
         return {'request': self.request}
