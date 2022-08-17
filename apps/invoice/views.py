@@ -320,7 +320,7 @@ class PaymentReminderView(ModelViewSet):
 
     def create(self, request, *args, **kwargs):
         instance = super(PaymentReminderView, self).create(request, *args, **kwargs)
-        return Response({"message": "Customer Create successfully", "data": instance.data})
+        return Response({"message": "Reminder Create successfully", "data": instance.data})
 
 
     def list(self, request, *args, **kwargs):
