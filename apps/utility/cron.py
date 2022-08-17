@@ -44,6 +44,7 @@ def send_email(invoice,reminder):
         
 def send_reminder():
     now = datetime.datetime.now()
+    print("==================================")
     print("Running Timing:", now.strftime("%Y-%m-%d %H:%M:%S"))
     today = datetime.datetime.now().date()
     invoices = Invoice.objects.filter(is_online_payment=True).exclude(invoice_status='PAYMENT_DONE')
@@ -60,3 +61,4 @@ def send_reminder():
                 if rem.days == abs(difference):
                     send_email(invoice,rem)
     print("Ending Timing:", now.strftime("%Y-%m-%d %H:%M:%S"))
+    print("==================================\n")
