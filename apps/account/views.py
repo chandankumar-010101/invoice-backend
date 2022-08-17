@@ -451,7 +451,7 @@ class GetDetailsView(APIView):
         payment_method['is_mobile_money']= request.user.payment_method.is_mobile_money if hasattr(request.user,'payment_method') else False
         payment_method['auto_payment_reminder']= request.user.payment_method.auto_payment_reminder if hasattr(request.user,'payment_method') else False
         roles = []
-        if user.get_user_type_display() == 'Admin':
+        if request.user.get_user_type_display() == 'Admin':
             roles = request.user.roles_permission_user.roles
         else:
             roles = request.user.parent.roles_permission_user.roles
