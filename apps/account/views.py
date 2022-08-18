@@ -66,15 +66,15 @@ class SignupView(APIView):
         )
     
     def save_reminder(self,user):
-        subject = "Invoice No {{invoice_no}} from {{organization}} is {{reminder_type}} {{day}} day"
-        body = """<p>Dear {{customer}},</p>
+        subject = "Invoice No {{invoice_no}} from {{company_name}} is {{due_date_status}}"
+        body = """Dear {{customer}},
 
-<p>We want to remind you that invoice {{invoice_no}} is due, with an outstanding balance of {{amount}} due.</p>
+We want to remind you that invoice {{invoice_no}} , is {{due_date_status}} , with an outstanding balance of {{amount_due}}
 
-<p>Please see the link below to quick and securely remit payment electronically at no cost to you. Feel free to contact us if you have any questions.</p>
+Please review your invoice and promptly remit payment at your earliest convenience. Let us know if you have any questions.
 
-<p>Best,<br />
-{{organization}}</p>"""
+Best,
+{{company_name}}"""
         for days in [3,7,14,21,30]:
             PaymentReminder.objects.create(
                 user = user,
