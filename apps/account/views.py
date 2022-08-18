@@ -67,14 +67,14 @@ class SignupView(APIView):
     
     def save_reminder(self,user):
         subject = "Invoice No {{invoice_no}} from {{company_name}} is {{due_date_status}}"
-        body = """Dear {{customer}},
+        body = """<p>Dear {{customer}},</p>
 
-We want to remind you that invoice {{invoice_no}} , is {{due_date_status}} , with an outstanding balance of {{amount_due}}
+<p>We want to remind you that invoice {{invoice_no}} , is {{due_date_status}} , with an outstanding balance of {{amount_due}}</p><br>
 
-Please review your invoice and promptly remit payment at your earliest convenience. Let us know if you have any questions.
+<p>satish review your invoice and promptly remit payment at your earliest convenience. Let us know if you have any questions.</p>
 
-Best,
-{{company_name}}"""
+<p>Best,<br />
+{{company_name}}</p>"""
         for days in [3,7,14,21,30]:
             PaymentReminder.objects.create(
                 user = user,
@@ -483,14 +483,14 @@ class GetDetailsView(APIView):
 
 from apps.invoice.models import PaymentReminder
 subject = "Invoice No {{invoice_no}} from {{company_name}} is {{due_date_status}}"
-body ="""Dear {{customer}},
+body ="""<p>Dear {{customer}},</p>
 
-We want to remind you that invoice {{invoice_no}} , is {{due_date_status}} , with an outstanding balance of {{amount_due}}
+<p>We want to remind you that invoice {{invoice_no}} , is {{due_date_status}} , with an outstanding balance of {{amount_due}}</p>
 
-Please review your invoice and promptly remit payment at your earliest convenience. Let us know if you have any questions.
+<p>satish review your invoice and promptly remit payment at your earliest convenience. Let us know if you have any questions.</p>
 
-Best,
-{{company_name}}"""
+<p>Best,<br />
+{{company_name}}</p>"""
 
 for reminder in PaymentReminder.objects.all():
     reminder.subject=subject
