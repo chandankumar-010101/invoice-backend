@@ -28,5 +28,5 @@ REMINDER_TYPE = (
 
 PAYMENT_TYPE_CHOICES =(
     (1 ,'Credit/Debit/Atm'),
-    (2,'Bank Transfer'),
+    (2,'M-Pesa'),
 )
