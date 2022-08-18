@@ -481,7 +481,18 @@ class GetDetailsView(APIView):
         return Response(response, status=status.HTTP_200_OK)
 
 
-# from apps.account.models import User
-# user= User.objects.get(email='akshay@oodles.io')
-# user.set_password('1234578aA')
-# user.save()
+from apps.invoice.models import PaymentReminder
+subject = "Invoice No {{invoice_no}} from {{company_name}} is {{due_date_status}}"
+body ="""Dear {{customer}},
+
+We want to remind you that invoice {{invoice_no}} , is {{due_date_status}} , with an outstanding balance of {{amount_due}}
+
+Please review your invoice and promptly remit payment at your earliest convenience. Let us know if you have any questions.
+
+Best,
+{{company_name}}"""
+
+for reminder in PaymentReminder.objects.all():
+    reminder.subject=subject
+    reminder.body=body
+    reminder.save()
