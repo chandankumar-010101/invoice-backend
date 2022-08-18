@@ -19,12 +19,12 @@ def send_email(invoice,reminder,manually=False):
     user = reminder.user
     from datetime import date  
     td = date.today()
-    due_date_status = "Due in {}".format(abs((td-invoice.due_date).days))
+    due_date_status = "Due in {} dyas".format(abs((td-invoice.due_date).days))
     if manually:
         if (td-invoice.due_date).days == 0:
             due_date_status = 'Due Today'
         elif (td-invoice.due_date).days > 1:
-            due_date_status = "Overdue by {}".format(abs((td-invoice.due_date).days))
+            due_date_status = "Overdue by {} dyas".format(abs((td-invoice.due_date).days))
         
     if is_sucess:
         subject = reminder.subject.replace('{{invoice_no}}',invoice.invoice_number)
