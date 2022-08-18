@@ -1,4 +1,8 @@
+from datetime import date  
+
 from rest_framework import serializers
+
+from django.db.models import Q,Sum
 
 from apps.customer.models import (
     Customer,
@@ -50,8 +54,27 @@ class CustomerFilterSerializer(serializers.ModelSerializer):
 class CustomerListSerializer(serializers.ModelSerializer):
     """ List of Customer serializer. """
     full_name = serializers.SerializerMethodField()
+    outstanding_invoices = serializers.SerializerMethodField()
+    open_balance = serializers.SerializerMethodField()
+    overdue_balance = serializers.SerializerMethodField()
+
     def get_full_name(self,obj):
         return obj.full_name.title()
+
+    def get_outstanding_invoices(self,obj):
+        return obj.invoice.filter(~Q(invoice_status='PAYMENT_DONE')).count()
+
+    def get_open_balance(self,obj):
+        queryset = obj.invoice.all().exclude(invoice_status='PAYMENT_DONE')
+        current_amount = queryset.filter(due_date__gt = date.today()).aggregate(Sum('due_amount'))
+        return current_amount['due_amount__sum'] if current_amount['due_amount__sum'] else 00
+
+
+    def get_overdue_balance(self,obj):
+        queryset = obj.invoice.all().exclude(invoice_status='PAYMENT_DONE')
+        current_amount = queryset.filter(due_date__lt = date.today()).aggregate(Sum('due_amount'))
+        return current_amount['due_amount__sum'] if current_amount['due_amount__sum'] else 00
+
     class Meta:
         model = Customer
         fields = ('pk','full_name','outstanding_invoices',

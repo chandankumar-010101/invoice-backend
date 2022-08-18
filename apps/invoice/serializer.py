@@ -35,7 +35,7 @@ class GetInvoiceSerializer(serializers.ModelSerializer):
         if (td-obj.due_date).days == 0:
             return {
                 'color':'#000000',
-                'days':"Due Today."
+                'days':"Due Today"
             }
         elif (td-obj.due_date).days > 1:
             return {
