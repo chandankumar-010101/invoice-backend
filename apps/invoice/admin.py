@@ -23,7 +23,7 @@ class InvoiceAdmin(admin.ModelAdmin):
 class PaymentReminderAdmin(admin.ModelAdmin):
 
     list_display = (
-        "id","user","is_sent_on_email"
+        "id","user","is_sent_on_email","is_sent_on_whatsapp"
     )
 
 
