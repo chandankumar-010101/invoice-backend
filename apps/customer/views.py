@@ -51,12 +51,12 @@ class CustomerListView(generics.ListAPIView):
         if 'search' in params and params['search'] !='':
             queryset = queryset.filter(full_name__icontains=params['search'])
 
-        if 'order_by' in params and params['order_by'] !='' and 'full_name' in params:
+        if 'order_by' in params and params['order_by'] !='' and 'full_name' in params['order_by']:
             queryset = queryset.order_by(params['order_by'])
         serializer = self.serializer_class(queryset, many=True)
 
-        if 'order_by' in params and params['order_by'] !='' and 'full_name' not in params:
-            data = sorted(serializer.data, key=lambda x: params['order_by'], reverse=True if '-' in params else False)
+        if 'order_by' in params and params['order_by'] !='' and 'full_name' not in params['order_by']:
+            data = sorted(serializer.data, key=lambda x: params['order_by'], reverse=True if '-' in params['order_by'] else False)
         else:
             data = serializer.data
 
