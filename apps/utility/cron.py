@@ -19,29 +19,24 @@ def send_email(invoice,reminder,manually=False):
     user = reminder.user
     from datetime import date  
     td = date.today()
-    msg_type = "Due in "
-    msg = abs((td-invoice.due_date).days)
+    due_date_status = "Due in {}".format(abs((td-invoice.due_date).days))
     if manually:
         if (td-invoice.due_date).days == 0:
-            msg_type = 'Due '
-            msg = "Today"
+            due_date_status = 'Due Today'
         elif (td-invoice.due_date).days > 1:
-            msg_type = "Overdue by "
-            msg = abs((td-invoice.due_date).days)
+            due_date_status = "Overdue by {}".format(abs((td-invoice.due_date).days))
         
     if is_sucess:
         subject = reminder.subject.replace('{{invoice_no}}',invoice.invoice_number)
-        subject = subject.replace('{{organization}}',invoice.customer.organization.company_name)
+        subject = subject.replace('{{company_name}}',invoice.customer.organization.company_name)
         if manually:
-            subject = subject.replace('{{day}}',str(msg))
-            subject = subject.replace('{{reminder_type}}',msg_type)
+            subject = subject.replace('{{due_date_status}}',due_date_status)
         else:
-            subject = subject.replace('{{day}}',str(reminder.days))
-            subject = subject.replace('{{reminder_type}}',reminder.reminder_type)
+            due_date_status = "{} {}".format(reminder.reminder_type,reminder.days)
+            subject = subject.replace('{{due_date_status}}',due_date_status)
         body = reminder.body.replace('{{customer}}',invoice.customer.full_name)
         body = body.replace('{{invoice_no}}',invoice.invoice_number)
         body = body.replace('{{amount}}',str(invoice.due_amount))
-        body = body.replace('{{organization}}',invoice.customer.organization.company_name)
         body = body.replace('{{company_name}}',invoice.customer.organization.company_name)
 
         context = {
