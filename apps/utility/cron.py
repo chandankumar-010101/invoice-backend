@@ -23,6 +23,8 @@ def send_email(invoice,reminder,manually=False):
     if manually:
         if (td-invoice.due_date).days == 0:
             due_date_status = 'Due Today'
+        elif (td-invoice.due_date).days == 1:
+            due_date_status = 'Due Tomorrow'
         elif (td-invoice.due_date).days > 1:
             due_date_status = "Overdue by {} days".format(abs((td-invoice.due_date).days))
         
