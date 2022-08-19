@@ -421,8 +421,12 @@ class PaymentListView(generics.ListAPIView):
         queryset = Invoice.objects.filter(customer__id__in=list(customer_id),invoice_status='PAYMENT_DONE')
         queryset = invoice_filter(self.request,queryset)
         params = self.request.GET
+        
         if 'order_by' in params and params['order_by'] !='':
-            queryset = queryset.order_by(params['order_by'])
+            if 'payment_method' in params['order_by'] or 'amount' in params['order_by']:
+                pass
+            else:
+                queryset = queryset.order_by(params['order_by'])
         return queryset
 
     def list(self, request, *args, **kwargs):
