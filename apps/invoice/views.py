@@ -410,7 +410,7 @@ class PaymentListView(generics.ListAPIView):
     pagination_class = CustomPagination
     pagination_class.page_size = 2
     serializer_class = GetPaymentSerializer
-    # permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated]
     filter_backends = (filters.DjangoFilterBackend, SearchFilter)
     search_fields = ['customer__full_name',"invoice_number","invoice_id"]
 
