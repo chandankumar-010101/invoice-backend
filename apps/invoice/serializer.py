@@ -44,6 +44,11 @@ class GetInvoiceSerializer(serializers.ModelSerializer):
                 'color':'#FE6867',
                 'days':"Overdue by {} days".format(abs((td-obj.due_date).days))
             }
+        elif (td-obj.due_date).days == 1:
+            return {
+                'color':'#000000',
+                'days':"Due Tomorrow"
+            }
         return {
             'color':'#000000',
             'days':"Due in {} days".format(abs((td-obj.due_date).days))
@@ -114,7 +119,6 @@ class PaymentReminderSerializer(serializers.ModelSerializer):
     def create(self,validated_data):
         request = self.context.get('request')
         admin_user = request.user.parent if request.user.parent else request.user
-
         instance = PaymentReminder.objects.create(
             user = admin_user,
             **validated_data
