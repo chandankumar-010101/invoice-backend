@@ -445,7 +445,7 @@ class CsvPaymentListView(APIView):
     def get(self, request):
         admin_user = request.user.parent if request.user.parent else request.user
         customer_id = Customer.objects.filter(organization=admin_user.profile.organization).values_list('id', flat=True)
-        queryset = Invoice.objects.filter(customer__id__in=list(customer_id)).exclude(invoice_status='PAYMENT_DONE')
+        queryset = Invoice.objects.filter(customer__id__in=list(customer_id),invoice_status='PAYMENT_DONE')
         serializer = GetPaymentSerializer(queryset, many=True)
         return Response({'data':serializer.data})
 
