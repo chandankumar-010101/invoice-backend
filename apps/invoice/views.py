@@ -410,7 +410,7 @@ class PaymentListView(generics.ListAPIView):
     pagination_class = CustomPagination
     pagination_class.page_size = 2
     serializer_class = GetPaymentSerializer
-    permission_classes = [IsAuthenticated]
+    # permission_classes = [IsAuthenticated]
     filter_backends = (filters.DjangoFilterBackend, SearchFilter)
     search_fields = ['customer__full_name',"invoice_number","invoice_id"]
 
@@ -427,10 +427,11 @@ class PaymentListView(generics.ListAPIView):
 
     def list(self, request, *args, **kwargs):
         response = super(PaymentListView, self).list(request, *args, **kwargs)
-      
+        print(response.data)
+        data = sorted(response.data['result'], key=lambda item: item['amount'], reverse = True)
         return Response({
             'message': "Data Fetched Successfully.",
-            'data': response.data,
+            'data': data,
         }, status=status.HTTP_200_OK)
 
 

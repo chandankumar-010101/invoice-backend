@@ -186,7 +186,10 @@ class GetPaymentSerializer(serializers.ModelSerializer):
         return total['amount__sum'] if total['amount__sum'] else 00
 
     def get_payment_method(self,obj):
-        return obj.invoice_transaction.all().last().payment_mode
+        try:
+            return obj.invoice_transaction.all().last().payment_mode
+        except:
+            return None
 
 
     def get_customer(self,obj):
