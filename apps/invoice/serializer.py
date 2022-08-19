@@ -172,3 +172,25 @@ class CardSerializer(serializers.Serializer):
     def validate_cvv_code(self, cvv_code):
         if len(cvv_code) != 3:
             raise serializers.ValidationError("Cvv No must be 3 digits.")
+
+class GetPaymentSerializer(serializers.ModelSerializer):
+
+    customer = serializers.SerializerMethodField()
+    amount = serializers.SerializerMethodField()
+    payment_method = serializers.SerializerMethodField()
+
+    def get_amount(self,obj):
+        total = obj.invoice_transaction.all().aggregate(Sum('due_amount'))
+        return total['due_amount__sum'] if total['due_amount__sum'] else 00
+
+    def get_payment_method(self,obj):
+        return obj.invoice_transaction.all().last().payment_mode
+
+
+    def get_customer(self,obj):
+        return obj.customer.full_name
+
+        
+    class Meta:
+        model = Invoice
+        fields = ("customer","invoice_number","updated_on","due_date")

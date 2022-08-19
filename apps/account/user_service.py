@@ -58,7 +58,6 @@ def generate_password():
     print("Random password is:", password)
     return password
 
-generate_password()
 def create_admin_user(request, user_type):
     """ Create a admin user while registration 
     

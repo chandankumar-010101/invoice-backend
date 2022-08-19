@@ -21,7 +21,11 @@ from rest_framework.viewsets import ModelViewSet
 
 
 from .models import Invoice,InvoiceAttachment,InvoiceTransaction,PaymentMethods,PaymentReminder
-from .serializer import InvoiceSerializer,GetInvoiceSerializer,PaymentReminderSerializer,CardSerializer
+from .serializer import (
+    InvoiceSerializer,
+    GetInvoiceSerializer,PaymentReminderSerializer,
+    CardSerializer,GetPaymentSerializer
+)
 
 from .schema import  (
     email_invoice_schema,
@@ -399,6 +403,51 @@ class BillingPaymentView(APIView):
             return Response(serializer.data, status=status.HTTP_200_OK)
         logger.error(serializer.errors)
         return Response({'detail':serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
+
+
+class PaymentListView(generics.ListAPIView):
+    filter_class = InvoiceFilter
+    pagination_class = CustomPagination
+    pagination_class.page_size = 2
+    serializer_class = GetPaymentSerializer
+    permission_classes = [IsAuthenticated]
+    filter_backends = (filters.DjangoFilterBackend, SearchFilter)
+    search_fields = ['customer__full_name',"invoice_number","invoice_id"]
+
+    
+    def get_queryset(self):
+        admin_user = self.request.user.parent if self.request.user.parent else self.request.user
+        customer_id = Customer.objects.filter(organization=admin_user.profile.organization).values_list('id', flat=True)
+        queryset = Invoice.objects.filter(customer__id__in=list(customer_id),invoice_status='PAYMENT_DONE')
+        queryset = invoice_filter(self.request,queryset)
+        params = self.request.GET
+        if 'order_by' in params and params['order_by'] !='':
+            queryset = queryset.order_by(params['order_by'])
+        return queryset
+
+    def list(self, request, *args, **kwargs):
+        response = super(PaymentListView, self).list(request, *args, **kwargs)
+      
+        return Response({
+            'message': "Data Fetched Successfully.",
+            'data': response.data,
+        }, status=status.HTTP_200_OK)
+
+
+class CsvPaymentListView(APIView):
+    """ Paginated customer list.
+    Get list of Customer by user's organization with 
+    pagination.
+    """
+
+    permission_classes = (IsAuthenticated, )
+
+    def get(self, request):
+        admin_user = request.user.parent if request.user.parent else request.user
+        customer_id = Customer.objects.filter(organization=admin_user.profile.organization).values_list('id', flat=True)
+        queryset = Invoice.objects.filter(customer__id__in=list(customer_id)).exclude(invoice_status='PAYMENT_DONE')
+        serializer = GetPaymentSerializer(queryset, many=True)
+        return Response({'data':serializer.data})
 
 
 class PeachWebhookView(APIView):
