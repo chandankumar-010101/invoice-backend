@@ -428,7 +428,7 @@ class PaymentListView(generics.ListAPIView):
     def list(self, request, *args, **kwargs):
         response = super(PaymentListView, self).list(request, *args, **kwargs)
         print(response.data)
-        data = sorted(response.data['result'], key=lambda item: item['amount'], reverse = True)
+        data = sorted(response.data, key=lambda item: item['amount'], reverse = True)
         return Response({
             'message': "Data Fetched Successfully.",
             'data': data,
