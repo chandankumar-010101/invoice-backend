@@ -182,8 +182,8 @@ class GetPaymentSerializer(serializers.ModelSerializer):
     payment_method = serializers.SerializerMethodField()
 
     def get_amount(self,obj):
-        total = obj.invoice_transaction.all().aggregate(Sum('due_amount'))
-        return total['due_amount__sum'] if total['due_amount__sum'] else 00
+        total = obj.invoice_transaction.all().aggregate(Sum('amount'))
+        return total['amount__sum'] if total['amount__sum'] else 00
 
     def get_payment_method(self,obj):
         return obj.invoice_transaction.all().last().payment_mode
