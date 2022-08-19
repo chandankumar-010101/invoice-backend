@@ -193,4 +193,4 @@ class GetPaymentSerializer(serializers.ModelSerializer):
         
     class Meta:
         model = Invoice
-        fields = ("customer","invoice_number","updated_on","due_date")
+        fields = ("customer","invoice_number","updated_on","due_date","payment_method","amount")
