@@ -2,6 +2,13 @@ import os
 import datetime
 import logging
 
+
+
+from decouple import config
+from django.utils.html import strip_tags
+
+from twilio.rest import Client
+
 from django.db.models import Q
 from django.conf import settings
 from django.template.loader import render_to_string
@@ -9,10 +16,30 @@ from django.template.loader import render_to_string
 from apps.invoice.models import Invoice
 from apps.utility.helpers import SiteUrl,SendMail,GenerateLink
 from apps.utility.peach import PeachPay
+from .helpers import generate_bitly_link
 
 
-def send_reminder_on_whats_app(invoice,reminder):
-    pass
+account_sid = config('TWILIO_ACCOUNT_SID')
+auth_token = config('TWILIO_AUTH_TOKEN')
+client = Client(account_sid, auth_token)
+
+
+def send_reminder_on_whats_app(invoice,body,url):
+    attachment= []
+    for data in invoice.invoice_attachment.all():
+        attachment.append(generate_bitly_link(data.attachment.url))
+    msg = ',\n'.join(attachment)
+    body = body.replace('&nbsp;','')
+    msg=',\nPayment Link: {}'.format(url)
+    message = client.messages.create(
+        from_='whatsapp:{}'.format(config('TWILIO_NUMBER')),
+        body='{}\nHere is the invoice attachment: {}'.format(
+            strip_tags(body),
+            msg
+        ),
+        to='whatsapp:{}'.format(invoice.customer.primary_phone)
+    )
+    print(message.sid)
 
 def send_email(invoice,reminder,manually=False):
     is_sucess, url = PeachPay().generate_payment_link(invoice)
@@ -58,6 +85,7 @@ def send_email(invoice,reminder,manually=False):
             invoice.invoice_status = 'SENT'
             invoice.reminders +=1
             invoice.save()
+            send_reminder_on_whats_app(invoice,body,url)
             print("SENT AND DONE")
         except Exception as e:
             print("ERRROR",e)
@@ -71,19 +99,16 @@ def send_reminder():
     for invoice in invoices:
         difference = (today-invoice.due_date).days
         user = invoice.customer.user
-        reminder = user.reminder_user.all()
-        try:
-            user = reminder.user
-            if hasattr(user, 'payment_method') and user.payment_method.auto_payment_reminder:
-                if difference < 0:
-                    for rem in reminder.filter(reminder_type='Overdue By'):
-                        if rem.days == abs(difference):
-                            send_email(invoice,rem)
-                elif difference >= 1:
-                    for rem in reminder.filter(reminder_type='Due In'):
-                        if rem.days == abs(difference):
-                            send_email(invoice,rem)
-        except Exception as e:
-            print("Error",e)
+        reminder = user.reminder_user.all().last()
+        user = reminder.user
+        if hasattr(user, 'payment_method') and user.payment_method.auto_payment_reminder:
+            if difference < 0:
+                for rem in reminder.filter(reminder_type='Overdue By'):
+                    if rem.days == abs(difference):
+                        send_email(invoice,rem)
+            elif difference >= 1:
+                for rem in reminder.filter(reminder_type='Due In'):
+                    if rem.days == abs(difference):
+                        send_email(invoice,rem)
     print("Ending Timing:", now.strftime("%Y-%m-%d %H:%M:%S"))
     print("====================================\n")
