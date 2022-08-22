@@ -28,18 +28,18 @@ def send_message_on_whatsapp(invoice,params):
     msg_body = ''
     for data in invoice.invoice_attachment.all():
         attachment.append(generate_bitly_link(data.attachment.url))
-    msg = ',\n'.join(attachment)
+    attachments = ',\n'.join(attachment)
     body = params['body'].replace('&nbsp;','')
     if 'url' in params:
         msg_body='{}\nHere is the invoice attachment: {}\nPayment Link: {}'.format(
             strip_tags(body),
-            msg,
+            attachments,
             params['url']
         )
     else:
         msg_body='{}\nHere is the invoice attachment: {}'.format(
             strip_tags(body),
-            msg
+            attachments
         )
 
     message = client.messages.create(
@@ -51,10 +51,7 @@ def send_message_on_whatsapp(invoice,params):
     if 'additional' in params and params['additional'] != '':
         message = client.messages.create(
             from_='whatsapp:{}'.format(config('TWILIO_NUMBER')),
-            body='{}\nHere is the invoice attachment: {}'.format(
-                params['body'],
-                msg
-            ),
+            body=msg_body,
             to='whatsapp:{}'.format(params['additional'])
         )
         print(message.sid)
