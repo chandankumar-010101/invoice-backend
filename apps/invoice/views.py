@@ -278,7 +278,7 @@ class SendReminderView(APIView):
         try:
             invoice = Invoice.objects.get(id=id)
             is_sucess, url = PeachPay().generate_payment_link(invoice)
-            if is_sucess:
+            if is_sucess and params['is_email'] :
                 context = {
                     'amount':invoice.due_amount,
                     'invoice':invoice,
@@ -293,12 +293,19 @@ class SendReminderView(APIView):
                 invoice.invoice_status = 'SENT'
                 invoice.reminders +=1
                 invoice.save()
-                return Response({
-                    'message': 'Reminder sent successfully.',
-                },status=status.HTTP_200_OK)
+            if is_sucess and params['is_whatsapp'] :
+                params['to'] = invoice.customer.primary_phone
+                send_message_on_whatsapp(invoice,params)
+                invoice.invoice_status = 'SENT'
+                invoice.reminders +=1
+                invoice.save()
             return Response({
-                'detail': [url]
-            }, status=status.HTTP_400_BAD_REQUEST)   
+                'message': 'Reminder sent successfully.',
+            },status=status.HTTP_200_OK)
+            if not is_sucess:
+                return Response({
+                    'detail': [url]
+                }, status=status.HTTP_400_BAD_REQUEST)   
         except Exception as error:
             return Response({
                 'detail': [error.args[0]]
