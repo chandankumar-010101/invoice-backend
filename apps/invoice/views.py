@@ -462,7 +462,9 @@ class PeachWebhookView(APIView):
 
 
     def post(self,request):
-        print(request.data)
+        params = request.data
+        print(params)
+        print("#########TYPE",params['Event[type]'])
         return Response({
             "message": 'ok'
         }, status=status.HTTP_200_OK)
