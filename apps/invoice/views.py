@@ -302,6 +302,7 @@ class SendReminderView(APIView):
             return Response({
                 'message': 'Reminder sent successfully.',
             },status=status.HTTP_200_OK)
+            
             if not is_sucess:
                 return Response({
                     'detail': [url]

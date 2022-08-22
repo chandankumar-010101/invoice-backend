@@ -28,10 +28,12 @@ def send_message_on_whatsapp(invoice,params):
     for data in invoice.invoice_attachment.all():
         attachment.append(generate_bitly_link(data.attachment.url))
     msg = ',\n'.join(attachment)
+    body = params['body'].replace('&nbsp;',invoice.invoice_number)
+
     message = client.messages.create(
         from_='whatsapp:{}'.format(config('TWILIO_NUMBER')),
         body='{}\nHere is the invoice attachment: {}'.format(
-            strip_tags(params['body']),
+            strip_tags(body),
             msg
         ),
         to='whatsapp:{}'.format(params['to'])
