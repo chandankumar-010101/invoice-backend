@@ -295,6 +295,7 @@ class SendReminderView(APIView):
                 invoice.save()
             if is_sucess and params['is_whatsapp'] :
                 params['to'] = invoice.customer.primary_phone
+                params['url'] = url
                 send_message_on_whatsapp(invoice,params)
                 invoice.invoice_status = 'SENT'
                 invoice.reminders +=1

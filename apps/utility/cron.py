@@ -28,14 +28,14 @@ def send_reminder_on_whats_app(invoice,body,url):
     attachment= []
     for data in invoice.invoice_attachment.all():
         attachment.append(generate_bitly_link(data.attachment.url))
-    msg = ',\n'.join(attachment)
     body = body.replace('&nbsp;','')
-    msg=',\nPayment Link: {}'.format(url)
+    msg = ',\n'.join(attachment)
     message = client.messages.create(
         from_='whatsapp:{}'.format(config('TWILIO_NUMBER')),
-        body='{}\nHere is the invoice attachment: {}'.format(
+        body='{}\n\nHere is the invoice attachment: {}\nPayment Link: {}'.format(
             strip_tags(body),
-            msg
+            msg,
+            url
         ),
         to='whatsapp:{}'.format(invoice.customer.primary_phone)
     )
