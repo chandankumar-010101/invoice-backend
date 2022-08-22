@@ -15,6 +15,18 @@ email_invoice_schema = openapi.Schema(
     required=['subject','cc','body']
 )
 
+
+send_reminder_schema = openapi.Schema(
+    type=openapi.TYPE_OBJECT, responses={200: 'OK'}, properties={
+        'subject': openapi.Schema(type=openapi.TYPE_STRING),
+        'body': openapi.Schema(type=openapi.TYPE_STRING),
+        'is_whatsapp': openapi.Schema(type=openapi.TYPE_STRING),
+        'is_email': openapi.Schema(type=openapi.TYPE_STRING),
+
+    },
+    required=['subject','is_whatsapp','body','is_email']
+)
+
 whats_invoice_schema = openapi.Schema(
     type=openapi.TYPE_OBJECT, responses={200: 'OK'}, properties={
         'to': openapi.Schema(type=openapi.TYPE_STRING),

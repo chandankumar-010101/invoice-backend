@@ -31,7 +31,7 @@ from .schema import  (
     email_invoice_schema,
     record_payment_schema,whats_invoice_schema,
     payment_method_schema,roles_permissions_schema,
-    card_schema
+    card_schema,send_reminder_schema
 )
 from apps.utility.filters import InvoiceFilter,invoice_filter
 from apps.customer.pagination import CustomPagination
@@ -272,7 +272,7 @@ from apps.utility.peach import PeachPay
 
 class SendReminderView(APIView):
     permission_classes = [IsAuthenticated]
-    @swagger_auto_schema(request_body=email_invoice_schema, operation_description='Send Reminder Invoice')
+    @swagger_auto_schema(request_body=send_reminder_schema, operation_description='Send Reminder Invoice')
     def post(self,request,id):
         from apps.utility.cron import send_email
         try:
