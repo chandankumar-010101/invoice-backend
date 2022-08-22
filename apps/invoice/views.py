@@ -268,20 +268,37 @@ class RecordPaymentView(APIView):
                 'detail': [error.args[0]]
             }, status=status.HTTP_400_BAD_REQUEST)
 
+from apps.utility.peach import PeachPay
 
 class SendReminderView(APIView):
     permission_classes = [IsAuthenticated]
-    
-    def get(self,request,id):
+    @swagger_auto_schema(request_body=email_invoice_schema, operation_description='Send Reminder Invoice')
+    def post(self,request,id):
         from apps.utility.cron import send_email
         try:
-            user = request.user.parent if request.user.parent else request.user
             invoice = Invoice.objects.get(id=id)
-            reminder = user.reminder_user.all().first()
-            send_email(invoice,reminder,manually=True)
+            is_sucess, url = PeachPay().generate_payment_link(invoice)
+            if is_sucess:
+                context = {
+                    'amount':invoice.due_amount,
+                    'invoice':invoice,
+                    'subject':params['subject'],
+                    'body':params['body'],
+                    'site_url': str(SiteUrl.site_url(request)),
+                    'payment':url
+                }
+                get_template = render_to_string('email_template/reminder.html', context)
+                SendMail.invoice(
+                    "You have an invoice reminder from {} due on {}".format(invoice.customer.organization.company_name,invoice.due_date), invoice.customer.primary_email, get_template,[],invoice)
+                invoice.invoice_status = 'SENT'
+                invoice.reminders +=1
+                invoice.save()
+                return Response({
+                    'message': 'Reminder sent successfully.',
+                },status=status.HTTP_200_OK)
             return Response({
-                'message': 'Reminder sent successfully.',
-            },status=status.HTTP_200_OK)
+                'detail': [url]
+            }, status=status.HTTP_400_BAD_REQUEST)   
         except Exception as error:
             return Response({
                 'detail': [error.args[0]]
