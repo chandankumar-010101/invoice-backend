@@ -274,7 +274,7 @@ class SendReminderView(APIView):
     permission_classes = [IsAuthenticated]
     @swagger_auto_schema(request_body=send_reminder_schema, operation_description='Send Reminder Invoice')
     def post(self,request,id):
-        from apps.utility.cron import send_email
+        params = request.data
         try:
             invoice = Invoice.objects.get(id=id)
             is_sucess, url = PeachPay().generate_payment_link(invoice)
