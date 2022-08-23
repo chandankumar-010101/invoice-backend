@@ -459,11 +459,11 @@ class DashboardView(APIView):
 
     def get_collection_time(self,queryset):
         queryset = queryset.filter(invoice_status='PAYMENT_DONE')
-        sum = 0
+        total = 0
         for invoice in queryset:
             payment = invoice.invoice_transaction.all().last()
-            sum += abs((payment.created_on-invoice.due_date).days)
-        return "{} Days".format(sum/queryset.count())
+            total += abs((payment.created_on-invoice.due_date).days)
+        return "{} Days".format(int(total/queryset.count()))
 
 
     def get(self,request):
