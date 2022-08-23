@@ -462,7 +462,7 @@ class DashboardView(APIView):
         total = 0
         for invoice in queryset:
             payment = invoice.invoice_transaction.all().last()
-            total += abs((payment.created_on-invoice.due_date).days)
+            total += (payment.created_on-invoice.due_date).days
         return "{} Days".format(int(total/queryset.count()))
 
 
