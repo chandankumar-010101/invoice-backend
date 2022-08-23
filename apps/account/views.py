@@ -470,7 +470,7 @@ class DashboardView(APIView):
         admin_user = request.user.parent if request.user.parent else request.user
         customer_id = Customer.objects.filter(organization=admin_user.profile.organization).values_list('id', flat=True)
         queryset = Invoice.objects.filter(customer__id__in=list(customer_id))
-        avg_c_t = get_collection_time(self)
+        avg_c_t = self.get_collection_time(self)
         outstanding_invoice = queryset.filter(~Q(invoice_status='PAYMENT_DONE')).count()
         outstanding_balance = queryset.filter(~Q(invoice_status='PAYMENT_DONE')).aggregate(Sum('due_amount'))
         queryset = queryset.exclude(invoice_status='PAYMENT_DONE')
