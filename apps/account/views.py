@@ -477,6 +477,7 @@ class DashboardView(APIView):
         return Response({
             'message': "Data Fetched Successfully.",
             'graph_data':graph_data,
+            'avg_c_t':"30 Days",
             'outstanding_invoice':outstanding_invoice,
             'outstanding_balance':outstanding_balance['due_amount__sum'] if outstanding_balance['due_amount__sum'] else 00,
             'current_amount':current_amount['due_amount__sum'] if current_amount['due_amount__sum'] else 00,
