@@ -1,5 +1,7 @@
 import logging
 
+from datetime import date  
+
 from django.template.loader import render_to_string
 from django.shortcuts import render
 from django.views.generic import View
