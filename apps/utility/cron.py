@@ -56,6 +56,7 @@ def send_email(invoice,reminder,manually=False):
         body = body.replace('{{amount_due}}',str(invoice.due_amount))
         body = body.replace('{{company_name}}',invoice.customer.organization.company_name)
         due_date_status = "{} {}".format(reminder.reminder_type,reminder.days)
+        subject = subject.replace('{{due_date_status}}',due_date_status)
         body = body.replace('{{due_date_status}}',due_date_status)
 
         context = {
