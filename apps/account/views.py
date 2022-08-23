@@ -4,6 +4,9 @@ from django.template.loader import render_to_string
 from django.shortcuts import render
 from django.views.generic import View
 
+from django.db.models import Q,Sum
+
+
 from rest_framework import status
 from rest_framework import generics
 from rest_framework.views import APIView
@@ -26,6 +29,8 @@ from .serializer import (
     PasswordchangeSerializer
 )
 from apps.customer.pagination import CustomPagination
+from apps.customer.models import Customer
+from apps.invoice.models import Invoice
 
 from apps.utility.helpers import SiteUrl,SendMail,GenerateLink
 from .permissions import IsAdminOnly
@@ -449,6 +454,29 @@ class ResetPasswordView(APIView):
                 "detail": [error.args[0]]
             }, status=status.HTTP_400_BAD_REQUEST)
 
+class DashboardView(APIView):
+    permission_classes = (IsAuthenticated, )
+
+    def get(self,request):
+        admin_user = request.user.parent if request.user.parent else request.user
+        customer_id = Customer.objects.filter(organization=admin_user.profile.organization).values_list('id', flat=True)
+        queryset = Invoice.objects.filter(customer__id__in=list(customer_id))
+        outstanding_invoice = queryset.filter(~Q(invoice_status='PAYMENT_DONE')).count()
+        outstanding_balance = queryset.filter(~Q(invoice_status='PAYMENT_DONE')).aggregate(Sum('due_amount'))
+        queryset = queryset.exclude(invoice_status='PAYMENT_DONE')
+        current_amount = queryset.filter(due_date__gt = date.today()).aggregate(Sum('due_amount'))
+        overdue_amount = queryset.filter(due_date__lt = date.today()).aggregate(Sum('due_amount'))
+        q = self.get_queryset()
+        total = q.aggregate(Sum('due_amount'))
+        return Response({
+            'message': "Data Fetched Successfully.",
+            'data': response.data,
+            'outstanding_invoice':outstanding_invoice,
+            'outstanding_balance':outstanding_balance['due_amount__sum'] if outstanding_balance['due_amount__sum'] else 00,
+            'current_amount':current_amount['due_amount__sum'] if current_amount['due_amount__sum'] else 00,
+            'overdue_amount':overdue_amount['due_amount__sum'] if overdue_amount['due_amount__sum'] else 00,
+            'total':total['due_amount__sum'] if total['due_amount__sum'] else 00
+        }, status=status.HTTP_200_OK)
 
 class GetDetailsView(APIView):
     permission_classes = (IsAuthenticated, )
