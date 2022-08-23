@@ -457,10 +457,20 @@ class ResetPasswordView(APIView):
 class DashboardView(APIView):
     permission_classes = (IsAuthenticated, )
 
+    def get_collection_time(self,queryset):
+        queryset = queryset.filter(invoice_status='PAYMENT_DONE')
+        sum = 0
+        for invoice in queryset:
+            payment = invoice.invoice_transaction.all().last()
+            sum += abs((payment.created_on-invoice.due_date).days)
+        return "{} Days".format(sum/queryset.count())
+
+
     def get(self,request):
         admin_user = request.user.parent if request.user.parent else request.user
         customer_id = Customer.objects.filter(organization=admin_user.profile.organization).values_list('id', flat=True)
         queryset = Invoice.objects.filter(customer__id__in=list(customer_id))
+        avg_c_t = get_collection_time(self)
         outstanding_invoice = queryset.filter(~Q(invoice_status='PAYMENT_DONE')).count()
         outstanding_balance = queryset.filter(~Q(invoice_status='PAYMENT_DONE')).aggregate(Sum('due_amount'))
         queryset = queryset.exclude(invoice_status='PAYMENT_DONE')
@@ -477,7 +487,7 @@ class DashboardView(APIView):
         return Response({
             'message': "Data Fetched Successfully.",
             'graph_data':graph_data,
-            'avg_c_t':"30 Days",
+            'avg_c_t':avg_c_t,
             'outstanding_invoice':outstanding_invoice,
             'outstanding_balance':outstanding_balance['due_amount__sum'] if outstanding_balance['due_amount__sum'] else 00,
             'current_amount':current_amount['due_amount__sum'] if current_amount['due_amount__sum'] else 00,
