@@ -88,8 +88,8 @@ def send_reminder():
     for invoice in invoices:
         difference = (today-invoice.due_date).days
         user = invoice.customer.user
-        reminder = user.reminder_user.all().last()
-        user = reminder.user
+        reminder = user.reminder_user.all()
+        user = reminder.last().user
         if hasattr(user, 'payment_method') and user.payment_method.auto_payment_reminder:
             if difference < 0:
                 for rem in reminder.filter(reminder_type='Overdue By'):
