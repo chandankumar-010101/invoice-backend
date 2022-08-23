@@ -463,6 +463,8 @@ class DashboardView(APIView):
         for invoice in queryset:
             payment = invoice.invoice_transaction.all().last()
             total += (payment.created_on-invoice.due_date).days
+        if total == 0:
+            return "N/A"
         return "{} Days".format(int(total/queryset.count()))
 
 
