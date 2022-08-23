@@ -468,9 +468,18 @@ class DashboardView(APIView):
         overdue_amount = queryset.filter(due_date__lt = date.today()).aggregate(Sum('due_amount'))
         q = self.get_queryset()
         total = q.aggregate(Sum('due_amount'))
+        graph_data = [
+            { name: "Current", value: current_amount['due_amount__sum'] if current_amount['due_amount__sum'] else 00 },
+            { name: "Overdue", value: overdue_amount['due_amount__sum'] if overdue_amount['due_amount__sum'] else 00 },
+            { name: "0 - 30D", value: 15000 },
+            { name: "30 - 60D", value: 150000 },
+            { name: "60  90D", value: 20000 },
+            { name: ">90D", value: 15000 }
+        ]
         return Response({
             'message': "Data Fetched Successfully.",
             'data': response.data,
+            'graph_data':graph_data,
             'outstanding_invoice':outstanding_invoice,
             'outstanding_balance':outstanding_balance['due_amount__sum'] if outstanding_balance['due_amount__sum'] else 00,
             'current_amount':current_amount['due_amount__sum'] if current_amount['due_amount__sum'] else 00,
