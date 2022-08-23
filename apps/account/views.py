@@ -5,9 +5,7 @@ from datetime import date
 from django.template.loader import render_to_string
 from django.shortcuts import render
 from django.views.generic import View
-
 from django.db.models import Q,Sum
-
 
 from rest_framework import status
 from rest_framework import generics
