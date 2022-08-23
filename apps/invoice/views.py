@@ -491,6 +491,8 @@ class PeachWebhookView(APIView):
         params = request.data
         print(params)
         print("#########TYPE",params['Event[type]'])
+        if params['Event[type]'] == 'PAYMENT.COMPLETED':
+            print("$$$$$$$$$$$$$$COMPLETE")
         return Response({
             "message": 'ok'
         }, status=status.HTTP_200_OK)
