@@ -484,10 +484,10 @@ class DashboardView(APIView):
         graph_data = [
             { 'name': "Current", 'value': current_amount['due_amount__sum'] if current_amount['due_amount__sum'] else 00 },
             { 'name': "Overdue", 'value': overdue_amount['due_amount__sum'] if overdue_amount['due_amount__sum'] else 00 },
-            { 'name': "0 - 30D", 'value': 15000 },
-            { 'name': "30 - 60D", 'value': 150000 },
-            { 'name': "60  90D", 'value': 20000 },
-            { 'name': ">90D", 'value': 15000 }
+            { 'name': "0 - 30D", 'value': 10000 },
+            { 'name': "30 - 60D", 'value': 1200000 },
+            { 'name': "60  90D", 'value': 200000 },
+            { 'name': ">90D", 'value': 150000 }
         ]
         return Response({
             'message': "Data Fetched Successfully.",
