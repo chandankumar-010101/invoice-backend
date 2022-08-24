@@ -251,7 +251,8 @@ class RecordPaymentView(APIView):
                 invoice = invoice,
                 amount = params['amount'],
                 payment_type = 'Manually',
-                payment_mode = params['payment_mode']
+                payment_mode = params['payment_mode'],
+                payment_date = params['payment_date']
             )
             if invoice.due_amount != float(params['amount']):
                 invoice.invoice_status = 'PARTIALLY_DONE'
@@ -259,7 +260,6 @@ class RecordPaymentView(APIView):
             else:
                 invoice.due_amount = 0
                 invoice.invoice_status = 'PAYMENT_DONE'
-            invoice.payment_date = params['payment_date']
             invoice.save()
             return Response({
                 'message': 'Payment Recorded successfully.',
