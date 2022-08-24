@@ -259,6 +259,7 @@ class RecordPaymentView(APIView):
             else:
                 invoice.due_amount = 0
                 invoice.invoice_status = 'PAYMENT_DONE'
+            invoice.payment_date = params['payment_date']
             invoice.save()
             return Response({
                 'message': 'Payment Recorded successfully.',

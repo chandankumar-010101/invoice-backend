@@ -40,8 +40,9 @@ record_payment_schema = openapi.Schema(
     type=openapi.TYPE_OBJECT, responses={200: 'OK'}, properties={
         'payment_mode': openapi.Schema(type=openapi.TYPE_STRING),
         'amount': openapi.Schema(type=openapi.TYPE_NUMBER),
+        'payment_date':openapi.Schema(type=openapi.TYPE_STRING),
     },
-    required=['payment_mode','amount']
+    required=['payment_mode','amount','payment_date']
 )
 
 
