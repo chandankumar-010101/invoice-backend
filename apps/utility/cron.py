@@ -50,11 +50,11 @@ def send_email(invoice,reminder,manually=False):
             
     if is_sucess:
         subject = reminder.subject.replace('{{invoice_no}}',invoice.invoice_number)
-        subject = subject.replace('{{company_name}}',invoice.customer.organization.company_name)
+        subject = subject.replace('{{my_company_name}}',invoice.customer.organization.company_name)
         body = reminder.body.replace('{{customer}}',invoice.customer.full_name)
         body = body.replace('{{invoice_no}}',invoice.invoice_number)
         body = body.replace('{{amount_due}}',str(invoice.due_amount))
-        body = body.replace('{{company_name}}',invoice.customer.organization.company_name)
+        body = body.replace('{{my_company_name}}',invoice.customer.organization.company_name)
         due_date_status = "{} {}".format(reminder.reminder_type,reminder.days)
         subject = subject.replace('{{due_date_status}}',due_date_status)
         body = body.replace('{{due_date_status}}',due_date_status)
