@@ -27,7 +27,7 @@
                 "access":"Full access"
             },
             {
-                "permission":"Activate online payments",
+                "permission":"Invoice Settings",
                 "access":"Full access"
             },
             {
@@ -64,7 +64,7 @@
                 "access":"No access"
             },
             {
-                "permission":"Activate online payments",
+                "permission":"Invoice Settings",
                 "access":"View-only access"
             },
             {
@@ -101,7 +101,7 @@
                 "access":"No access"
             },
             {
-                "permission":"Activate online payments",
+                "permission":"Invoice Settings",
                 "access":"No access"
             },
             {
@@ -138,7 +138,7 @@
                 "access":"No access"
             },
             {
-                "permission":"Activate online payments",
+                "permission":"Invoice Settings",
                 "access":"No access"
             },
             {
