@@ -530,18 +530,25 @@ class GetDetailsView(APIView):
         return Response(response, status=status.HTTP_200_OK)
 
 
-from apps.invoice.models import PaymentReminder
-subject = "Invoice No {{invoice_no}} from {{my_company_name}} is {{due_date_status}}"
-body ="""<p>Dear {{customer}},</p>
+# from apps.invoice.models import PaymentReminder
+# subject = "Invoice No {{invoice_no}} from {{my_company_name}} is {{due_date_status}}"
+# body ="""<p>Dear {{customer}},</p>
 
-<p>We want to remind you that invoice {{invoice_no}} , is {{due_date_status}} , with an outstanding balance of {{amount_due}}</p><br>
+# <p>We want to remind you that invoice {{invoice_no}} , is {{due_date_status}} , with an outstanding balance of {{amount_due}}</p><br>
 
-<p>Please review your invoice and promptly remit payment at your earliest convenience. Let us know if you have any questions.</p>
+# <p>Please review your invoice and promptly remit payment at your earliest convenience. Let us know if you have any questions.</p>
 
-<p>Best,<br />
-{{my_company_name}}</p>"""
+# <p>Best,<br />
+# {{my_company_name}}</p>"""
 
-for reminder in PaymentReminder.objects.all():
-    reminder.subject=subject
-    reminder.body=body
-    reminder.save()
+# for reminder in PaymentReminder.objects.all():
+#     reminder.subject=subject
+#     reminder.body=body
+#     reminder.save()
+
+
+import json
+data = json.load(open('json/roles.json'))
+for role in RolesAndPermissions.objects.all():
+    role.roles = data
+    role.save()
