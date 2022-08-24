@@ -202,7 +202,7 @@ class UserCreateView(APIView):
             get_template = render_to_string(
                 'email_template/welcome.html', context)
             SendMail.mail(
-                "User Onboard", user.email, get_template)
+                "New User Onboarding", user.email, get_template)
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
@@ -547,8 +547,8 @@ class GetDetailsView(APIView):
 #     reminder.save()
 
 
-import json
-data = json.load(open('json/roles.json'))
-for role in RolesAndPermissions.objects.all():
-    role.roles = data
-    role.save()
+# import json
+# data = json.load(open('json/roles.json'))
+# for role in RolesAndPermissions.objects.all():
+#     role.roles = data
+#     role.save()

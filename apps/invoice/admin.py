@@ -48,7 +48,7 @@ class InvoiceAttachmentAdmin(admin.ModelAdmin):
 class RolesAndPermissionsAdmin(admin.ModelAdmin):
 
     list_display = (
-        "id",
+        "id",'user'
     )
 
 @admin.register(InvoiceTransaction)
