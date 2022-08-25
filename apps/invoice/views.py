@@ -462,10 +462,14 @@ class PaymentListView(generics.ListAPIView):
         if 'order_by' in params and data:
             if 'payment_method' in params['order_by'] or 'amount' in params['order_by']:
                 data = sorted(data, key=lambda k: (k[params['order_by'].replace('-','')]), reverse=True if '-' in params['order_by'] else False )
-        return Response({
-            'message': "Data Fetched Successfully.",
-            'data': data,
-        }, status=status.HTTP_200_OK)
+
+         page = self.paginate_queryset(data)
+        
+        return self.get_paginated_response(page)
+        # return Response({
+        #     'message': "Data Fetched Successfully.",
+        #     'data': data,
+        # }, status=status.HTTP_200_OK)
 
 
 class CsvPaymentListView(APIView):
