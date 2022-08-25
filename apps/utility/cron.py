@@ -47,7 +47,7 @@ def send_email(invoice,reminder,manually=False):
     from datetime import date  
     td = date.today()
     due_date_status = "Due in {} days".format(abs((td-invoice.due_date).days))
-            
+    is_sent = False
     if is_sucess:
         subject = reminder.subject.replace('{{invoice_no}}',invoice.invoice_number)
         subject = subject.replace('{{my_company_name}}',invoice.customer.organization.company_name)
@@ -70,14 +70,20 @@ def send_email(invoice,reminder,manually=False):
             'payment':url
         }
         try:
-            get_template = render_to_string(
-            'email_template/reminder.html', context)
-            SendMail.invoice(
-                "You have an invoice reminder from {} due on {}".format(invoice.customer.organization.company_name,invoice.due_date), invoice.customer.primary_email, get_template,[],invoice)
-            invoice.invoice_status = 'SENT'
-            invoice.reminders +=1
-            invoice.save()
-            send_reminder_on_whats_app(invoice,body,url)
+            if reminder.is_sent_on_email:
+                get_template = render_to_string(
+                'email_template/reminder.html', context)
+                SendMail.invoice(
+                    "You have an invoice reminder from {} due on {}".format(invoice.customer.organization.company_name,invoice.due_date), invoice.customer.primary_email, get_template,[],invoice)
+                is_sent=True
+            
+            if reminder.is_sent_on_whatsapp:
+                send_reminder_on_whats_app(invoice,body,url)
+                is_sent=True
+            if is_sent:
+                invoice.invoice_status = 'SENT'
+                invoice.reminders +=1
+                invoice.save()
             print("SENT AND DONE")
         except Exception as e:
             print("ERRROR",e)
