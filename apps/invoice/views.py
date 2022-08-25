@@ -457,10 +457,15 @@ class PaymentListView(generics.ListAPIView):
         return queryset
 
     def list(self, request, *args, **kwargs):
+        params = request.GET
         response = super(PaymentListView, self).list(request, *args, **kwargs)
+        if 'payment_method' in params['order_by'] or 'amount' in params['order_by']:
+            data = sorted(response.data, key=lambda k: (k[params['order_by'].replace('-','')]), reverse=True if '-' in params['order_by'] else False )
+        else:
+            data = response.data
         return Response({
             'message': "Data Fetched Successfully.",
-            'data': response.data,
+            'data': data,
         }, status=status.HTTP_200_OK)
 
 
