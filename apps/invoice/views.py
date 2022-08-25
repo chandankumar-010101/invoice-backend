@@ -463,7 +463,7 @@ class PaymentListView(generics.ListAPIView):
             if 'payment_method' in params['order_by'] or 'amount' in params['order_by']:
                 data = sorted(data, key=lambda k: (k[params['order_by'].replace('-','')]), reverse=True if '-' in params['order_by'] else False )
 
-         page = self.paginate_queryset(data)
+        page = self.paginate_queryset(data)
         
         return self.get_paginated_response(page)
         # return Response({
