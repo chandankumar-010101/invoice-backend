@@ -459,7 +459,7 @@ class PaymentListView(generics.ListAPIView):
     def list(self, request, *args, **kwargs):
         params = request.GET
         response = super(PaymentListView, self).list(request, *args, **kwargs)
-        if 'order_by' in params and 'payment_method' in params['order_by'] or 'amount' in params['order_by']:
+        if 'order_by' in params and 'payment_method' in params['order_by'] or 'order_by' in params and  'amount' in params['order_by']:
             data = sorted(response.data, key=lambda k: (k[params['order_by'].replace('-','')]), reverse=True if '-' in params['order_by'] else False )
         else:
             data = response.data
