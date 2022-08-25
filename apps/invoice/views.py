@@ -458,9 +458,8 @@ class PaymentListView(generics.ListAPIView):
 
     def list(self, request, *args, **kwargs):
         params = request.GET
-        response = super(PaymentListView, self).list(request, *args, **kwargs)
-        data = response.data
-        if 'order_by' in params:
+        data = self.serializer_class(self.get_queryset(), many=True).data
+        if 'order_by' in params and data:
             if 'payment_method' in params['order_by'] or 'amount' in params['order_by']:
                 data = sorted(data, key=lambda k: (k[params['order_by'].replace('-','')]), reverse=True if '-' in params['order_by'] else False )
         return Response({
