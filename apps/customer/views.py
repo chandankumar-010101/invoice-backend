@@ -45,21 +45,19 @@ class CustomerListView(generics.ListAPIView):
     def list(self, request, *args, **kwargs):
         params = request.GET
         admin_user = request.user.parent if request.user.parent else request.user
-
         organization = admin_user.profile.organization
         queryset = Customer.objects.filter(organization=organization)
+
         if 'search' in params and params['search'] !='':
             queryset = queryset.filter(full_name__icontains=params['search'])
 
         if 'order_by' in params and params['order_by'] !='' and 'full_name' in params['order_by']:
             queryset = queryset.order_by(params['order_by'])
         serializer = self.serializer_class(queryset, many=True)
-
         if 'order_by' in params and params['order_by'] !='' and 'full_name' not in params['order_by']:
-            data = sorted(serializer.data, key=lambda x: params['order_by'], reverse=True )
+            data = sorted(serializer.data, key=lambda k: (k[params['order_by'].replace('-','')]), reverse=True if '-' in params['order_by'] else False )
         else:
             data = serializer.data
-
         page = self.paginate_queryset(data)
         
         return self.get_paginated_response(page)
