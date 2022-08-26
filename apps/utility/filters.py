@@ -1,4 +1,4 @@
-from datetime import datetime, date
+from datetime import datetime, date,timedelta
 
 import django_filters
 
@@ -11,6 +11,7 @@ from psycopg2.extras import DateRange
 
 def invoice_filter(request,queryset):
     params = request.GET
+
     if 'invoice_status' in params and params['invoice_status'] !='':
         queryset = queryset.filter(
             invoice_status= params['invoice_status'].upper()
@@ -24,12 +25,13 @@ def invoice_filter(request,queryset):
     try:
         if 'due_date' in params and params['due_date'] !='':
             due_date = int(params['due_date'])
-
             if due_date == 1:
                 pass
             elif due_date == 2:
+                todays_date = date.today() +  timedelta(days=30)
+
                 queryset = queryset.filter(
-                    due_date__month=date.today().month
+                    due_date__lte=todays_date
                 )
             elif due_date == 3:
                 queryset = queryset.filter(
