@@ -38,7 +38,9 @@ def invoice_filter(request,queryset):
                 due_date__lt = date.today()
             )
         elif due_date == 4:
-            pass
+            queryset = queryset.filter(
+                due_date__range = [date.today() -  timedelta(days=30),date.today()]
+            )
         elif due_date == 5:
             pass
         elif due_date == 6:
