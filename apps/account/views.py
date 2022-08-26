@@ -1,6 +1,7 @@
 import logging
 
-from datetime import date  
+from datetime import datetime, date,timedelta
+
 
 from django.template.loader import render_to_string
 from django.shortcuts import render
@@ -478,16 +479,27 @@ class DashboardView(APIView):
         queryset = queryset.exclude(invoice_status='PAYMENT_DONE')
         current_amount = queryset.filter(due_date__gt = date.today()).aggregate(Sum('due_amount'))
         overdue_amount = queryset.filter(due_date__lt = date.today()).aggregate(Sum('due_amount'))
-        # graph_current_amount = queryset.filter(due_date = date.today()).aggregate(Sum('due_amount'))
-        # graph_overdue_amount = queryset.filter(due_date = date.today()).aggregate(Sum('due_amount'))
+
+        one_to_thirty_days = queryset.filter(
+            due_date__range = [date.today() -  timedelta(days=30),date.today() -  timedelta(days=2)]
+        ).aggregate(Sum('due_amount'))
+        thirty_to_sixty_days = queryset.filter(
+            due_date__range = [date.today() -  timedelta(days=60),date.today()-  timedelta(days=30)]
+        ).aggregate(Sum('due_amount'))
+        sixty_to_ninty_days = queryset.filter(
+            due_date__range = [date.today() -  timedelta(days=90),date.today()-  timedelta(days=60)]
+        ).aggregate(Sum('due_amount'))
+        ninty_plus_days = queryset.filter(
+            due_date__lt = date.today()-  timedelta(days=90)
+        ).aggregate(Sum('due_amount'))
 
         graph_data = [
             { 'name': "Current", 'value': current_amount['due_amount__sum'] if current_amount['due_amount__sum'] else 00 },
             { 'name': "Overdue", 'value': overdue_amount['due_amount__sum'] if overdue_amount['due_amount__sum'] else 00 },
-            { 'name': "0 - 30D", 'value': 1000000 },
-            { 'name': "30 - 60D", 'value': 1200000 },
-            { 'name': "60  90D", 'value': 2000000 },
-            { 'name': ">90D", 'value': 1500000 }
+            { 'name': "0 - 30D", 'value': one_to_thirty_days['due_amount__sum'] if one_to_thirty_days['due_amount__sum'] else 00 },
+            { 'name': "30 - 60D", 'value': thirty_to_sixty_days['due_amount__sum'] if thirty_to_sixty_days['due_amount__sum'] else 00 },
+            { 'name': "60  90D", 'value': sixty_to_ninty_days['due_amount__sum'] if sixty_to_ninty_days['due_amount__sum'] else 00 },
+            { 'name': ">90D", 'value':  ninty_plus_days['due_amount__sum'] if ninty_plus_days['due_amount__sum'] else 00 },
         ]
         return Response({
             'message': "Data Fetched Successfully.",
