@@ -57,7 +57,15 @@ class CustomerListSerializer(serializers.ModelSerializer):
     outstanding_invoices = serializers.SerializerMethodField()
     open_balance = serializers.SerializerMethodField()
     overdue_balance = serializers.SerializerMethodField()
-    payments_term = serializers.CharField(source='get_payments_term_display')
+    payments_term = serializers.SerializerMethodField()
+    
+    def get_payments_term(self,obj):
+        try:
+            payments_term = obj.get_payments_term_display().split(" ")
+            return payments_term[1]
+        except:
+            return None
+
     def get_full_name(self,obj):
         return obj.full_name.title()
 
