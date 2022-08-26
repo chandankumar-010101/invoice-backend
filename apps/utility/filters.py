@@ -35,9 +35,8 @@ def invoice_filter(request,queryset):
             )
         elif due_date == 3:
             queryset = queryset.filter(
-                ~Q(invoice_status='PAYMENT_DONE')
+                due_date__lt = date.today()
             )
-            return queryset
         elif due_date == 4:
             pass
         elif due_date == 5:
