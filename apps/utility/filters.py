@@ -22,33 +22,33 @@ def invoice_filter(request,queryset):
             customer= params['customer']
         )
 
-    try:
-        if 'due_date' in params and params['due_date'] !='':
-            due_date = int(params['due_date'])
-            if due_date == 1:
-                pass
-            elif due_date == 2:
-                todays_date = date.today() +  timedelta(days=30)
+    # try:
+    if 'due_date' in params and params['due_date'] !='':
+        due_date = int(params['due_date'])
+        if due_date == 1:
+            pass
+        elif due_date == 2:
+            todays_date = date.today() +  timedelta(days=30)
 
-                queryset = queryset.filter(
-                    due_date__gt=todays_date
-                )
-            elif due_date == 3:
-                queryset = queryset.filter(
-                    ~Q(invoice_status='PAYMENT_DONE')
-                )
-                return queryset
-            elif due_date == 4:
-                pass
-            elif due_date == 5:
-                pass
-            elif due_date == 6:
-                pass
-            elif due_date == 7:
-                pass
-    except Exception as e:
-        print("EXception",e)
-        pass
+            queryset = queryset.filter(
+                due_date__gt=todays_date
+            )
+        elif due_date == 3:
+            queryset = queryset.filter(
+                ~Q(invoice_status='PAYMENT_DONE')
+            )
+            return queryset
+        elif due_date == 4:
+            pass
+        elif due_date == 5:
+            pass
+        elif due_date == 6:
+            pass
+        elif due_date == 7:
+            pass
+    # except Exception as e:
+    #     print("EXception",e)
+    #     pass
 
     return queryset
 
