@@ -39,7 +39,7 @@ def invoice_filter(request,queryset):
             )
         elif due_date == 4:
             queryset = queryset.filter(
-                due_date__range = [date.today() -  timedelta(days=30),date.today()+  timedelta(days=1)]
+                due_date__range = [date.today() -  timedelta(days=30),date.today() -  timedelta(days=2)]
             )
         elif due_date == 5:
             queryset = queryset.filter(
