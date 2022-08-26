@@ -29,7 +29,14 @@ class GetInvoiceSerializer(serializers.ModelSerializer):
     primary_phone = serializers.SerializerMethodField()
     additional_phone = serializers.SerializerMethodField()
     due_date_status = serializers.SerializerMethodField()
-
+    payments_term = serializers.SerializerMethodField()
+    
+    def get_payments_term(self,obj):
+        try:
+            payments_term = obj.customer.get_payments_term_display().split(" ")
+            return payments_term[1]
+        except:
+            return None
 
     def get_due_date_status(self,obj):
         from datetime import date  
