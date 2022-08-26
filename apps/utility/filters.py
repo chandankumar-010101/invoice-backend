@@ -26,12 +26,12 @@ def invoice_filter(request,queryset):
     if 'due_date' in params and params['due_date'] !='':
         due_date = int(params['due_date'])
         if due_date == 1:
-            pass
-        elif due_date == 2:
-            todays_date = date.today() +  timedelta(days=30)
-
             queryset = queryset.filter(
-                due_date__range = [date.today(),todays_date]
+                due_date__gt = date.today()
+            )
+        elif due_date == 2:
+            queryset = queryset.filter(
+                due_date__range = [date.today(),date.today() +  timedelta(days=30)]
             )
         elif due_date == 3:
             queryset = queryset.filter(
