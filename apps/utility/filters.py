@@ -31,6 +31,7 @@ def invoice_filter(request,queryset):
             todays_date = date.today() +  timedelta(days=30)
 
             queryset = queryset.filter(
+                due_date__lt = date.today(),
                 due_date__gt=todays_date
             )
         elif due_date == 3:
