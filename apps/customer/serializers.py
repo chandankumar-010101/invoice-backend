@@ -57,7 +57,7 @@ class CustomerListSerializer(serializers.ModelSerializer):
     outstanding_invoices = serializers.SerializerMethodField()
     open_balance = serializers.SerializerMethodField()
     overdue_balance = serializers.SerializerMethodField()
-
+    payments_term = serializers.CharField(source='get_payments_term_display')
     def get_full_name(self,obj):
         return obj.full_name.title()
 
@@ -79,7 +79,7 @@ class CustomerListSerializer(serializers.ModelSerializer):
     class Meta:
         model = Customer
         fields = ('pk','full_name','outstanding_invoices',
-                'open_balance','overdue_balance') 
+                'open_balance','overdue_balance','payments_term') 
 
 class CustomerRetriveDestroySerializer(serializers.ModelSerializer):
     """ Reterive and delete Customer record serializer. """
