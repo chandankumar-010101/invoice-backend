@@ -482,35 +482,21 @@ class DashboardView(APIView):
         overdue_amount = queryset.filter(due_date__lt = date.today()).aggregate(Sum('due_amount'))
         if 'start_date' in params and params['start_date'] !='' and 'end_date' in params and params['end_date'] !='':
             queryset = queryset.filter(created_on__range= [params['start_date'],params['end_date']])
-            graph_current_amount = queryset.filter(due_date__gt = date.today()).aggregate(Sum('due_amount'))
-            graph_overdue_amount = queryset.filter(due_date__lt = date.today()).aggregate(Sum('due_amount'))
-            one_to_thirty_days = queryset.filter(
-                due_date__range = [date.today() - timedelta(days=30),date.today() - timedelta(days=2)]
-            ).aggregate(Sum('due_amount'))
-            thirty_to_sixty_days = queryset.filter(
-                due_date__range = [date.today() - timedelta(days=60),date.today()- timedelta(days=30)]
-            ).aggregate(Sum('due_amount'))
-            sixty_to_ninty_days = queryset.filter(
-                due_date__range = [date.today() - timedelta(days=90),date.today()- timedelta(days=60)]
-            ).aggregate(Sum('due_amount'))
-            ninty_plus_days = queryset.filter(
-                due_date__lt = date.today()- timedelta(days=90)
-            ).aggregate(Sum('due_amount'))
-        else:
-            graph_current_amount = queryset.filter(due_date__gt = date.today()).aggregate(Sum('due_amount'))
-            graph_overdue_amount = queryset.filter(due_date__lt = date.today()).aggregate(Sum('due_amount'))
-            one_to_thirty_days = queryset.filter(
-                due_date__range = [date.today() - timedelta(days=30),date.today() - timedelta(days=2)]
-            ).aggregate(Sum('due_amount'))
-            thirty_to_sixty_days = queryset.filter(
-                due_date__range = [date.today() - timedelta(days=60),date.today()- timedelta(days=30)]
-            ).aggregate(Sum('due_amount'))
-            sixty_to_ninty_days = queryset.filter(
-                due_date__range = [date.today() - timedelta(days=90),date.today()- timedelta(days=60)]
-            ).aggregate(Sum('due_amount'))
-            ninty_plus_days = queryset.filter(
-                due_date__lt = date.today()- timedelta(days=90)
-            ).aggregate(Sum('due_amount'))
+            
+        graph_current_amount = queryset.filter(due_date__gt = date.today()).aggregate(Sum('due_amount'))
+        graph_overdue_amount = queryset.filter(due_date__lt = date.today()).aggregate(Sum('due_amount'))
+        one_to_thirty_days = queryset.filter(
+            due_date__range = [date.today() - timedelta(days=30),date.today() - timedelta(days=2)]
+        ).aggregate(Sum('due_amount'))
+        thirty_to_sixty_days = queryset.filter(
+            due_date__range = [date.today() - timedelta(days=60),date.today()- timedelta(days=30)]
+        ).aggregate(Sum('due_amount'))
+        sixty_to_ninty_days = queryset.filter(
+            due_date__range = [date.today() - timedelta(days=90),date.today()- timedelta(days=60)]
+        ).aggregate(Sum('due_amount'))
+        ninty_plus_days = queryset.filter(
+            due_date__lt = date.today()- timedelta(days=90)
+        ).aggregate(Sum('due_amount'))
 
         graph_data = [
             { 'name': "Current", 'value': graph_current_amount['due_amount__sum'] if graph_current_amount['due_amount__sum'] else 00 },
