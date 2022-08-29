@@ -259,7 +259,7 @@ class RecordPaymentView(APIView):
                 invoice.due_amount -= float(params['amount'])
             else:
                 invoice.due_amount = 0
-                invoice.invoice_status = 'PAYMENT_DONE'
+                invoice.invoice_status = 'PARTIALLY_PAID'
             invoice.save()
             return Response({
                 'message': 'Payment Recorded successfully.',
