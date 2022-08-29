@@ -46,12 +46,13 @@ class GetInvoiceSerializer(serializers.ModelSerializer):
                 'color':'#000000',
                 'days':"Due Today"
             }
+            
         elif (td-obj.due_date).days > 1:
             return {
                 'color':'#FE6867',
                 'days':"Overdue by {} days".format(abs((td-obj.due_date).days))
             }
-        elif (td-obj.due_date).days == 1:
+        elif abs((td-obj.due_date).days) == 1:
             return {
                 'color':'#000000',
                 'days':"Due Tomorrow"
