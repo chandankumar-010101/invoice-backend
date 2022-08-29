@@ -33,7 +33,7 @@ from .schema import  (
     payment_method_schema,roles_permissions_schema,
     card_schema,send_reminder_schema
 )
-from apps.utility.filters import InvoiceFilter,invoice_filter
+from apps.utility.filters import InvoiceFilter,invoice_filter,invoice_payment_filter
 from apps.customer.pagination import CustomPagination
 from apps.customer.models import Customer
 
@@ -445,18 +445,16 @@ class PaymentListView(generics.ListAPIView):
     def get_queryset(self):
         admin_user = self.request.user.parent if self.request.user.parent else self.request.user
         customer_id = Customer.objects.filter(organization=admin_user.profile.organization).values_list('id', flat=True)
-        # queryset = Invoice.objects.filter(customer__id__in=list(customer_id),invoice_status='PAYMENT_DONE')
         queryset = InvoiceTransaction.objects.filter(invoice__customer__id__in=list(customer_id))
-        # queryset = invoice_filter(self.request,queryset)
+        queryset = invoice_payment_filter(self.request,queryset)
         params = self.request.GET
         
         if 'order_by' in params and params['order_by'] !='':
-            if 'payment_method' not in params['order_by'] :
-                queryset = queryset.order_by(params['order_by'])
+            queryset = queryset.order_by(params['order_by'])
         return queryset
 
     def list(self, request, *args, **kwargs):
-        params = request.GET
+        # params = request.GET
         data = self.serializer_class(self.get_queryset(), many=True).data
         # if 'order_by' in params and data:
         #     if 'payment_method' in params['order_by'] or 'amount' in params['order_by']:

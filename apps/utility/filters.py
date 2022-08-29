@@ -8,6 +8,16 @@ from apps.invoice.models import Invoice
 from psycopg2.extras import DateRange
 
 
+def invoice_payment_filter(request,queryset):
+    if 'customer' in params and params['customer'] !='':
+        queryset = queryset.filter(
+            invoice__customer= params['customer']
+        )
+    if 'payment_method' in params and params['payment_method'] !='':
+        queryset = queryset.filter(
+            payment_mode= params['payment_method']
+        )
+    return queryset
 
 def invoice_filter(request,queryset):
     params = request.GET
