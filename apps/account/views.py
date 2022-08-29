@@ -480,8 +480,8 @@ class DashboardView(APIView):
         queryset = queryset.exclude(invoice_status='PAYMENT_DONE')
         current_amount = queryset.filter(due_date__gt = date.today()).aggregate(Sum('due_amount'))
         overdue_amount = queryset.filter(due_date__lt = date.today()).aggregate(Sum('due_amount'))
-        if 'start_date' in params and params['start_date'] !='' and 'end_date' in params and params['end_date'] !='':
-            queryset = queryset.filter(created_on__range= [params['start_date'],params['end_date']])
+        if 'date' in params and params['date'] !='':
+            queryset = queryset.filter(created_on__date = date.today())
         graph_current_amount = queryset.filter(due_date__gt = date.today()).aggregate(Sum('due_amount'))
         graph_overdue_amount = queryset.filter(due_date__lt = date.today()).aggregate(Sum('due_amount'))
         one_to_thirty_days = queryset.filter(
