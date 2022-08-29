@@ -451,18 +451,16 @@ class PaymentListView(generics.ListAPIView):
         params = self.request.GET
         
         if 'order_by' in params and params['order_by'] !='':
-            if 'payment_method' in params['order_by'] or 'amount' in params['order_by']:
-                pass
-            else:
+            if 'payment_method' not in params['order_by'] :
                 queryset = queryset.order_by(params['order_by'])
         return queryset
 
     def list(self, request, *args, **kwargs):
         params = request.GET
         data = self.serializer_class(self.get_queryset(), many=True).data
-        if 'order_by' in params and data:
-            if 'payment_method' in params['order_by'] or 'amount' in params['order_by']:
-                data = sorted(data, key=lambda k: (k[params['order_by'].replace('-','')]), reverse=True if '-' in params['order_by'] else False )
+        # if 'order_by' in params and data:
+        #     if 'payment_method' in params['order_by'] or 'amount' in params['order_by']:
+        #         data = sorted(data, key=lambda k: (k[params['order_by'].replace('-','')]), reverse=True if '-' in params['order_by'] else False )
         page = self.paginate_queryset(data)
         return self.get_paginated_response(page)
 
