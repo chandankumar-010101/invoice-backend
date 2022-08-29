@@ -17,3 +17,6 @@ django-storages
 boto3
 twilio
 django-crontab
+channels
+redis
+channels-redis

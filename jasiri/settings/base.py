@@ -35,6 +35,7 @@ CORS_ALLOWED_ORIGINS = [
 # Application definition
 
 INSTALLED_APPS = [
+    'channels',
     'django_crontab',
     'django.contrib.admin',
     'django.contrib.auth',
@@ -142,7 +143,16 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'jasiri.wsgi.application'
+ASGI_APPLICATION = 'jasiri.routing.application'
 
+CHANNEL_LAYERS = {
+    'default': {
+        'BACKEND': 'channels_redis.core.RedisChannelLayer',
+        'CONFIG': {
+            "hosts": [('127.0.0.1', 6379)],
+        },
+    },
+}
 
 # Password validation
 # https://docs.djangoproject.com/en/4.0/ref/settings/#auth-password-validators
