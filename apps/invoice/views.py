@@ -445,7 +445,8 @@ class PaymentListView(generics.ListAPIView):
     def get_queryset(self):
         admin_user = self.request.user.parent if self.request.user.parent else self.request.user
         customer_id = Customer.objects.filter(organization=admin_user.profile.organization).values_list('id', flat=True)
-        queryset = Invoice.objects.filter(customer__id__in=list(customer_id),invoice_status='PAYMENT_DONE')
+        # queryset = Invoice.objects.filter(customer__id__in=list(customer_id),invoice_status='PAYMENT_DONE')
+        queryset = InvoiceTransaction.objects.filter(invoice__customer__id__in=list(customer_id))
         queryset = invoice_filter(self.request,queryset)
         params = self.request.GET
         
@@ -478,7 +479,8 @@ class CsvPaymentListView(APIView):
     def get(self, request):
         admin_user = request.user.parent if request.user.parent else request.user
         customer_id = Customer.objects.filter(organization=admin_user.profile.organization).values_list('id', flat=True)
-        queryset = Invoice.objects.filter(customer__id__in=list(customer_id),invoice_status='PAYMENT_DONE')
+        # queryset = Invoice.objects.filter(customer__id__in=list(customer_id),invoice_status='PAYMENT_DONE')
+        queryset = InvoiceTransaction.objects.filter(invoice__customer__id__in=list(customer_id))
         serializer = GetPaymentSerializer(queryset, many=True)
         return Response({'data':serializer.data})
 

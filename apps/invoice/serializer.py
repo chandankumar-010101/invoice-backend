@@ -2,7 +2,7 @@ from rest_framework import serializers
 from django.db.models import Q,Sum
 
 
-from .models import Invoice,InvoiceAttachment,PaymentReminder,CardDetail
+from .models import Invoice,InvoiceAttachment,PaymentReminder,CardDetail,InvoiceTransaction
 from apps.utility.helpers import ordinal
 class InvoiceAttachmentSerializer(serializers.ModelSerializer):
 
@@ -189,25 +189,30 @@ class CardSerializer(serializers.Serializer):
 
 class GetPaymentSerializer(serializers.ModelSerializer):
 
-    customer = serializers.SerializerMethodField()
-    amount = serializers.SerializerMethodField()
+    # amount = serializers.SerializerMethodField()
+
+    # def get_amount(self,obj):
+    #     total = obj.invoice_transaction.all().aggregate(Sum('amount'))
+    #     return total['amount__sum'] if total['amount__sum'] else 00
+    
+    
     payment_method = serializers.SerializerMethodField()
-
-    def get_amount(self,obj):
-        total = obj.invoice_transaction.all().aggregate(Sum('amount'))
-        return total['amount__sum'] if total['amount__sum'] else 00
-
     def get_payment_method(self,obj):
-        try:
-            return obj.invoice_transaction.all().last().payment_mode
-        except:
-            return None
+        return obj.payment_mode
 
+    invoice_number = serializers.SerializerMethodField()
+    def get_invoice_number(self,obj):
+        return obj.invoice.invoice_number
+    
+    due_date = serializers.SerializerMethodField()
+    def get_due_date(self,obj):
+        return obj.invoice.due_date
 
+    customer = serializers.SerializerMethodField()
     def get_customer(self,obj):
-        return obj.customer.full_name
+        return obj.invoice.customer.full_name
 
         
     class Meta:
-        model = Invoice
+        model = InvoiceTransaction
         fields = ("customer","invoice_number","updated_on","due_date","payment_method","amount")
