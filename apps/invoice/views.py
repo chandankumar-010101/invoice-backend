@@ -433,7 +433,7 @@ class BillingPaymentView(APIView):
 
 
 class PaymentListView(generics.ListAPIView):
-    filter_class = InvoiceFilter
+    # filter_class = InvoiceFilter
     pagination_class = CustomPagination
     pagination_class.page_size = 2
     serializer_class = GetPaymentSerializer
@@ -447,7 +447,7 @@ class PaymentListView(generics.ListAPIView):
         customer_id = Customer.objects.filter(organization=admin_user.profile.organization).values_list('id', flat=True)
         # queryset = Invoice.objects.filter(customer__id__in=list(customer_id),invoice_status='PAYMENT_DONE')
         queryset = InvoiceTransaction.objects.filter(invoice__customer__id__in=list(customer_id))
-        queryset = invoice_filter(self.request,queryset)
+        # queryset = invoice_filter(self.request,queryset)
         params = self.request.GET
         
         if 'order_by' in params and params['order_by'] !='':
