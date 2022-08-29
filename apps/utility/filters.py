@@ -9,6 +9,8 @@ from psycopg2.extras import DateRange
 
 
 def invoice_payment_filter(request,queryset):
+    params = request.GET
+
     if 'customer' in params and params['customer'] !='':
         queryset = queryset.filter(
             invoice__customer= params['customer']
