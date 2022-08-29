@@ -470,6 +470,7 @@ class DashboardView(APIView):
 
 
     def get(self,request):
+        import  datetime
         params = request.GET
         admin_user = request.user.parent if request.user.parent else request.user
         customer_id = Customer.objects.filter(organization=admin_user.profile.organization).values_list('id', flat=True)
@@ -481,7 +482,9 @@ class DashboardView(APIView):
         current_amount = queryset.filter(due_date__gt = date.today()).aggregate(Sum('due_amount'))
         overdue_amount = queryset.filter(due_date__lt = date.today()).aggregate(Sum('due_amount'))
         if 'date' in params and params['date'] !='':
-            queryset = queryset.filter(created_on__date = date.today())
+            queryset = queryset.filter(created_on__date = params['date'])
+        else:
+            queryset = queryset.filter(created_on__date = datetime.datetime.now().date())
         graph_current_amount = queryset.filter(due_date__gt = date.today()).aggregate(Sum('due_amount'))
         graph_overdue_amount = queryset.filter(due_date__lt = date.today()).aggregate(Sum('due_amount'))
         one_to_thirty_days = queryset.filter(
