@@ -439,7 +439,7 @@ class PaymentListView(generics.ListAPIView):
     serializer_class = GetPaymentSerializer
     permission_classes = [IsAuthenticated]
     filter_backends = (filters.DjangoFilterBackend, SearchFilter)
-    search_fields = ['customer__full_name',"invoice_number","invoice_id"]
+    search_fields = ['invoice__customer__full_name',"invoice__invoice_number","invoice__invoice_id"]
 
     
     def get_queryset(self):
@@ -454,11 +454,7 @@ class PaymentListView(generics.ListAPIView):
         return queryset
 
     def list(self, request, *args, **kwargs):
-        # params = request.GET
         data = self.serializer_class(self.get_queryset(), many=True).data
-        # if 'order_by' in params and data:
-        #     if 'payment_method' in params['order_by'] or 'amount' in params['order_by']:
-        #         data = sorted(data, key=lambda k: (k[params['order_by'].replace('-','')]), reverse=True if '-' in params['order_by'] else False )
         page = self.paginate_queryset(data)
         return self.get_paginated_response(page)
 
@@ -475,7 +471,6 @@ class CsvPaymentListView(APIView):
     def get(self, request):
         admin_user = request.user.parent if request.user.parent else request.user
         customer_id = Customer.objects.filter(organization=admin_user.profile.organization).values_list('id', flat=True)
-        # queryset = Invoice.objects.filter(customer__id__in=list(customer_id),invoice_status='PAYMENT_DONE')
         queryset = InvoiceTransaction.objects.filter(invoice__customer__id__in=list(customer_id))
         serializer = GetPaymentSerializer(queryset, many=True)
         return Response({'data':serializer.data})
