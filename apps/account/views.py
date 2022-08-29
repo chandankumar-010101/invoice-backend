@@ -482,7 +482,6 @@ class DashboardView(APIView):
         overdue_amount = queryset.filter(due_date__lt = date.today()).aggregate(Sum('due_amount'))
         if 'start_date' in params and params['start_date'] !='' and 'end_date' in params and params['end_date'] !='':
             queryset = queryset.filter(created_on__range= [params['start_date'],params['end_date']])
-            
         graph_current_amount = queryset.filter(due_date__gt = date.today()).aggregate(Sum('due_amount'))
         graph_overdue_amount = queryset.filter(due_date__lt = date.today()).aggregate(Sum('due_amount'))
         one_to_thirty_days = queryset.filter(
@@ -497,14 +496,13 @@ class DashboardView(APIView):
         ninty_plus_days = queryset.filter(
             due_date__lt = date.today()- timedelta(days=90)
         ).aggregate(Sum('due_amount'))
-
         graph_data = [
             { 'name': "Current", 'value': graph_current_amount['due_amount__sum'] if graph_current_amount['due_amount__sum'] else 00 },
             { 'name': "Overdue", 'value': graph_overdue_amount['due_amount__sum'] if graph_overdue_amount['due_amount__sum'] else 00 },
-            { 'name': "0 - 30D", 'value': one_to_thirty_days['due_amount__sum'] if one_to_thirty_days['due_amount__sum'] else 00 },
-            { 'name': "30 - 60D", 'value': thirty_to_sixty_days['due_amount__sum'] if thirty_to_sixty_days['due_amount__sum'] else 00 },
-            { 'name': "60 - 90D", 'value': sixty_to_ninty_days['due_amount__sum'] if sixty_to_ninty_days['due_amount__sum'] else 00 },
-            { 'name': ">90D", 'value':  ninty_plus_days['due_amount__sum'] if ninty_plus_days['due_amount__sum'] else 00 },
+            { 'name': "0 - 30 Days Overdue", 'value': one_to_thirty_days['due_amount__sum'] if one_to_thirty_days['due_amount__sum'] else 00 },
+            { 'name': "30 - 60 Days Overdue", 'value': thirty_to_sixty_days['due_amount__sum'] if thirty_to_sixty_days['due_amount__sum'] else 00 },
+            { 'name': "60 - 90 Days Overdue", 'value': sixty_to_ninty_days['due_amount__sum'] if sixty_to_ninty_days['due_amount__sum'] else 00 },
+            { 'name': ">90 Days Overdue", 'value':  ninty_plus_days['due_amount__sum'] if ninty_plus_days['due_amount__sum'] else 00 },
         ]
         return Response({
             'message': "Data Fetched Successfully.",
@@ -523,7 +521,6 @@ class GetDetailsView(APIView):
         response={}
         payment_method = {}
         admin_user = request.user.parent if request.user.parent else request.user
-
         serializer = UserProfileSerializer(request.user.profile)
         response['is_editable'] = False if request.user.parent else True
         response['profile'] = serializer.data

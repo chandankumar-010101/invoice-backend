@@ -4,7 +4,6 @@ INVOICE_STATUS = (
     ('UNSENT', 'Unsent'),
     ('PAYMENT_DONE', 'Payment Done'),
     ('PARTIALLY_PAID', 'Partially Paid'),
-
 )
 
 PAYMENT_TYPE = (
