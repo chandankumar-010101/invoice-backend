@@ -158,7 +158,7 @@ class LoginView(APIView):
                 response['refresh'] = token.get('refresh')
                 response['roles'] = roles
                 response['last_login'] = user.last_login.strftime("%m/%d/%Y, %H:%M:%S")
-                response['notification'] = NotificationSerializer(admin_user.notification_user.filter(is_seen=False)).data
+                response['notification'] = NotificationSerializer(admin_user.notification_user.filter(is_seen=False),many=True).data
                 # response['permission'] =  user.parent.roles_permission_user if hasattr(user.parent,'roles_permission_user') else None
                 return Response(response, status=status.HTTP_200_OK)
             return Response({
