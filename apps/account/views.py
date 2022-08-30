@@ -42,7 +42,7 @@ from .schema import (
     profile_update_schema,create_user_schema
 )
 from apps.invoice.serializer import PaymentReminderSerializer,CardSerializer,NotificationSerializer
-from apps.invoice.models import RolesAndPermissions,PaymentReminder
+from apps.invoice.models import RolesAndPermissions,PaymentReminder,Notification
 logger = logging.getLogger(__name__)
 
 
@@ -141,7 +141,6 @@ class LoginView(APIView):
             user = authenticate(username=email, password=password)
             if user is not None:
                 login(request, user)
-                admin_user = user.parent if user.parent else user
                 queryset = UserProfile.objects.get(email=email)
                 serializer = UserProfileSerializer(queryset)
                 token = get_jwt_tokens_for_user(user)
@@ -158,7 +157,6 @@ class LoginView(APIView):
                 response['refresh'] = token.get('refresh')
                 response['roles'] = roles
                 response['last_login'] = user.last_login.strftime("%m/%d/%Y, %H:%M:%S")
-                response['notification'] = NotificationSerializer(admin_user.notification_user.filter(is_seen=False),many=True).data
                 # response['permission'] =  user.parent.roles_permission_user if hasattr(user.parent,'roles_permission_user') else None
                 return Response(response, status=status.HTTP_200_OK)
             return Response({
@@ -547,6 +545,23 @@ class GetDetailsView(APIView):
         response['payment_method'] = payment_method
         response['card_details'] = CardSerializer(admin_user.card_details_user).data if hasattr(admin_user, 'card_details_user') else {}
         return Response(response, status=status.HTTP_200_OK)
+
+class NotificationView(generics.ListAPIView):
+    pagination_class = CustomPagination
+    pagination_class.page_size = 5
+    serializer_class = NotificationSerializer
+    permission_classes = [IsAuthenticated]
+
+    
+    def get_queryset(self):
+        admin_user = self.request.user.parent if self.request.user.parent else self.request.user
+        queryset = admin_user.notification_user.all().order_by('is_seen')
+        return queryset
+
+    def list(self, request, *args, **kwargs):
+        data = self.serializer_class(self.get_queryset(), many=True).data
+        page = self.paginate_queryset(data)
+        return self.get_paginated_response(page)
 
 
 # from apps.invoice.models import PaymentReminder
