@@ -222,4 +222,5 @@ class GetPaymentSerializer(serializers.ModelSerializer):
 class NotificationSerializer(serializers.ModelSerializer):
 
     class Meta:
+        model = Notification
         fields = ('id','message','is_seen','invoice')
