@@ -162,6 +162,6 @@ def triger_socket(uuid,data):
     async_to_sync(channel_layaer.group_send)(
         'order_%s' % uuid, {
             'type': 'send_notification',
-            'payload': json.dumps(data)
+            'payload': data
         }
     )
