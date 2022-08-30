@@ -79,6 +79,7 @@ class UserProfileSerializer(serializers.ModelSerializer):
     def get_uuid(self,obj):
         return obj.user.uuid
 
+
     class Meta:
         model = UserProfile
         fields = '__all__'
