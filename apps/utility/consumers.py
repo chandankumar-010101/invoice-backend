@@ -22,7 +22,7 @@ class NotificationConsumer(WebsocketConsumer):
         )
 
     def receive(self, text_data):
-        print("############",text_data)
+        # print("############",self.room_group_name)
         async_to_sync(self.channel_layer.group_send)(
             self.room_group_name,
             {
@@ -32,7 +32,7 @@ class NotificationConsumer(WebsocketConsumer):
         )
 
     def send_notification(self, event):
-        print("####$$$$$$$",event)
+        print("####$$$$$$$",self.room_group_name)
         data = event.get('payload')
         self.send(text_data=json.dumps({
             'payload': data

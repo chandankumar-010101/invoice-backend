@@ -571,7 +571,6 @@ class NotificationMarkAsReadView(APIView):
 class NotificationSendView(APIView):
     def get(self,request):
         admin_user = request.user.parent if request.user.parent else request.user
-
         from apps.utility.helpers import triger_socket
         instance = Notification.objects.create(
             user = admin_user,
@@ -581,7 +580,7 @@ class NotificationSendView(APIView):
             icon_colour = 'red'
         )
         serializer = NotificationSerializer(instance).data
-        triger_socket(admin_user.uuid,serializer)
+        triger_socket(str(admin_user.uuid),serializer)
         return Response({
             'message': "Notification send Successfully."
         })
