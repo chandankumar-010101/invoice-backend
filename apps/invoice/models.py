@@ -94,6 +94,8 @@ class Notification(models.Model):
     invoice = models.ForeignKey(Invoice, on_delete=models.CASCADE,null=True,blank=True,related_name="notification_invoice")
     title = models.CharField(max_length= 150, null=True, blank=False)
     message = models.CharField(max_length= 255, null=True, blank=False)
+    icon_class = models.CharField(max_length=150,null=True,blank=True,default='fa fa-clock-o')
+    icon_colour = models.CharField(max_length=150,null=True,blank=True,default='red')
     is_seen = models.BooleanField(default=False)
     created_at = models.DateField(auto_now_add=True)
     updated_at = models.DateField(auto_now=True)
