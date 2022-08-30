@@ -558,6 +558,16 @@ class NotificationView(generics.ListAPIView):
         page = self.paginate_queryset(data)
         return self.get_paginated_response(page)
 
+class NotificationMarkAsReadView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self,request):
+        admin_user = request.user.parent if request.user.parent else request.user
+        admin_user.notification_user.filter(is_seen=False).update(is_seen=True)
+        return Response({
+            'message': "Notification marked as seen Successfully."
+        })
+
 
 # from apps.invoice.models import PaymentReminder
 # subject = "Invoice No {{invoice_no}} from {{my_company_name}} is {{due_date_status}}"
