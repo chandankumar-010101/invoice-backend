@@ -92,6 +92,7 @@ class CardDetail(models.Model):
 class Notification(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE,related_name="notification_user")
     invoice = models.ForeignKey(Invoice, on_delete=models.CASCADE,null=True,blank=True,related_name="notification_invoice")
+    title = models.CharField(max_length= 150, null=True, blank=False)
     message = models.CharField(max_length= 255, null=True, blank=False)
     is_seen = models.BooleanField(default=False)
     created_at = models.DateField(auto_now_add=True)
