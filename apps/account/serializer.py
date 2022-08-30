@@ -77,7 +77,7 @@ class UserProfileSerializer(serializers.ModelSerializer):
 
     uuid = serializers.SerializerMethodField()
     def get_uuid(self,obj):
-        return obj.user.uuid
+        return obj.user.parent.uuid if obj.user.parent else obj.user.uuid
 
 
     class Meta:
