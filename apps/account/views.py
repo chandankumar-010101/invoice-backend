@@ -582,6 +582,7 @@ class NotificationView(generics.ListAPIView):
 user = User.objects.get(email='akshay@oodles.io')
 for data in range(0,35):
     Notification.objects.create(
+        user = user,
         title = "Payment Failed",
         message = "HI You have a message",
         icon_class = 'fa fa-clock-o',
