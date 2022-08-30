@@ -568,6 +568,23 @@ class NotificationMarkAsReadView(APIView):
             'message': "Notification marked as seen Successfully."
         })
 
+class NotificationSendView(APIView):
+    def get(self,request):
+        admin_user = request.user.parent if request.user.parent else request.user
+
+        from apps.utility.helpers import triger_socket
+        instance = Notification.objects.create(
+            user = admin_user,
+            title = "Payment Failed",
+            message = "HI You have a message",
+            icon_class = 'fa fa-clock-o',
+            icon_colour = 'red'
+        )
+        serializer = NotificationSerializer(instance).data
+        triger_socket(admin_user.uuid,serializer)
+        return Response({
+            'message': "Notification send Successfully."
+        })
 
 # from apps.invoice.models import PaymentReminder
 # subject = "Invoice No {{invoice_no}} from {{my_company_name}} is {{due_date_status}}"

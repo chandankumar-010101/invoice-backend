@@ -29,5 +29,7 @@ urlpatterns = [
     path('static-content', views.StaticContentView.as_view(),),
     path('notification', views.NotificationView.as_view(),),
     path('notification/mark-as-read', views.NotificationMarkAsReadView.as_view(),),
+    path('notification/send', views.NotificationSendView.as_view(),),
+
 
 ]
