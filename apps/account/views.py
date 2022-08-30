@@ -144,7 +144,6 @@ class LoginView(APIView):
                 queryset = UserProfile.objects.get(email=email)
                 serializer = UserProfileSerializer(queryset)
                 token = get_jwt_tokens_for_user(user)
-                roles = []
                 admin_user = user.parent if user.parent else user
                 roles = admin_user.roles_permission_user.roles
                 response['profile'] = serializer.data
@@ -155,7 +154,6 @@ class LoginView(APIView):
                 response['refresh'] = token.get('refresh')
                 response['roles'] = roles
                 response['last_login'] = user.last_login.strftime("%m/%d/%Y, %H:%M:%S")
-                # response['permission'] =  user.parent.roles_permission_user if hasattr(user.parent,'roles_permission_user') else None
                 return Response(response, status=status.HTTP_200_OK)
             return Response({
                 'detail': [resp_msg.INVALID_EMAIL_PASSWORD]
@@ -175,7 +173,6 @@ class UserCreateView(APIView):
     @swagger_auto_schema(request_body=create_user_schema, operation_description='Create User')
     def post(self, request, *args, **kwargs):
         admin_user = request.user.parent if request.user.parent else request.user
-
         serializer = UserCreateSerializer(data=request.data)
         password = ''
         if serializer.is_valid():
@@ -581,3 +578,12 @@ class NotificationView(generics.ListAPIView):
 # for role in RolesAndPermissions.objects.all():
 #     role.roles = data
 #     role.save()
+
+user = User.objects.get(email='akshay@oodles.io')
+for data in range(0,35):
+    Notification.objects.create(
+        title = "Payment Failed",
+        message = "HI You have a message",
+        icon_class = 'fa fa-clock-o',
+        icon_colour = 'red'
+    )
