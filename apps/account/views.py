@@ -145,10 +145,8 @@ class LoginView(APIView):
                 serializer = UserProfileSerializer(queryset)
                 token = get_jwt_tokens_for_user(user)
                 roles = []
-                if user.get_user_type_display() == 'Admin':
-                    roles = user.roles_permission_user.roles
-                else:
-                    roles = user.parent.roles_permission_user.roles
+                admin_user = user.parent if user.parent else user
+                roles = admin_user.roles_permission_user.roles
                 response['profile'] = serializer.data
                 response['organization'] = queryset.organization.company_name
                 response['phone_number'] = queryset.organization.phone_number
@@ -567,11 +565,8 @@ class NotificationView(generics.ListAPIView):
 # from apps.invoice.models import PaymentReminder
 # subject = "Invoice No {{invoice_no}} from {{my_company_name}} is {{due_date_status}}"
 # body ="""<p>Dear {{customer}},</p>
-
 # <p>We want to remind you that invoice {{invoice_no}} , is {{due_date_status}} , with an outstanding balance of {{amount_due}}</p><br>
-
 # <p>Please review your invoice and promptly remit payment at your earliest convenience. Let us know if you have any questions.</p>
-
 # <p>Best,<br />
 # {{my_company_name}}</p>"""
 
