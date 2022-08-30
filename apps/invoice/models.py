@@ -97,5 +97,5 @@ class Notification(models.Model):
     icon_class = models.CharField(max_length=150,null=True,blank=True,default='fa fa-clock-o')
     icon_colour = models.CharField(max_length=150,null=True,blank=True,default='red')
     is_seen = models.BooleanField(default=False)
-    created_at = models.DateField(auto_now_add=True)
-    updated_at = models.DateField(auto_now=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
