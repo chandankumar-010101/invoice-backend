@@ -1,3 +1,4 @@
+import json
 import random
 import datetime
 import requests
@@ -5,8 +6,10 @@ import mimetypes
 
 from decouple import config
 
-from django.utils import timezone
+from asgiref.sync import async_to_sync
+from channels.layers import get_channel_layer
 
+from django.utils import timezone
 from django.conf import settings
 from django.core.mail import EmailMessage
 from django.utils.encoding import force_bytes,force_str
@@ -152,3 +155,13 @@ def download_file_from_s3(url):
 def ordinal(n): return "%d%s" % (
     n, "tsnrhtdd"[(n//10 % 10 != 1)*(n % 10 < 4)*n % 10::4])
 
+def triger_socket(uuid,data):
+    print(data)
+    data['is_seen'] = False
+    channel_layaer = get_channel_layer()
+    async_to_sync(channel_layaer.group_send)(
+        'order_%s' % uuid, {
+            'type': 'send_notification',
+            'payload': json.dumps(data)
+        }
+    )

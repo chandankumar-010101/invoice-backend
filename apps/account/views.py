@@ -41,7 +41,7 @@ from .schema import (
     forgot_password_schema,reset_password_schema,
     profile_update_schema,create_user_schema
 )
-from apps.invoice.serializer import PaymentReminderSerializer,CardSerializer
+from apps.invoice.serializer import PaymentReminderSerializer,CardSerializer,NotificationSerializer
 from apps.invoice.models import RolesAndPermissions,PaymentReminder
 logger = logging.getLogger(__name__)
 
@@ -141,6 +141,7 @@ class LoginView(APIView):
             user = authenticate(username=email, password=password)
             if user is not None:
                 login(request, user)
+                admin_user = user.parent if user.parent else user
                 queryset = UserProfile.objects.get(email=email)
                 serializer = UserProfileSerializer(queryset)
                 token = get_jwt_tokens_for_user(user)
@@ -157,6 +158,7 @@ class LoginView(APIView):
                 response['refresh'] = token.get('refresh')
                 response['roles'] = roles
                 response['last_login'] = user.last_login.strftime("%m/%d/%Y, %H:%M:%S")
+                response['notification'] = NotificationSerializer(admin_user.notification_user.filter(is_seen=False)).data
                 # response['permission'] =  user.parent.roles_permission_user if hasattr(user.parent,'roles_permission_user') else None
                 return Response(response, status=status.HTTP_200_OK)
             return Response({

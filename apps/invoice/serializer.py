@@ -2,8 +2,9 @@ from rest_framework import serializers
 from django.db.models import Q,Sum
 
 
-from .models import Invoice,InvoiceAttachment,PaymentReminder,CardDetail,InvoiceTransaction
+from .models import Invoice,InvoiceAttachment,PaymentReminder,CardDetail,InvoiceTransaction,Notification
 from apps.utility.helpers import ordinal
+
 class InvoiceAttachmentSerializer(serializers.ModelSerializer):
 
     attachment = serializers.SerializerMethodField()
@@ -216,3 +217,9 @@ class GetPaymentSerializer(serializers.ModelSerializer):
     class Meta:
         model = InvoiceTransaction
         fields = ("customer","invoice_number","updated_on","due_date","payment_method","amount")
+
+
+class NotificationSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        fields = ('id','message','is_seen','invoice')

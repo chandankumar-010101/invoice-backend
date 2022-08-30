@@ -87,3 +87,12 @@ class CardDetail(models.Model):
     card_number = models.CharField(max_length=16,null=True,blank=False)
     expiry_date = models.DateField()
     cvv_code = models.CharField(max_length=3,null=True,blank=False)
+
+
+class Notification(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE,related_name="notification_user")
+    invoice = models.ForeignKey(Invoice, on_delete=models.CASCADE,null=True,blank=True,related_name="notification_invoice")
+    message = models.CharField(max_length= 255, null=True, blank=False)
+    is_seen = models.BooleanField(default=False)
+    created_at = models.DateField(auto_now_add=True)
+    updated_at = models.DateField(auto_now=True)
