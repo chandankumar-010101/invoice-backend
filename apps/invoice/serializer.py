@@ -31,6 +31,7 @@ class GetInvoiceSerializer(serializers.ModelSerializer):
     additional_phone = serializers.SerializerMethodField()
     due_date_status = serializers.SerializerMethodField()
     payments_term = serializers.SerializerMethodField()
+    days = serializers.SerializerMethodField()
     
     def get_payments_term(self,obj):
         try:
@@ -38,6 +39,17 @@ class GetInvoiceSerializer(serializers.ModelSerializer):
             return payments_term[1]
         except:
             return None
+
+    def get_days(self,obj):
+        from datetime import date  
+        td = date.today()
+        if (td-obj.due_date).days == 0:
+            return "Due Today"
+        elif (td-obj.due_date).days > 1:
+            return "Overdue by {} days".format(abs((td-obj.due_date).days))
+        elif abs((td-obj.due_date).days) == 1:
+            return "Due Tomorrow"
+        return "Due in {} days".format(abs((td-obj.due_date).days))
 
     def get_due_date_status(self,obj):
         from datetime import date  

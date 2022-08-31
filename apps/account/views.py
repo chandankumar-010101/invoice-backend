@@ -595,6 +595,7 @@ class NotificationSendView(APIView):
             'message': "Notification send Successfully."
         })
 
+
 # from apps.invoice.models import PaymentReminder
 # subject = "Invoice No {{invoice_no}} from {{my_company_name}} is {{due_date_status}}"
 # body ="""<p>Dear {{customer}},</p>

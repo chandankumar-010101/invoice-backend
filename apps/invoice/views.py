@@ -494,12 +494,3 @@ class PeachWebhookView(APIView):
             "message": 'ok'
         }, status=status.HTTP_200_OK)
 
-from django.views.decorators.csrf import csrf_exempt
-from django.views.decorators.http import require_POST
-@csrf_exempt
-@require_POST
-def peach_webhook(request):
-    jsondata = request.body
-    data = json.loads(jsondata)
-    print("data",data)
-    return HttpResponse(status=200)
