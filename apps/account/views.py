@@ -557,7 +557,7 @@ class NotificationView(generics.ListAPIView):
         response = super(NotificationView, self).list(request, *args, **kwargs)
         admin_user = request.user.parent if request.user.parent else request.user
         queryset = admin_user.notification_user.filter(is_seen = True).count()
-        response.data['notification'] = queryset
+        response.data['notification_count'] = queryset
         return Response( response.data,
         status=status.HTTP_200_OK)
 
@@ -589,7 +589,7 @@ class NotificationSendView(APIView):
         serializer = NotificationSerializer(instance).data
 
         queryset = admin_user.notification_user.filter(is_seen = True).count()
-        serializer['notification'] = queryset
+        serializer['notification_count'] = queryset
         triger_socket(str(admin_user.uuid),serializer)
         return Response({
             'message': "Notification send Successfully."
