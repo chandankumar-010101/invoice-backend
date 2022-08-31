@@ -555,12 +555,10 @@ class NotificationView(generics.ListAPIView):
 
     def list(self, request, *args, **kwargs):
         response = super(NotificationView, self).list(request, *args, **kwargs)
-        return Response({
-            'message': "Data Fetched Successfully.",
-            'data': response.data,
-            'notification_count':5,
-        }, status=status.HTTP_200_OK)
-        
+        response.data['notification'] = 5
+        return Response( response.data,
+            , status=status.HTTP_200_OK)
+
         # data = self.serializer_class(self.get_queryset(), many=True).data
         # page = self.paginate_queryset(data)
         # return self.get_paginated_response(page)
