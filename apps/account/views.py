@@ -555,7 +555,9 @@ class NotificationView(generics.ListAPIView):
 
     def list(self, request, *args, **kwargs):
         response = super(NotificationView, self).list(request, *args, **kwargs)
-        response.data['notification'] = 5
+        admin_user = request.user.parent if request.user.parent else request.user
+        queryset = admin_user.notification_user.filter(is_seen = True).count()
+        response.data['notification'] = queryset
         return Response( response.data,
         status=status.HTTP_200_OK)
 
@@ -585,6 +587,9 @@ class NotificationSendView(APIView):
             icon_colour = 'red'
         )
         serializer = NotificationSerializer(instance).data
+
+        queryset = admin_user.notification_user.filter(is_seen = True).count()
+        serializer['notification'] = queryset
         triger_socket(str(admin_user.uuid),serializer)
         return Response({
             'message': "Notification send Successfully."
