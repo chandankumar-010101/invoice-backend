@@ -557,7 +557,7 @@ class NotificationView(generics.ListAPIView):
         response = super(NotificationView, self).list(request, *args, **kwargs)
         response.data['notification'] = 5
         return Response( response.data,
-            , status=status.HTTP_200_OK)
+        status=status.HTTP_200_OK)
 
         # data = self.serializer_class(self.get_queryset(), many=True).data
         # page = self.paginate_queryset(data)
