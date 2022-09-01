@@ -23,8 +23,7 @@ def invoice_payment_filter(request,queryset):
     if 'search' in params and params['search'] !='':
         queryset = queryset.filter(
             Q(invoice__invoice_number=params['search'])|
-            Q(invoice__customer__full_name=params['search'])|
-            Q(invoice__invoice_id=params['search'])
+            Q(invoice__customer__full_name=params['search'])
         )
     return queryset
 
