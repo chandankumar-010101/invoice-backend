@@ -153,7 +153,7 @@ class LoginView(APIView):
                 response['access'] = token.get('access')
                 response['refresh'] = token.get('refresh')
                 response['roles'] = roles
-                response['last_login'] = user.last_login.strftime("%m/%d/%Y, %H:%M:%S")
+                response['last_login'] = user.last_login
                 return Response(response, status=status.HTTP_200_OK)
             return Response({
                 'detail': [resp_msg.INVALID_EMAIL_PASSWORD]
@@ -353,7 +353,7 @@ class ProfileupdateView(APIView):
             response['profile'] = serializer.data
             response['organization'] = admin_user.profile.organization.company_name
             response['user_type'] = admin_user.user_type
-            response['last_login'] = admin_user.last_login.strftime("%m/%d/%Y, %H:%M:%S")
+            response['last_login'] = admin_user.last_login
             return Response(response, status=status.HTTP_200_OK)
         except Exception as error:
             logger.error(error.args[0])
@@ -525,7 +525,7 @@ class GetDetailsView(APIView):
         response['organization'] = admin_user.profile.organization.company_name
         response['phone_number'] = request.user.profile.organization.phone_number
         response['user_type'] = request.user.user_type
-        response['last_login'] = request.user.last_login.strftime("%m/%d/%Y, %H:%M:%S")
+        response['last_login'] = request.user.last_login
         response['payment_reminder'] = PaymentReminderSerializer(admin_user.reminder_user.all().order_by('days'),many=True).data
         payment_method['is_bank_transfer']= admin_user.payment_method.is_bank_transfer if hasattr(admin_user,'payment_method') else False
         payment_method['is_card_payment']= admin_user.payment_method.is_card_payment if hasattr( admin_user,'payment_method') else False
