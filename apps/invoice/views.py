@@ -301,14 +301,13 @@ class SendReminderView(APIView):
                 invoice.invoice_status = 'SENT'
                 invoice.reminders +=1
                 invoice.save()
-            return Response({
-                'message': 'Reminder sent successfully.',
-            },status=status.HTTP_200_OK)
-            
             if not is_sucess:
                 return Response({
                     'detail': [url]
                 }, status=status.HTTP_400_BAD_REQUEST)   
+            return Response({
+                'message': 'Reminder sent successfully.',
+            },status=status.HTTP_200_OK)
         except Exception as error:
             return Response({
                 'detail': [error.args[0]]

@@ -1,6 +1,7 @@
 from datetime import datetime, date,timedelta
 
 import django_filters
+from django.db.models import Q,Sum
 
 
 
@@ -18,6 +19,12 @@ def invoice_payment_filter(request,queryset):
     if 'payment_method' in params and params['payment_method'] !='':
         queryset = queryset.filter(
             payment_mode= params['payment_method']
+        )
+    if 'search' in params and params['search'] !='':
+        queryset = queryset.filter(
+            Q(invoice__invoice_number=params['search'])|
+            Q(invoice__customer__full_name=params['search'])|
+            Q(invoice__invoice_id=params['search'])
         )
     return queryset
 

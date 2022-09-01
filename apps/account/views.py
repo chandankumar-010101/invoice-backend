@@ -586,6 +586,7 @@ class NotificationSendView(APIView):
             icon_class = 'fa fa-clock-o',
             icon_colour = 'red'
         )
+        
         serializer = NotificationSerializer(instance).data
 
         queryset = admin_user.notification_user.filter(is_seen = False).count()
