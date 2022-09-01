@@ -550,7 +550,7 @@ class NotificationView(generics.ListAPIView):
     
     def get_queryset(self):
         admin_user = self.request.user.parent if self.request.user.parent else self.request.user
-        queryset = admin_user.notification_user.all().order_by('is_seen')
+        queryset = admin_user.notification_user.all()order_by('-id').order_by('is_seen')
         return queryset
 
     def list(self, request, *args, **kwargs):
