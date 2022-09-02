@@ -37,4 +37,8 @@ urlpatterns = [
     path('payment/list', views.PaymentListView.as_view()),
     path('payment/csv', views.CsvPaymentListView.as_view()),
 
+
+    path('ageing-report/list', views.AgeingReportsListView.as_view()),
+
+
 ]

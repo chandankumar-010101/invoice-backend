@@ -1,6 +1,8 @@
 from rest_framework import serializers
 from django.db.models import Q,Sum
 
+from apps.customer.models import Customer
+
 
 from .models import Invoice,InvoiceAttachment,PaymentReminder,CardDetail,InvoiceTransaction,Notification
 from apps.utility.helpers import ordinal
@@ -236,3 +238,80 @@ class NotificationSerializer(serializers.ModelSerializer):
     class Meta:
         model = Notification
         fields = "__all__"
+
+
+class GetAgeingReportsSerializer:
+    customer = serializers.SerializerMethodField()
+    not_overdue = serializers.SerializerMethodField()
+    not_overdue_invoices = serializers.SerializerMethodField()
+    thirty_or_less = serializers.SerializerMethodField()
+    thirty_one_to_sixty = serializers.SerializerMethodField()
+    sixty_to_ninty = serializers.SerializerMethodField()
+    ninty_or_more = serializers.SerializerMethodField()
+    total_amount = serializers.SerializerMethodField()
+    total_invoices = serializers.SerializerMethodField()
+
+    def get_customer(self,obj):
+        return obj.full_name
+
+    def get_not_overdue(self,obj):
+        return 100
+
+    def get_not_overdue_invoices(self,obj):
+        return 100
+
+    def get_thirty_or_less(self,obj):
+        return 100
+
+    def get_thirty_one_to_sixty(self,obj):
+        return 100
+
+    def get_sixty_to_ninty(self,obj):
+        return 100
+
+    def get_ninty_or_more(self,obj):
+        return 100
+
+    def get_total_amount(self,obj):
+        return 100
+        
+    def get_total_invoices(self,obj):
+        return 100
+
+    # def get_due_date_status(self,obj):
+    #     from datetime import date  
+    #     td = date.today()
+    #     if (td-obj.due_date).days == 0:
+    #         return {
+    #             'color':'#000000',
+    #             'days':"Due Today"
+    #         }
+            
+    #     elif (td-obj.due_date).days > 1:
+    #         return {
+    #             'color':'#FE6867',
+    #             'days':"Overdue by {} days".format(abs((td-obj.due_date).days))
+    #         }
+    #     elif abs((td-obj.due_date).days) == 1:
+    #         return {
+    #             'color':'#000000',
+    #             'days':"Due Tomorrow"
+    #         }
+    #     return {
+    #         'color':'#000000',
+    #         'days':"Due in {} days".format(abs((td-obj.due_date).days))
+    #     }
+
+
+
+
+        
+    class Meta:
+        model = Customer
+        fields = (
+            "customer",
+            "not_overdue","not_overdue_invoices",
+            "thirty_or_less","thirty_one_to_sixty","sixty_to_ninty",
+            "ninty_or_more","total_amount","total_invoices"
+        )
+

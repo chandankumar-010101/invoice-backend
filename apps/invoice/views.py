@@ -24,7 +24,7 @@ from .models import Invoice,InvoiceAttachment,InvoiceTransaction,PaymentMethods,
 from .serializer import (
     InvoiceSerializer,
     GetInvoiceSerializer,PaymentReminderSerializer,
-    CardSerializer,GetPaymentSerializer
+    CardSerializer,GetPaymentSerializer,GetAgeingReportsSerializer
 )
 
 from .schema import  (
@@ -474,7 +474,35 @@ class CsvPaymentListView(APIView):
         serializer = GetPaymentSerializer(queryset, many=True)
         return Response({'data':serializer.data})
 
+class AgeingReportsListView(generics.ListAPIView):
+    # filter_class = InvoiceFilter
+    pagination_class = CustomPagination
+    pagination_class.page_size = 2
+    serializer_class = GetAgeingReportsSerializer
+    permission_classes = [IsAuthenticated]
+    filter_backends = (filters.DjangoFilterBackend, SearchFilter)
+    
+    def get_queryset(self):
+        admin_user = self.request.user.parent if self.request.user.parent else self.request.user
+        customer_id = Customer.objects.filter(organization=admin_user.profile.organization).values_list('id', flat=True)
+        # queryset = invoice_filter(self.request,queryset)
+        params = self.request.GET
+        
+        # if 'order_by' in params and params['order_by'] !='':
+        #     queryset = queryset.order_by(params['order_by'])
+        # return queryset
 
+    def list(self, request, *args, **kwargs):
+        data = self.serializer_class(self.get_queryset(), many=True).data
+        # data = sorted(data, key=lambda k: (k[params['order_by'].replace('-','')]), reverse=True if '-' in params['order_by'] else False )
+        page = self.paginate_queryset(data)
+        return self.get_paginated_response(page)        
+
+        
+
+
+
+        
 class PeachWebhookView(APIView):
     def get(self,request):
         print(request.GET)
