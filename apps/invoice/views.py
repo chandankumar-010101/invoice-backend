@@ -484,7 +484,7 @@ class AgeingReportsListView(generics.ListAPIView):
     
     def get_queryset(self):
         admin_user = self.request.user.parent if self.request.user.parent else self.request.user
-        queryset = Customer.objects.filter(organization=admin_user.profile.organization).values_list('id', flat=True)
+        queryset = Customer.objects.filter(organization=admin_user.profile.organization)
         # queryset = invoice_filter(self.request,queryset)
         params = self.request.GET
         

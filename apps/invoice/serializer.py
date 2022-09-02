@@ -252,7 +252,7 @@ class GetAgeingReportsSerializer(serializers.ModelSerializer):
     total_invoices = serializers.SerializerMethodField()
 
     def get_customer(self,obj):
-        return str(obj.full_name)
+        return obj.full_name
 
     def get_not_overdue(self,obj):
         return 100
