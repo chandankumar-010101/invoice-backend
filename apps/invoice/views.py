@@ -484,13 +484,13 @@ class AgeingReportsListView(generics.ListAPIView):
     
     def get_queryset(self):
         admin_user = self.request.user.parent if self.request.user.parent else self.request.user
-        customer_id = Customer.objects.filter(organization=admin_user.profile.organization).values_list('id', flat=True)
+        queryset = Customer.objects.filter(organization=admin_user.profile.organization).values_list('id', flat=True)
         # queryset = invoice_filter(self.request,queryset)
         params = self.request.GET
         
         # if 'order_by' in params and params['order_by'] !='':
         #     queryset = queryset.order_by(params['order_by'])
-        # return queryset
+        return queryset
 
     def list(self, request, *args, **kwargs):
         data = self.serializer_class(self.get_queryset(), many=True).data
