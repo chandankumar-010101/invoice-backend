@@ -9,6 +9,7 @@ from apps.invoice.models import Invoice
 from psycopg2.extras import DateRange
 
 
+ 
 def invoice_payment_filter(request,queryset):
     params = request.GET
 
