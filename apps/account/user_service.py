@@ -53,7 +53,7 @@ def create_user_profile(request, user, org):
 
  
 def generate_password():
-    characters = string.ascii_letters + string.digits + string.punctuation
+    characters = string.ascii_letters + string.digits 
     password = ''.join(random.choice(characters) for i in range(8))
     print("Random password is:", password)
     return password
