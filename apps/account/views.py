@@ -502,10 +502,19 @@ class DashboardView(APIView):
             { 'name': "60 - 90 Days Overdue", 'value': sixty_to_ninty_days['due_amount__sum'] if sixty_to_ninty_days['due_amount__sum'] else 00 },
             { 'name': ">90 Days Overdue", 'value':  ninty_plus_days['due_amount__sum'] if ninty_plus_days['due_amount__sum'] else 00 },
         ]
+        current_per, overdue_per = 0,0
+        if outstanding_balance['due_amount__sum'] >= 0 and current_amount['due_amount__sum'] >= 0:
+            current_per = current_amount['due_amount__sum'] * (100/outstanding_balance['due_amount__sum'])
+
+        if outstanding_balance['due_amount__sum'] >= 0 and overdue_amount['due_amount__sum'] >= 0:
+            overdue_per = overdue_amount['due_amount__sum'] * (100/outstanding_balance['due_amount__sum'])
+
         return Response({
             'message': "Data Fetched Successfully.",
             'graph_data':graph_data,
             'avg_c_t':avg_c_t,
+            'current_per':current_per,
+            'overdue_per':overdue_per,
             'outstanding_invoice':outstanding_invoice,
             'outstanding_balance':outstanding_balance['due_amount__sum'] if outstanding_balance['due_amount__sum'] else 00,
             'current_amount':current_amount['due_amount__sum'] if current_amount['due_amount__sum'] else 00,
