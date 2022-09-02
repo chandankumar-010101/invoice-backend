@@ -513,7 +513,7 @@ class AgeingReportsCSVView(APIView):
     def get(self, request):
         admin_user = request.user.parent if request.user.parent else request.user
         queryset = Customer.objects.filter(organization=admin_user.profile.organization)
-        serializer = GetAgeingReportsSerializer(queryset, many=True)
+        serializer = GetAgeingReportsSerializer(queryset, context={'request':request},many=True)
         return Response({'data':serializer.data})
         
 
