@@ -497,7 +497,8 @@ class AgeingReportsListView(generics.ListAPIView):
     def list(self, request, *args, **kwargs):
         params = request.GET
         data = self.serializer_class(self.get_queryset(),context={'request':request}, many=True).data
-        data = sorted(data, key=lambda k: (k[params['order_by'].replace('-','')]), reverse=True if '-' in params['order_by'] else False )
+        if 'order_by' in params and params['order_by'] !='':
+            data = sorted(data, key=lambda k: (k[params['order_by'].replace('-','')]), reverse=True if '-' in params['order_by'] else False )
         page = self.paginate_queryset(data)
         return self.get_paginated_response(page)        
 
