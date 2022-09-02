@@ -498,6 +498,20 @@ class AgeingReportsListView(generics.ListAPIView):
         page = self.paginate_queryset(data)
         return self.get_paginated_response(page)        
 
+
+class AgeingReportsCSVView(APIView):
+    """ Paginated customer list.
+    Get list of Customer by user's organization with 
+    pagination.
+    """
+
+    permission_classes = (IsAuthenticated, )
+
+    def get(self, request):
+        admin_user = request.user.parent if request.user.parent else request.user
+        queryset = Customer.objects.filter(organization=admin_user.profile.organization)
+        serializer = GetAgeingReportsSerializer(queryset, many=True)
+        return Response({'data':serializer.data})
         
 
 

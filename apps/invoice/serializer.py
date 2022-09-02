@@ -255,7 +255,11 @@ class GetAgeingReportsSerializer(serializers.ModelSerializer):
         return obj.full_name
 
     def get_not_overdue(self,obj):
-        return 100
+        from datetime import date  
+        today = date.today()
+        queryset = obj.invoice.all().exclude(invoice_status='PAYMENT_DONE')
+        current_amount = queryset.filter(due_date__gt = date.today()).aggregate(Sum('due_amount'))
+        return current_amount['due_amount__sum'] if current_amount['due_amount__sum'] else 00
 
     def get_not_overdue_invoices(self,obj):
         return 100
