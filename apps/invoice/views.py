@@ -477,7 +477,7 @@ class CsvPaymentListView(APIView):
 class AgeingReportsListView(generics.ListAPIView):
     # filter_class = InvoiceFilter
     pagination_class = CustomPagination
-    pagination_class.page_size = 2
+    pagination_class.page_size = 10
     serializer_class = GetAgeingReportsSerializer
     permission_classes = [IsAuthenticated]
     filter_backends = (filters.DjangoFilterBackend, SearchFilter)
