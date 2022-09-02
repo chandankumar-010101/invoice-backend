@@ -241,7 +241,7 @@ class NotificationSerializer(serializers.ModelSerializer):
 
 
 class GetAgeingReportsSerializer(serializers.ModelSerializer):
-    customer = serializers.SerializerMethodField()
+    # customer = serializers.SerializerMethodField()
     not_overdue = serializers.SerializerMethodField()
     not_overdue_invoices = serializers.SerializerMethodField()
     thirty_or_less = serializers.SerializerMethodField()
@@ -251,8 +251,8 @@ class GetAgeingReportsSerializer(serializers.ModelSerializer):
     total_amount = serializers.SerializerMethodField()
     total_invoices = serializers.SerializerMethodField()
 
-    def get_customer(self,obj):
-        return obj.full_name
+    # def get_customer(self,obj):
+    #     return obj.full_name
 
     def get_not_overdue(self,obj):
         return 100
@@ -302,14 +302,10 @@ class GetAgeingReportsSerializer(serializers.ModelSerializer):
     #         'days':"Due in {} days".format(abs((td-obj.due_date).days))
     #     }
 
-
-
-
-        
     class Meta:
         model = Customer
         fields = (
-            "customer",
+            "full_name",
             "not_overdue","not_overdue_invoices",
             "thirty_or_less","thirty_one_to_sixty","sixty_to_ninty",
             "ninty_or_more","total_amount","total_invoices"
