@@ -240,7 +240,7 @@ class NotificationSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
 
-class GetAgeingReportsSerializer:
+class GetAgeingReportsSerializer(serializers.ModelSerializer):
     customer = serializers.SerializerMethodField()
     not_overdue = serializers.SerializerMethodField()
     not_overdue_invoices = serializers.SerializerMethodField()
@@ -274,7 +274,7 @@ class GetAgeingReportsSerializer:
 
     def get_total_amount(self,obj):
         return 100
-        
+
     def get_total_invoices(self,obj):
         return 100
 
