@@ -477,9 +477,9 @@ class DashboardView(APIView):
         current_amount = queryset.filter(due_date__gt = date.today()).aggregate(Sum('due_amount'))
         overdue_amount = queryset.filter(due_date__lt = date.today()).aggregate(Sum('due_amount'))
         if 'date' in params and params['date'] !='':
-            queryset = queryset.filter(created_on = params['date'])
+            queryset = queryset.filter(invoice_date__lte = params['date'])
         else:
-            queryset = queryset.filter(created_on__lte = date.today())
+            queryset = queryset.filter(invoice_date__lte = date.today())
         graph_current_amount = queryset.filter(due_date__gt = date.today()).aggregate(Sum('due_amount'))
         graph_overdue_amount = queryset.filter(due_date__lt = date.today()).aggregate(Sum('due_amount'))
         one_to_thirty_days = queryset.filter(
