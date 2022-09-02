@@ -305,7 +305,6 @@ class GetAgeingReportsSerializer(serializers.ModelSerializer):
     class Meta:
         model = Customer
         fields = (
-            "full_name",
             "not_overdue","not_overdue_invoices",
             "thirty_or_less","thirty_one_to_sixty","sixty_to_ninty",
             "ninty_or_more","total_amount","total_invoices"
