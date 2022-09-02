@@ -493,7 +493,7 @@ class AgeingReportsListView(generics.ListAPIView):
             )
         if 'search' in params and params['search'] !='':
             queryset = queryset.filter(
-                customer__icontains = params['search']
+                full_name__icontains = params['search']
             )
         return queryset
 
