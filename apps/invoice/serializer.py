@@ -255,32 +255,61 @@ class GetAgeingReportsSerializer(serializers.ModelSerializer):
         return obj.full_name
 
     def get_not_overdue(self,obj):
+        request = self.context.get('request')
         from datetime import date  
-        today = date.today()
         queryset = obj.invoice.all().exclude(invoice_status='PAYMENT_DONE')
         current_amount = queryset.filter(due_date__gt = date.today()).aggregate(Sum('due_amount'))
         return current_amount['due_amount__sum'] if current_amount['due_amount__sum'] else 00
 
     def get_not_overdue_invoices(self,obj):
-        return 100
+        from datetime import date,timedelta
+        queryset = obj.invoice.all().exclude(invoice_status='PAYMENT_DONE')
+        return queryset.filter(due_date__gt = date.today()).count()
 
     def get_thirty_or_less(self,obj):
-        return 100
+        from datetime import date,timedelta
+        queryset = obj.invoice.all().exclude(invoice_status='PAYMENT_DONE')
+        one_to_thirty_days = queryset.filter(
+            due_date__range = [date.today() - timedelta(days=30),date.today() - timedelta(days=2)]
+        ).aggregate(Sum('due_amount'))
+        
+        return one_to_thirty_days['due_amount__sum'] if one_to_thirty_days['due_amount__sum'] else 00
 
     def get_thirty_one_to_sixty(self,obj):
-        return 100
+        from datetime import date,timedelta
+        queryset = obj.invoice.all().exclude(invoice_status='PAYMENT_DONE')
+        thirty_to_sixty_days = queryset.filter(
+            due_date__range = [date.today() - timedelta(days=60),date.today()- timedelta(days=30)]
+        ).aggregate(Sum('due_amount'))
+        
+        return thirty_to_sixty_days['due_amount__sum'] if thirty_to_sixty_days['due_amount__sum'] else 00
 
     def get_sixty_to_ninty(self,obj):
-        return 100
+        from datetime import date,timedelta
+        queryset = obj.invoice.all().exclude(invoice_status='PAYMENT_DONE')
+        sixty_to_ninty_days = queryset.filter(
+            due_date__range = [date.today() - timedelta(days=90),date.today()- timedelta(days=60)]
+        ).aggregate(Sum('due_amount'))
+        return sixty_to_ninty_days['due_amount__sum'] if sixty_to_ninty_days['due_amount__sum'] else 00
 
     def get_ninty_or_more(self,obj):
-        return 100
+        from datetime import date,timedelta
+        queryset = obj.invoice.all().exclude(invoice_status='PAYMENT_DONE')
+        ninty_plus_days = queryset.filter(
+            due_date__lt = date.today()- timedelta(days=90)
+        ).aggregate(Sum('due_amount'))
+        return ninty_plus_days['due_amount__sum'] if ninty_plus_days['due_amount__sum'] else 00
 
     def get_total_amount(self,obj):
-        return 100
+        from datetime import date  
+        queryset = obj.invoice.all().exclude(invoice_status='PAYMENT_DONE')
+        current_amount = queryset.aggregate(Sum('due_amount'))
+        return current_amount['due_amount__sum'] if current_amount['due_amount__sum'] else 00
+
 
     def get_total_invoices(self,obj):
-        return 100
+        queryset = obj.invoice.all().exclude(invoice_status='PAYMENT_DONE')
+        return queryset.count()
 
     # def get_due_date_status(self,obj):
     #     from datetime import date  

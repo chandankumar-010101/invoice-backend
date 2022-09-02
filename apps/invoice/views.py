@@ -1,7 +1,8 @@
 import logging
 
 
-from datetime import date  
+from datetime import date
+from multiprocessing import context  
 from drf_yasg.utils import swagger_auto_schema
 
 from django.template.loader import render_to_string
@@ -483,7 +484,7 @@ class AgeingReportsListView(generics.ListAPIView):
     filter_backends = (filters.DjangoFilterBackend, SearchFilter)
     
     def get_queryset(self):
-        admin_user = self.request.user.parent if self.request.user.parent else self.request.user
+        # admin_user = self.request.user.parent if self.request.user.parent else self.request.user
         queryset = Customer.objects.filter(organization=admin_user.profile.organization)
         # queryset = invoice_filter(self.request,queryset)
         params = self.request.GET
@@ -493,7 +494,7 @@ class AgeingReportsListView(generics.ListAPIView):
         return queryset
 
     def list(self, request, *args, **kwargs):
-        data = self.serializer_class(self.get_queryset(), many=True).data
+        data = self.serializer_class(self.get_queryset(),context={'request':request}, many=True).data
         # data = sorted(data, key=lambda k: (k[params['order_by'].replace('-','')]), reverse=True if '-' in params['order_by'] else False )
         page = self.paginate_queryset(data)
         return self.get_paginated_response(page)        
