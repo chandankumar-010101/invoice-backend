@@ -508,6 +508,18 @@ class DashboardView(APIView):
 
         if outstanding_balance['due_amount__sum'] >= 0 and overdue_amount['due_amount__sum'] >= 0:
             overdue_per = overdue_amount['due_amount__sum'] * (100/outstanding_balance['due_amount__sum'])
+        
+        if one_to_thirty_days['due_amount__sum'] >= 0 and overdue_amount['due_amount__sum'] >= 0:
+            one_to_thord_per = overdue_amount['due_amount__sum'] * (100/one_to_thirty_days['due_amount__sum'])
+        
+        if thirty_to_sixty_days['due_amount__sum'] >= 0 and overdue_amount['due_amount__sum'] >= 0:
+            thirty_to_sixty_per = overdue_amount['due_amount__sum'] * (100/thirty_to_sixty_days['due_amount__sum'])
+
+        if sixty_to_ninty_days['due_amount__sum'] >= 0 and overdue_amount['due_amount__sum'] >= 0:
+            sixty_to_ninty_per = overdue_amount['due_amount__sum'] * (100/sixty_to_ninty_days['due_amount__sum'])
+
+        if ninty_plus_days['due_amount__sum'] >= 0 and overdue_amount['due_amount__sum'] >= 0:
+            ninty_plus_days_per = overdue_amount['due_amount__sum'] * (100/ninty_plus_days['due_amount__sum'])
 
         return Response({
             'message': "Data Fetched Successfully.",
@@ -515,6 +527,10 @@ class DashboardView(APIView):
             'avg_c_t':avg_c_t,
             'current_per':current_per,
             'overdue_per':overdue_per,
+            'one_to_thord_per':one_to_thord_per,
+            'thirty_to_sixty_per':thirty_to_sixty_per,
+            'sixty_to_ninty_per':sixty_to_ninty_per,
+            'ninty_plus_days_per':ninty_plus_days_per,
             'outstanding_invoice':outstanding_invoice,
             'outstanding_balance':outstanding_balance['due_amount__sum'] if outstanding_balance['due_amount__sum'] else 00,
             'current_amount':current_amount['due_amount__sum'] if current_amount['due_amount__sum'] else 00,
