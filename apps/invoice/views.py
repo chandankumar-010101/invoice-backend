@@ -533,7 +533,7 @@ class CustomerStatementListView(generics.ListAPIView):
         admin_user = self.request.user.parent if self.request.user.parent else self.request.user
         try:
             customer_id = Customer.objects.get(organization=admin_user.profile.organization,id = params['customer'])
-            queryset = Invoice.objects.filter(customer=customer_id)
+            queryset = Invoice.objects.filter(customer=customer_id,created_on__lte = params['date'])
             return queryset
         except:
             return None
@@ -559,7 +559,7 @@ class AgeingReportsCSVView(APIView):
         params = request.GET
         admin_user = request.user.parent if request.user.parent else request.user
         customer_id = Customer.objects.get(organization=admin_user.profile.organization,id = params['customer'])
-        queryset = Invoice.objects.filter(customer=customer_id)
+        queryset = Invoice.objects.filter(customer=customer_id,created_on__lte = params['date'])
         serializer = GetCustomerStatementSerializer(queryset,many=True)
         return Response({'data':serializer.data})
         
