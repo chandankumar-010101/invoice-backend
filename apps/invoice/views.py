@@ -25,7 +25,8 @@ from .models import Invoice,InvoiceAttachment,InvoiceTransaction,PaymentMethods,
 from .serializer import (
     InvoiceSerializer,
     GetInvoiceSerializer,PaymentReminderSerializer,
-    CardSerializer,GetPaymentSerializer,GetAgeingReportsSerializer
+    CardSerializer,GetPaymentSerializer,GetAgeingReportsSerializer,
+    GetCustomerStatementSerializer
 )
 
 from .schema import  (
@@ -520,9 +521,48 @@ class AgeingReportsCSVView(APIView):
         serializer = GetAgeingReportsSerializer(queryset, context={'request':request},many=True)
         return Response({'data':serializer.data})
         
+class CustomerStatementListView(generics.ListAPIView):
+    pagination_class = CustomPagination
+    pagination_class.page_size = 10
+    serializer_class = GetCustomerStatementSerializer
+    permission_classes = [IsAuthenticated]
+    filter_backends = (filters.DjangoFilterBackend, SearchFilter)
+    
+    def get_queryset(self):
+        params = self.request.GET
+        admin_user = self.request.user.parent if self.request.user.parent else self.request.user
+        try:
+            customer_id = Customer.objects.get(organization=admin_user.profile.organization,id = params['customer'])
+            queryset = Invoice.objects.filter(customer=customer_id)
+            return queryset
+        except:
+            return None
+
+    def list(self, request, *args, **kwargs):
+        params = request.GET
+        data = self.serializer_class(self.get_queryset(),many=True).data
+        if 'order_by' in params and params['order_by'] !='':
+            data = sorted(data, key=lambda k: (k[params['order_by'].replace('-','')]), reverse=True if '-' in params['order_by'] else False )
+        page = self.paginate_queryset(data)
+        return self.get_paginated_response(page)    
 
 
+class AgeingReportsCSVView(APIView):
+    """ Paginated customer list.
+    Get list of Customer by user's organization with 
+    pagination.
+    """
 
+    permission_classes = (IsAuthenticated, )
+
+    def get(self, request):
+        params = request.GET
+        admin_user = request.user.parent if request.user.parent else request.user
+        customer_id = Customer.objects.get(organization=admin_user.profile.organization,id = params['customer'])
+        queryset = Invoice.objects.filter(customer=customer_id)
+        serializer = GetCustomerStatementSerializer(queryset,many=True)
+        return Response({'data':serializer.data})
+        
         
 class PeachWebhookView(APIView):
     def get(self,request):

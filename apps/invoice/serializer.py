@@ -360,3 +360,30 @@ class GetAgeingReportsSerializer(serializers.ModelSerializer):
             "ninty_or_more","total_amount","total_invoices"
         )
 
+
+class GetCustomerStatementSerializer(serializers.ModelSerializer):
+    invoice_amount = serializers.SerializerMethodField()
+    amount_paid = serializers.SerializerMethodField()
+    amount_due = serializers.SerializerMethodField()
+
+    def get_invoice_amount(self,obj):
+        paid = obj.invoice_transaction.all().aggregate(Sum('amount'))
+        return obj.due_amount + paid['amount__sum'] if paid['amount__sum'] else 00
+    
+    def get_amount_paid(self,obj):
+        paid = obj.invoice_transaction.all().aggregate(Sum('amount'))
+        return paid['amount__sum'] if paid['amount__sum'] else 00
+
+    def get_amount_due(self,obj):
+        return obj.due_amount
+
+
+
+    class Meta:
+        model = Invoice
+        fields = (
+            "invoice_number",
+            "invoice_date","due_date",
+            "invoice_amount","amount_paid","amount_paid",
+            "amount_due"
+        )

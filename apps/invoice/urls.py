@@ -40,7 +40,7 @@ urlpatterns = [
 
     path('ageing-report/list', views.AgeingReportsListView.as_view()),
     path('ageing-report/csv', views.AgeingReportsCSVView.as_view()),
-
+    path('customer-statement/list', views.CustomerStatementListView.as_view()),
 
 
 ]
