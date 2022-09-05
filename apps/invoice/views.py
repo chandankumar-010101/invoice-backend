@@ -547,7 +547,7 @@ class CustomerStatementListView(generics.ListAPIView):
         return self.get_paginated_response(page)    
 
 
-class AgeingReportsCSVView(APIView):
+class CustomerStatementListCSVView(APIView):
     """ Paginated customer list.
     Get list of Customer by user's organization with 
     pagination.
