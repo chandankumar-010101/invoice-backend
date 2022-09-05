@@ -340,7 +340,6 @@ class GetAgeingReportsSerializer(serializers.ModelSerializer):
         current_amount = queryset.aggregate(Sum('due_amount'))
         return current_amount['due_amount__sum'] if current_amount['due_amount__sum'] else 00
 
-
     def get_total_invoices(self,obj):
         from datetime import date  
         request = self.context.get('request')
@@ -359,7 +358,6 @@ class GetAgeingReportsSerializer(serializers.ModelSerializer):
             "thirty_or_less","thirty_one_to_sixty","sixty_to_ninty",
             "ninty_or_more","total_amount","total_invoices"
         )
-
 
 class GetCustomerStatementSerializer(serializers.ModelSerializer):
     invoice_amount = serializers.SerializerMethodField()
