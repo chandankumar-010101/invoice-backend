@@ -365,6 +365,17 @@ class GetCustomerStatementSerializer(serializers.ModelSerializer):
     invoice_amount = serializers.SerializerMethodField()
     amount_paid = serializers.SerializerMethodField()
     amount_due = serializers.SerializerMethodField()
+    balance = serializers.SerializerMethodField()
+
+    def get_balance(self,obj):
+        request = self.context.get('request')
+        queryset = Invoice.objects.filter(customer=obj.customer).exclude(invoice_status='PAYMENT_DONE')
+        current_amount = queryset.filter(due_date__gt = request.GET['date']).aggregate(Sum('due_amount'))
+        overdue_amount = queryset.filter(due_date__lt = request.GET['date']).aggregate(Sum('due_amount'))
+        return {
+            'current_amount':current_amount['due_amount__sum'] if current_amount['due_amount__sum'] else 00,
+            'overdue_amount':overdue_amount['due_amount__sum'] if overdue_amount['due_amount__sum'] else 00,
+        }
 
     def get_invoice_amount(self,obj):
         paid = obj.invoice_transaction.all().aggregate(Sum('amount'))
@@ -385,5 +396,5 @@ class GetCustomerStatementSerializer(serializers.ModelSerializer):
             "invoice_number",
             "invoice_date","due_date",
             "invoice_amount","amount_paid","amount_paid",
-            "amount_due"
+            "amount_due","balance"
         )

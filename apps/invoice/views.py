@@ -525,26 +525,30 @@ class CustomerStatementListView(generics.ListAPIView):
     pagination_class = CustomPagination
     pagination_class.page_size = 10
     serializer_class = GetCustomerStatementSerializer
-    permission_classes = [IsAuthenticated]
+    # permission_classes = [IsAuthenticated]
     filter_backends = (filters.DjangoFilterBackend, SearchFilter)
     
     def get_queryset(self):
         params = self.request.GET
-        admin_user = self.request.user.parent if self.request.user.parent else self.request.user
+        # admin_user = self.request.user.parent if self.request.user.parent else self.request.user
         try:
-            customer_id = Customer.objects.get(organization=admin_user.profile.organization,id = params['customer'])
-            queryset = Invoice.objects.filter(customer=customer_id,created_on__lte = params['date'])
+            # customer_id = Customer.objects.get(organization=admin_user.profile.organization,id = params['customer'])
+            customer_id = Customer.objects.all().last()
+            queryset = Invoice.objects.filter(customer=customer_id)
             return queryset
         except:
             return None
 
     def list(self, request, *args, **kwargs):
+        from collections import OrderedDict
         params = request.GET
-        data = self.serializer_class(self.get_queryset(),many=True).data
+        data = self.serializer_class(self.get_queryset(),context={'request':request},many=True).data
+               
         if 'order_by' in params and params['order_by'] !='':
             data = sorted(data, key=lambda k: (k[params['order_by'].replace('-','')]), reverse=True if '-' in params['order_by'] else False )
         page = self.paginate_queryset(data)
-        return self.get_paginated_response(page)    
+        page_data =  self.get_paginated_response(page)    
+        return page_data
 
 
 class CustomerStatementListCSVView(APIView):
@@ -560,7 +564,7 @@ class CustomerStatementListCSVView(APIView):
         admin_user = request.user.parent if request.user.parent else request.user
         customer_id = Customer.objects.get(organization=admin_user.profile.organization,id = params['customer'])
         queryset = Invoice.objects.filter(customer=customer_id,created_on__lte = params['date'])
-        serializer = GetCustomerStatementSerializer(queryset,many=True)
+        serializer = GetCustomerStatementSerializer(queryset,context={'request':request},many=True)
         return Response({'data':serializer.data})
         
         
