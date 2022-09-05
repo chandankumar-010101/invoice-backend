@@ -530,10 +530,10 @@ class CustomerStatementListView(generics.ListAPIView):
     
     def get_queryset(self):
         params = self.request.GET
-        # admin_user = self.request.user.parent if self.request.user.parent else self.request.user
+        admin_user = self.request.user.parent if self.request.user.parent else self.request.user
         try:
-            # customer_id = Customer.objects.get(organization=admin_user.profile.organization,id = params['customer'])
-            customer_id = Customer.objects.all().last()
+            customer_id = Customer.objects.get(organization=admin_user.profile.organization,id = params['customer'])
+            # customer_id = Customer.objects.all().last()
             queryset = Invoice.objects.filter(customer=customer_id)
             return queryset
         except:

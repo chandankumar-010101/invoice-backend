@@ -386,8 +386,6 @@ class GetCustomerStatementSerializer(serializers.ModelSerializer):
     def get_amount_due(self,obj):
         return obj.due_amount
 
-
-
     class Meta:
         model = Invoice
         fields = (
