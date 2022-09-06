@@ -59,7 +59,6 @@ class InvoiceListView(generics.ListAPIView):
     
     def get_queryset(self):
         admin_user = self.request.user.parent if self.request.user.parent else self.request.user
-
         customer_id = Customer.objects.filter(organization=admin_user.profile.organization).values_list('id', flat=True)
         queryset = Invoice.objects.filter(customer__id__in=list(customer_id)).exclude(invoice_status='PAYMENT_DONE')
         queryset = invoice_filter(self.request,queryset)
@@ -71,7 +70,6 @@ class InvoiceListView(generics.ListAPIView):
     def list(self, request, *args, **kwargs):
         response = super(InvoiceListView, self).list(request, *args, **kwargs)
         admin_user = request.user.parent if request.user.parent else request.user
-
         customer_id = Customer.objects.filter(organization=admin_user.profile.organization).values_list('id', flat=True)
         queryset = Invoice.objects.filter(customer__id__in=list(customer_id))
         outstanding_invoice = queryset.filter(~Q(invoice_status='PAYMENT_DONE')).count()
@@ -169,7 +167,6 @@ class InvoiceUpdateView(generics.UpdateAPIView):
 
 class RetrieveInvoiceView(generics.RetrieveDestroyAPIView):
     """Customer detail operations. 
-
     delete reterive view for a customer.
     """
 
@@ -314,8 +311,6 @@ class SendReminderView(APIView):
             return Response({
                 'detail': [error.args[0]]
             }, status=status.HTTP_400_BAD_REQUEST)
-
-        
 
 class PaymentMethodeView(APIView):
     permission_classes = [IsAuthenticated]
@@ -509,7 +504,7 @@ class AgeingReportsListView(generics.ListAPIView):
 
 class AgeingReportsCSVView(APIView):
     """ Paginated customer list.
-    Get list of Customer by user's organization with 
+    Get list of Customer by user's organization with
     pagination.
     """
 
@@ -525,7 +520,7 @@ class CustomerStatementListView(generics.ListAPIView):
     pagination_class = CustomPagination
     pagination_class.page_size = 10
     serializer_class = GetCustomerStatementSerializer
-    # permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated]
     filter_backends = (filters.DjangoFilterBackend, SearchFilter)
     
     def get_queryset(self):
@@ -533,17 +528,14 @@ class CustomerStatementListView(generics.ListAPIView):
         admin_user = self.request.user.parent if self.request.user.parent else self.request.user
         try:
             customer_id = Customer.objects.get(organization=admin_user.profile.organization,id = params['customer'])
-            # customer_id = Customer.objects.all().last()
             queryset = Invoice.objects.filter(customer=customer_id)
             return queryset
         except:
             return None
 
     def list(self, request, *args, **kwargs):
-        from collections import OrderedDict
         params = request.GET
         data = self.serializer_class(self.get_queryset(),context={'request':request},many=True).data
-               
         if 'order_by' in params and params['order_by'] !='':
             data = sorted(data, key=lambda k: (k[params['order_by'].replace('-','')]), reverse=True if '-' in params['order_by'] else False )
         page = self.paginate_queryset(data)

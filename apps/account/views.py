@@ -225,12 +225,12 @@ class UserUpdateView(APIView):
                         instance.email = params['email']
                         instance.user.email = params['email']
                 if instance.phone != params['phone_number']:
-                        if UserProfile.objects.filter(phone=params['phone_number']).exists():
-                            return Response({
-                                'detail': [resp_msg.PHONE_ALREADY_EXISTS]
-                            },status=status.HTTP_400_BAD_REQUEST)
-                        else:
-                            instance.phone = params['phone_number']
+                    if UserProfile.objects.filter(phone=params['phone_number']).exists():
+                        return Response({
+                            'detail': [resp_msg.PHONE_ALREADY_EXISTS]
+                        },status=status.HTTP_400_BAD_REQUEST)
+                    else:
+                        instance.phone = params['phone_number']
                 instance.full_name = params['full_name']
                 instance.user.user_type = params['role']
                 instance.save()
@@ -335,7 +335,6 @@ class ProfileupdateView(APIView):
                     return Response({
                         "message": resp_msg.PHONE_ALREADY_EXISTS
                     }, status=status.HTTP_400_BAD_REQUEST)
-
             request.user.email = params['email']
             request.user.profile.email = params['email']
             request.user.profile.phone = params['phone_number']
@@ -347,7 +346,6 @@ class ProfileupdateView(APIView):
                 request.user.profile.organization.save()
             request.user.save()
             request.user.profile.save()
-
             serializer = UserProfileSerializer(request.user.profile)
             response={}
             response['profile'] = serializer.data
@@ -429,7 +427,6 @@ class ForgotPasswordView(APIView):
                 "detail": ["Enter email doest not exist"]
             }, status=status.HTTP_400_BAD_REQUEST)
 
-
 class ResetPasswordView(APIView):
     @swagger_auto_schema(request_body=reset_password_schema, operation_description='Forgot Password')
     def post(self,request):
@@ -462,7 +459,6 @@ class DashboardView(APIView):
         if total == 0:
             return "N/A"
         return "{} Days".format(int(total/queryset.count()))
-
 
     def get(self,request):
         import  datetime
@@ -564,7 +560,7 @@ class GetDetailsView(APIView):
         response['roles'] = roles
         response['payment_method'] = payment_method
         response['card_details'] = CardSerializer(admin_user.card_details_user).data if hasattr(admin_user, 'card_details_user') else {}
-        return Response(response, status=status.HTTP_200_OK)
+        return Response(response,status=status.HTTP_200_OK)
 
 class NotificationView(generics.ListAPIView):
     pagination_class = CustomPagination
@@ -572,7 +568,6 @@ class NotificationView(generics.ListAPIView):
     serializer_class = NotificationSerializer
     permission_classes = [IsAuthenticated]
 
-    
     def get_queryset(self):
         admin_user = self.request.user.parent if self.request.user.parent else self.request.user
         queryset = admin_user.notification_user.all().order_by('-id').order_by('is_seen')
@@ -583,12 +578,8 @@ class NotificationView(generics.ListAPIView):
         admin_user = request.user.parent if request.user.parent else request.user
         queryset = admin_user.notification_user.filter(is_seen = False).count()
         response.data['notification_count'] = queryset
-        return Response( response.data,
+        return Response(response.data,
         status=status.HTTP_200_OK)
-
-        # data = self.serializer_class(self.get_queryset(), many=True).data
-        # page = self.paginate_queryset(data)
-        # return self.get_paginated_response(page)
 
 class NotificationMarkAsReadView(APIView):
     permission_classes = [IsAuthenticated]
@@ -611,16 +602,13 @@ class NotificationSendView(APIView):
             icon_class = 'fa fa-clock-o',
             icon_colour = 'red'
         )
-        
         serializer = NotificationSerializer(instance).data
-
         queryset = admin_user.notification_user.filter(is_seen = False).count()
         serializer['notification_count'] = queryset
         triger_socket(str(admin_user.uuid),serializer)
         return Response({
             'message': "Notification send Successfully."
         })
-
 
 # from apps.invoice.models import PaymentReminder
 # subject = "Invoice No {{invoice_no}} from {{my_company_name}} is {{due_date_status}}"
