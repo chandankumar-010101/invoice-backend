@@ -490,6 +490,8 @@ class DashboardView(APIView):
         ninty_plus_days = queryset.filter(
             due_date__lt = date.today()- timedelta(days=90)
         ).aggregate(Sum('due_amount'))
+
+        
         graph_data = [
             { 'name': "Current", 'value': graph_current_amount['due_amount__sum'] if graph_current_amount['due_amount__sum'] else 00 },
             { 'name': "Overdue", 'value': graph_overdue_amount['due_amount__sum'] if graph_overdue_amount['due_amount__sum'] else 00 },
