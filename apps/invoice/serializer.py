@@ -377,7 +377,7 @@ class GetCustomerStatementSerializer(serializers.ModelSerializer):
 
     def get_invoice_amount(self,obj):
         paid = obj.invoice_transaction.all().aggregate(Sum('amount'))
-        return obj.due_amount + paid['amount__sum'] if paid['amount__sum'] else 00
+        return obj.due_amount + paid['amount__sum'] if paid['amount__sum'] else obj.due_amount
     
     def get_amount_paid(self,obj):
         paid = obj.invoice_transaction.all().aggregate(Sum('amount'))
