@@ -501,22 +501,22 @@ class DashboardView(APIView):
             { 'name': ">90 Days Overdue", 'value':  ninty_plus_days['due_amount__sum'] if ninty_plus_days['due_amount__sum'] else 00 },
         ]
         current_per, overdue_per = 0,0
-        if outstanding_balance['due_amount__sum'] > 0 and current_amount['due_amount__sum'] > 0:
+        if outstanding_balance['due_amount__sum'] > 0 and current_amount['due_amount__sum'] and current_amount['due_amount__sum'] > 0:
             current_per = current_amount['due_amount__sum'] * (100/outstanding_balance['due_amount__sum'])
 
-        if outstanding_balance['due_amount__sum'] > 0 and overdue_amount['due_amount__sum'] > 0:
+        if outstanding_balance['due_amount__sum'] > 0 and overdue_amount['due_amount__sum'] and overdue_amount['due_amount__sum'] > 0:
             overdue_per = overdue_amount['due_amount__sum'] * (100/outstanding_balance['due_amount__sum'])
         
-        if outstanding_balance['due_amount__sum'] > 0 and one_to_thirty_days['due_amount__sum'] > 0:
+        if outstanding_balance['due_amount__sum'] > 0 and one_to_thirty_days['due_amount__sum'] and one_to_thirty_days['due_amount__sum'] > 0:
             one_to_thord_per = one_to_thirty_days['due_amount__sum'] * (100/outstanding_balance['due_amount__sum'])
         
-        if outstanding_balance['due_amount__sum'] > 0 and thirty_to_sixty_days['due_amount__sum'] > 0:
+        if outstanding_balance['due_amount__sum'] > 0 and thirty_to_sixty_days['due_amount__sum'] and thirty_to_sixty_days['due_amount__sum'] > 0:
             thirty_to_sixty_per = thirty_to_sixty_days['due_amount__sum'] * (100/outstanding_balance['due_amount__sum'])
 
-        if outstanding_balance['due_amount__sum'] > 0 and sixty_to_ninty_days['due_amount__sum'] > 0:
+        if outstanding_balance['due_amount__sum'] > 0 and sixty_to_ninty_days['due_amount__sum'] and sixty_to_ninty_days['due_amount__sum'] > 0:
             sixty_to_ninty_per = sixty_to_ninty_days['due_amount__sum'] * (100/outstanding_balance['due_amount__sum'])
 
-        if outstanding_balance['due_amount__sum'] > 0 and ninty_plus_days['due_amount__sum'] > 0:
+        if outstanding_balance['due_amount__sum'] > 0 and ninty_plus_days['due_amount__sum'] and ninty_plus_days['due_amount__sum'] > 0:
             ninty_plus_per = ninty_plus_days['due_amount__sum'] * (100/outstanding_balance['due_amount__sum'])
 
         return Response({
