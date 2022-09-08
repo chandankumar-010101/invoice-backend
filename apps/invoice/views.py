@@ -578,3 +578,14 @@ class PeachWebhookView(APIView):
             "message": 'ok'
         }, status=status.HTTP_200_OK)
 
+
+from django.views.decorators.csrf import csrf_exempt
+from django.views.decorators.http import require_POST
+from django.http import HttpResponse
+
+@csrf_exempt
+@require_POST
+def peach_Callback(request):
+    print("callback POST", request.POST)
+    print("callback GET", request.GET)
+    return HttpResponse('Done')

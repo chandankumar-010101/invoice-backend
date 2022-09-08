@@ -59,25 +59,25 @@ class PeachPay:
 # PeachPay().generate_payment_link(invoice)
 
 
-# def get_checkout_id():
-# 	url = "https://eu-test.oppwa.com/v1/checkouts"
-# 	data = {
-# 		'entityId' : config('PEACH_ENTITY_ID'),
-# 		'amount' : '92.00',
-# 		'currency' : 'ZAR',
-# 		'paymentType' : 'DB'
-# 	}
-# 	try:
-# 		opener = build_opener(HTTPHandler)
-# 		request = Request(url, data=urlencode(data).encode('utf-8'))
-# 		request.add_header('Authorization', 'Bearer {}'.format(config('PEACH_ACCESS_TOKEN')))
-# 		request.get_method = lambda: 'POST'
-# 		response = opener.open(request)
-# 		return json.loads(response.read())
-# 	except HTTPError as e:
-# 		return json.loads(e.read())
-# 	except URLError as e:
-# 		return e.reason
+def get_checkout_id():
+	url = "https://eu-test.oppwa.com/v1/checkouts"
+	data = {
+		'entityId' : config('PEACH_ENTITY_ID'),
+		'amount' : '92.00',
+		'currency' : 'ZAR',
+		'paymentType' : 'DB'
+	}
+	try:
+		opener = build_opener(HTTPHandler)
+		request = Request(url, data=urlencode(data).encode('utf-8'))
+		request.add_header('Authorization', 'Bearer {}'.format(config('PEACH_ACCESS_TOKEN')))
+		request.get_method = lambda: 'POST'
+		response = opener.open(request)
+		return json.loads(response.read())
+	except HTTPError as e:
+		return json.loads(e.read())
+	except URLError as e:
+		return e.reason
 
 # responseData = get_checkout_id()
 # print(responseData['id'])

@@ -1,6 +1,5 @@
 import logging
 
-
 from rest_framework import status
 from rest_framework import generics
 from rest_framework import viewsets
@@ -59,7 +58,6 @@ class CustomerListView(generics.ListAPIView):
         else:
             data = serializer.data
         page = self.paginate_queryset(data)
-        
         return self.get_paginated_response(page)
 
 class CsvCustomerListView(APIView):
@@ -72,7 +70,6 @@ class CsvCustomerListView(APIView):
 
     def get(self, request):
         admin_user = request.user.parent if request.user.parent else request.user
-
         organization = admin_user.profile.organization
         queryset = Customer.objects.filter(organization=organization)
         serializer = CustomerListSerializer(queryset, many=True)
@@ -97,16 +94,16 @@ class CustomerCreateView(generics.CreateAPIView):
             params['payments_credit'] = 0
         organization = serializer.user.profile.organization
         is_alternate_contact = serializer.data.get('alternate_contact')
-
         is_email_exist = Customer.objects.filter(
-            primary_email=serializer.data.get('primary_email'))
+            primary_email=serializer.data.get('primary_email')
+        )
         if len(is_email_exist) > 0:
             return Response({
                 'detail': [resp_msg.CUSTOMER_EMAIL_ALREADY_EXIST]
             },status=status.HTTP_400_BAD_REQUEST)
-
         is_phone_exist = Customer.objects.filter(
-            primary_phone=serializer.data.get('primary_phone'))
+            primary_phone=serializer.data.get('primary_phone')
+        )
         if len(is_phone_exist) > 0:
             return Response({
                 'detail': [resp_msg.CUSTOMER_PHONE_ALREADY_EXIST]
@@ -194,7 +191,7 @@ class CustomerFilterView(APIView):
 
 class DeleteMultipleCustomerView(APIView):
     """Customer delete operations.
-    Delete multiple customer at once.
+    Delete multipportsle customer at once.
     """
 
     def post(self, request):
