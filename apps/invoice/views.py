@@ -21,10 +21,11 @@ from django.db.models import Q,Sum
 from rest_framework.viewsets import ModelViewSet
 
 
-from .models import Invoice,InvoiceAttachment,InvoiceTransaction,PaymentMethods,PaymentReminder, Subscription
+from .models import Invoice,InvoiceAttachment,InvoiceTransaction, Notification,PaymentMethods,PaymentReminder, Subscription
 from .serializer import (
     InvoiceSerializer,
-    GetInvoiceSerializer,PaymentReminderSerializer,
+    GetInvoiceSerializer,
+    NotificationSerializer,PaymentReminderSerializer,
     CardSerializer,GetPaymentSerializer,GetAgeingReportsSerializer,
     GetCustomerStatementSerializer
 )
@@ -572,7 +573,26 @@ class PaymentStatusView(APIView):
     permission_classes = (IsAuthenticated, )
 
     def get(self,request,id):
-        data = PeachPay().get_payment_status(id)    
+        data = PeachPay().get_payment_status(id)   
+        from apps.utility.helpers import triger_socket
+        admin_user = request.user.parent if request.user.parent else request.user
+        title = "Subscription purchase failed."
+        message = data['result']['description']
+        if data['result']['code'] == '000.100.110':
+            title = "Subscription purchased successfully."
+            message = "Hey, we’d like to inform you that we have received your payment {} for Subscription.".format(data['amount'])
+        
+        instance = Notification.objects.create(
+            user = admin_user,
+            title = title,
+            message = "HI You have a message",
+            icon_class = 'fa fa-long-arrow-down',
+            icon_colour = 'green'
+        )
+        serializer = NotificationSerializer(instance).data
+        queryset = admin_user.notification_user.filter(is_seen = False).count()
+        serializer['notification_count'] = queryset
+        triger_socket(str(admin_user.uuid),serializer)
         return  Response(data)
 
 
