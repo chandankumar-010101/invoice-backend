@@ -48,7 +48,8 @@ logger = logging.getLogger(__name__)
 
 class PaymentView(View):
     def get(self,request):
-        return render(request,'payment.html')
+        params = request.GET
+        return render(request,'payment.html',{'key':params['key']})
 
 
 class OrganizationListView(generics.ListAPIView):

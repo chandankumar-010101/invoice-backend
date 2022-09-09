@@ -62,7 +62,7 @@ class PeachPay:
 def get_checkout_id():
 	url = "https://eu-test.oppwa.com/v1/checkouts"
 	data = {
-		'entityId' : config('PEACH_ENTITY_ID'),
+		'entityId' :config('PEACH_ENTITY_ID'),
 		'amount' : '92.00',
 		'currency' : 'ZAR',
 		'paymentType' : 'DB'
