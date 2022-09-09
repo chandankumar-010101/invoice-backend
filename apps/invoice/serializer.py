@@ -4,8 +4,21 @@ from django.db.models import Q,Sum
 from apps.customer.models import Customer
 
 
-from .models import Invoice,InvoiceAttachment,PaymentReminder,CardDetail,InvoiceTransaction,Notification
+from .models import (
+    Invoice,InvoiceAttachment,
+    PaymentReminder,CardDetail,
+    InvoiceTransaction,Notification,
+    Subscription
+
+)
 from apps.utility.helpers import ordinal
+
+
+class SubscriptionSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Subscription
+        fields = "__all__"
 
 class InvoiceAttachmentSerializer(serializers.ModelSerializer):
 

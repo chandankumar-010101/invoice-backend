@@ -102,3 +102,11 @@ class Notification(models.Model):
 
     class Meta:
         ordering = ('-id',)
+
+
+class Subscription(models.Model):
+    no_of_users = models.IntegerField(default=0, null=True, blank=True)
+    storage = models.IntegerField(default=0, null=True, blank=True)
+    name = models.CharField(max_length= 150, null=True, blank=False)
+    amount = models.FloatField(default=0.0, null=True, blank=True)
+

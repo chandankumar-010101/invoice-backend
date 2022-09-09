@@ -21,7 +21,7 @@ from django.db.models import Q,Sum
 from rest_framework.viewsets import ModelViewSet
 
 
-from .models import Invoice,InvoiceAttachment,InvoiceTransaction,PaymentMethods,PaymentReminder
+from .models import Invoice,InvoiceAttachment,InvoiceTransaction,PaymentMethods,PaymentReminder, Subscription
 from .serializer import (
     InvoiceSerializer,
     GetInvoiceSerializer,PaymentReminderSerializer,
@@ -563,7 +563,8 @@ class CheckoutIdView(APIView):
 
     def get(self,request):  
         params={}
-        params['amount']=100
+        instance = Subscription.objectsa.all().last()
+        params['amount']=instance.amount
         data = PeachPay().get_checkout_id(params)    
         return  Response(data)
 

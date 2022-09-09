@@ -31,7 +31,7 @@ from .serializer import (
 )
 from apps.customer.pagination import CustomPagination
 from apps.customer.models import Customer
-from apps.invoice.models import Invoice
+from apps.invoice.models import Invoice,Subscription
 
 from apps.utility.helpers import SiteUrl,SendMail,GenerateLink
 from .permissions import IsAdminOnly
@@ -41,7 +41,11 @@ from .schema import (
     forgot_password_schema,reset_password_schema,
     profile_update_schema,create_user_schema
 )
-from apps.invoice.serializer import PaymentReminderSerializer,CardSerializer,NotificationSerializer
+from apps.invoice.serializer import (
+    PaymentReminderSerializer,
+    CardSerializer,NotificationSerializer,
+    SubscriptionSerializer
+)
 from apps.invoice.models import RolesAndPermissions,PaymentReminder,Notification
 logger = logging.getLogger(__name__)
 
@@ -562,6 +566,7 @@ class GetDetailsView(APIView):
         else:
             roles = request.user.parent.roles_permission_user.roles
         response['roles'] = roles
+        response['subscription'] = SubscriptionSerializer(Subscription.objectsa.all().last()).data
         response['payment_method'] = payment_method
         response['card_details'] = CardSerializer(admin_user.card_details_user).data if hasattr(admin_user, 'card_details_user') else {}
         return Response(response,status=status.HTTP_200_OK)

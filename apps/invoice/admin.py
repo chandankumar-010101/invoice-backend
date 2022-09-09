@@ -3,7 +3,8 @@ from .models import (
     Invoice,
     InvoiceAttachment,
     InvoiceTransaction,RolesAndPermissions,
-    PaymentReminder,CardDetail,Notification
+    PaymentReminder,CardDetail,Notification,
+    Subscription
 )
 
 # Register your models here.
@@ -17,6 +18,14 @@ class InvoiceAdmin(admin.ModelAdmin):
     @admin.display(description='Customer Name')
     def get_customer_name(self, obj):
         return obj.customer.full_name
+
+
+@admin.register(Subscription)
+class SubscriptionAdmin(admin.ModelAdmin):
+
+    list_display = (
+        "id","name","no_of_users","storage","amount"
+    )
 
 
 @admin.register(PaymentReminder)
