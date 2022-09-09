@@ -570,9 +570,10 @@ class CheckoutIdView(APIView):
 class PaymentStatusView(APIView):
     permission_classes = (IsAuthenticated, )
 
-    def post(self,request):
-        params = request.data
-        return  Response({})
+    def post(self,request,id):
+        data = PeachPay().get_payment_status(id)    
+        return  Response({'data':data})
+
 
 
 class PeachWebhookView(APIView):

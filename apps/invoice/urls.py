@@ -32,7 +32,7 @@ urlpatterns = [
     path('card-details', views.BillingPaymentView.as_view()),
 
     path('checkout-id', views.CheckoutIdView.as_view()),
-    path('payment-status', views.PaymentStatusView.as_view()),
+    path('payment-status/<str:id>', views.PaymentStatusView.as_view()),
 
     # path('peach-webhook', views.peach_webhook),
     path('peach-webhook', views.PeachWebhookView.as_view()),
