@@ -268,7 +268,6 @@ class RecordPaymentView(APIView):
                 'detail': [error.args[0]]
             }, status=status.HTTP_400_BAD_REQUEST)
 
-from apps.utility.peach import PeachPay
 
 class SendReminderView(APIView):
     permission_classes = [IsAuthenticated]
@@ -559,7 +558,23 @@ class CustomerStatementListCSVView(APIView):
         serializer = GetCustomerStatementSerializer(queryset,context={'request':request},many=True)
         return Response({'data':serializer.data})
         
-        
+class CheckoutIdView(APIView):
+    permission_classes = (IsAuthenticated, )
+
+    def get(self,request):  
+        params={}
+        params['amount']=100
+        data = PeachPay().get_checkout_id(params)    
+        return  Response({'data':data})
+
+class PaymentStatusView(APIView):
+    permission_classes = (IsAuthenticated, )
+
+    def post(self,request):
+        params = request.data
+        return  Response({})
+
+
 class PeachWebhookView(APIView):
     def get(self,request):
         print(request.GET)
@@ -577,6 +592,9 @@ class PeachWebhookView(APIView):
         return Response({
             "message": 'ok'
         }, status=status.HTTP_200_OK)
+
+
+
 
 
 from django.views.decorators.csrf import csrf_exempt

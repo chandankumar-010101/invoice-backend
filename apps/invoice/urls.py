@@ -31,6 +31,9 @@ urlpatterns = [
     path('update-role-permissions', views.UpdateRolesAndPermissionsView.as_view()),
     path('card-details', views.BillingPaymentView.as_view()),
 
+    path('checkout-id', views.CheckoutIdView.as_view()),
+    path('payment-status', views.PaymentStatusView.as_view()),
+
     # path('peach-webhook', views.peach_webhook),
     path('peach-webhook', views.PeachWebhookView.as_view()),
     path('peach-callback', views.peach_Callback),
