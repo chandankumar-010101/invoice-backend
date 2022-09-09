@@ -566,7 +566,7 @@ class GetDetailsView(APIView):
         else:
             roles = request.user.parent.roles_permission_user.roles
         response['roles'] = roles
-        response['subscription'] = SubscriptionSerializer(Subscription.objectsa.all().last()).data
+        response['subscription'] = SubscriptionSerializer(Subscription.objects.all().last()).data
         response['payment_method'] = payment_method
         response['card_details'] = CardSerializer(admin_user.card_details_user).data if hasattr(admin_user, 'card_details_user') else {}
         return Response(response,status=status.HTTP_200_OK)

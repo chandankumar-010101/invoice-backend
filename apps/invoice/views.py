@@ -563,7 +563,7 @@ class CheckoutIdView(APIView):
 
     def get(self,request):  
         params={}
-        instance = Subscription.objectsa.all().last()
+        instance = Subscription.objects.all().last()
         params['amount']=instance.amount
         data = PeachPay().get_checkout_id(params)    
         return  Response(data)
