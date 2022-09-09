@@ -578,21 +578,22 @@ class PaymentStatusView(APIView):
         admin_user = request.user.parent if request.user.parent else request.user
         title = "Subscription purchase failed."
         message = data['result']['description']
-        if data['result']['code'] == '000.100.110':
-            title = "Subscription purchased successfully."
-            message = "Hey, we’d like to inform you that we have received your payment {} for Subscription.".format(data['amount'])
-        
-        instance = Notification.objects.create(
-            user = admin_user,
-            title = title,
-            message = "HI You have a message",
-            icon_class = 'fa fa-long-arrow-down' if data['result']['code'] == '000.100.110' else 'fa fa-clock-o',
-            icon_colour = 'green' if data['result']['code'] == '000.100.110' else 'red'
-        )
-        serializer = NotificationSerializer(instance).data
-        queryset = admin_user.notification_user.filter(is_seen = False).count()
-        serializer['notification_count'] = queryset
-        triger_socket(str(admin_user.uuid),serializer)
+        if data['result']['code'] != '200.300.404':
+            if data['result']['code'] == '000.100.110':
+                title = "Subscription purchased successfully."
+                message = "Hey, we’d like to inform you that we have received your payment {} for Subscription.".format(data['amount'])
+            
+            instance = Notification.objects.create(
+                user = admin_user,
+                title = title,
+                message = message,
+                icon_class = 'fa fa-long-arrow-down' if data['result']['code'] == '000.100.110' else 'fa fa-clock-o',
+                icon_colour = 'green' if data['result']['code'] == '000.100.110' else 'red'
+            )
+            serializer = NotificationSerializer(instance).data
+            queryset = admin_user.notification_user.filter(is_seen = False).count()
+            serializer['notification_count'] = queryset
+            triger_socket(str(admin_user.uuid),serializer)
         return  Response(data)
 
 
