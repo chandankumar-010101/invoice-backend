@@ -586,8 +586,8 @@ class PaymentStatusView(APIView):
             user = admin_user,
             title = title,
             message = "HI You have a message",
-            icon_class = 'fa fa-long-arrow-down',
-            icon_colour = 'green'
+            icon_class = 'fa fa-long-arrow-down' if data['result']['code'] == '000.100.110' else 'fa fa-clock-o',
+            icon_colour = 'green' if data['result']['code'] == '000.100.110' else 'red'
         )
         serializer = NotificationSerializer(instance).data
         queryset = admin_user.notification_user.filter(is_seen = False).count()
