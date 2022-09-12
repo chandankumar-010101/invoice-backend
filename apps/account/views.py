@@ -555,7 +555,7 @@ class GetDetailsView(APIView):
         response['phone_number'] = request.user.profile.organization.phone_number
         response['user_type'] = request.user.user_type
         response['last_login'] = request.user.last_login
-        response['payment_reminder'] = PaymentReminderSerializer(admin_user.reminder_user.all().order_by('Overdue By'),many=True).data
+        response['payment_reminder'] = PaymentReminderSerializer(admin_user.reminder_user.all().order_by('reminder_type').order_by('days'),many=True).data
         payment_method['is_bank_transfer']= admin_user.payment_method.is_bank_transfer if hasattr(admin_user,'payment_method') else False
         payment_method['is_card_payment']= admin_user.payment_method.is_card_payment if hasattr( admin_user,'payment_method') else False
         payment_method['is_mobile_money']= admin_user.payment_method.is_mobile_money if hasattr(admin_user,'payment_method') else False
