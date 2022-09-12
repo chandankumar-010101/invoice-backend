@@ -530,6 +530,11 @@ class DashboardView(APIView):
             'graph_data':graph_data,
             'avg_c_t':avg_c_t,
             'current_per':current_per,
+            'account_type' :{
+                'is_trial_account':True,
+                'ending_date':"2022-10-22",
+                "is_block":True
+            },
             'overdue_per':overdue_per,
             'one_to_thord_per':one_to_thord_per,
             'thirty_to_sixty_per':thirty_to_sixty_per,
