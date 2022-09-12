@@ -105,8 +105,8 @@ class Notification(models.Model):
 
 
 class Subscription(models.Model):
-    no_of_users = models.IntegerField(default=0, null=True, blank=True)
-    storage = models.IntegerField(default=0, null=True, blank=True)
+    no_of_users = models.CharField(max_length=150,null=True,blank=True)
+    storage =  models.CharField(max_length=150,null=True,blank=True)
     name = models.CharField(max_length= 150, null=True, blank=False)
     amount = models.IntegerField(default=0, null=True, blank=True)
 
