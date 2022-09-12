@@ -75,8 +75,8 @@ class PaymentReminder(models.Model):
     is_sent_on_whatsapp = models.BooleanField(default=False)
     is_sent_on_email = models.BooleanField(default=False)
 
-    class Meta:
-        ordering = ('days','reminder_type')
+    # class Meta:
+    #     ordering = ('days','reminder_type')
 
 
 class RolesAndPermissions(models.Model):
