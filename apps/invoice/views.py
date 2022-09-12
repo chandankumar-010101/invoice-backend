@@ -630,3 +630,22 @@ def peach_Callback(request):
     print("callback POST", request.POST)
     print("callback GET", request.GET)
     return HttpResponse('Done')
+
+# def get_file_size():
+#     from apps.invoice.models import InvoiceAttachment
+#     from hurry.filesize import size
+#     for data in  InvoiceAttachment.objects.all():
+#         print(data.attachment.size)
+
+# get_file_size()
+
+
+# size = 1607591
+# power = 2**10
+# n = 0
+# power_labels = {0 : 'Blocks', 1: 'KB', 2: 'MB', 3: 'GB', 4: 'TB'}
+# while size > power:
+#     size /= power
+#     n += 1
+# print(round(size,2), power_labels[n])
+# Auto Payment has been activated/de activated.

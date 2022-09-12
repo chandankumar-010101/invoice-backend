@@ -61,7 +61,7 @@ class PeachPay:
         data = {
             'entityId' :config('PEACH_ENTITY_ID'),
             'amount' : params['amount'],
-            'currency' : 'ZAR',
+            'currency' : 'KES',
             'paymentType' : 'DB'
         }
         try:
@@ -93,7 +93,8 @@ class PeachPay:
         except URLError as e:
             return e.reason
 
-            
+
+    
 # invoice = Invoice.objects.all().last()
 # PeachPay().generate_payment_link(invoice)
 

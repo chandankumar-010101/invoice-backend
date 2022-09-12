@@ -165,3 +165,4 @@ def triger_socket(uuid,data):
             'payload': data
         }
     )
+
