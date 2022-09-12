@@ -331,7 +331,7 @@ class PaymentMethodeView(APIView):
         if 'auto_payment_reminder' in params and params['auto_payment_reminder'] != '':
             instance.auto_payment_reminder = params['auto_payment_reminder'].capitalize()
             instance.save()
-            message =  "Auto Payment reminder has been activated successfully." if instance.auto_payment_reminder else "Auto Payment reminder has been deactivated successfully."
+            message =  "Auto Payment reminder has been activated successfully." if instance.auto_payment_reminder == True else "Auto Payment reminder has been deactivated successfully."
         instance.save()
         return Response({
             'message': message,
