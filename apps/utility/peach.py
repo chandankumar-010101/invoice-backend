@@ -61,7 +61,7 @@ class PeachPay:
         data = {
             'entityId' :config('PEACH_ENTITY_ID'),
             'amount' : params['amount'],
-            'currency' : 'KES',
+            'currency' : 'ZAR',
             'paymentType' : 'DB'
         }
         try:
