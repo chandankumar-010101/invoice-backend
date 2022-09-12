@@ -76,7 +76,7 @@ class PaymentReminder(models.Model):
     is_sent_on_email = models.BooleanField(default=False)
 
     class Meta:
-        ordering = ('days',)
+        ordering = ('days','reminder_type')
 
 
 class RolesAndPermissions(models.Model):
