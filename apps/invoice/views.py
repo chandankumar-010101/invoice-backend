@@ -321,6 +321,7 @@ class PaymentMethodeView(APIView):
         admin_user = request.user.parent if request.user.parent else request.user
 
         instance,_ = PaymentMethods.objects.get_or_create(user=admin_user)
+        message = 'Payment method updated successfully.'
         if 'is_bank_transfer' in params and params['is_bank_transfer'] != '':
             instance.is_bank_transfer = params['is_bank_transfer'].capitalize() 
         if 'is_card_payment' in params and params['is_card_payment'] != '':
@@ -328,11 +329,12 @@ class PaymentMethodeView(APIView):
         if 'is_mobile_money' in params and params['is_mobile_money'] != '':
             instance.is_mobile_money = params['is_mobile_money'].capitalize() 
         if 'auto_payment_reminder' in params and params['auto_payment_reminder'] != '':
-            instance.auto_payment_reminder = params['auto_payment_reminder'].capitalize() 
-
+            instance.auto_payment_reminder = params['auto_payment_reminder'].capitalize()
+            instance.save()
+            message =  "Auto Payment reminder has been activated successfully." if instance.auto_payment_reminder else "Auto Payment reminder has been deactivated successfully."
         instance.save()
         return Response({
-            'message': 'Payment method updated successfully.',
+            'message': message,
         },status=status.HTTP_200_OK)
 
 
