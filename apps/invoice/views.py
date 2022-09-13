@@ -572,14 +572,16 @@ class CheckoutIdView(APIView):
         return  Response(data)
 
 class MPESACheckoutView(APIView):
-    # permission_classes = (IsAuthenticated, )
+    permission_classes = (IsAuthenticated, )
 
     def get(self,request):  
         params={}
+        admin_user = request.user.parent if request.user.parent else request.user
+
         instance = Subscription.objects.all().last()
         params['amount']=str(instance.amount)
         params['transaction_id'] = '123'
-        params['phone_no']="254789653489"
+        params['phone_no'] = admin_user.profile.phone
         data = PeachPay().mpesa(params)    
         return  Response(data)
 

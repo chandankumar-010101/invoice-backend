@@ -174,7 +174,7 @@ class CardSerializer(serializers.Serializer):
     card_number = serializers.CharField()
     expiry_date= serializers.DateField()
     cvv_code  = serializers.CharField()
-
+    m_pesa  = serializers.CharField()
 
     def create(self,validated_data):
         request = self.context.get('request')
@@ -188,6 +188,7 @@ class CardSerializer(serializers.Serializer):
             card_number = params['card_number'],
             expiry_date = params['expiry_date'],
             cvv_code = params['cvv_code'],
+            m_pesa = params['m_pesa'],
         )
     
     def update(self, instance, validated_data):
@@ -198,6 +199,8 @@ class CardSerializer(serializers.Serializer):
         instance.card_number = params['card_number']
         instance.expiry_date = params['expiry_date']
         instance.cvv_code = params['cvv_code']
+        instance.m_pesa = params['m_pesa']
+
         instance.save()
         return instance
 
