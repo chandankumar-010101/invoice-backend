@@ -13,7 +13,7 @@ urlpatterns = [
     path('signup', views.SignupView.as_view(), name="signup"),
     path('login', views.LoginView.as_view(), name="login"),
     path('dashboard', views.DashboardView.as_view(), name="login"),
-
+    path('subscription-details', views.GetSubscription.as_view(),name='subscription'),
     path('get-details', views.GetDetailsView.as_view(), name="login"),
 
     path('create-user', views.UserCreateView.as_view(), name="create_user"),

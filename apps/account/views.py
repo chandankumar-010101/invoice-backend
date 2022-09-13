@@ -530,11 +530,6 @@ class DashboardView(APIView):
             'graph_data':graph_data,
             'avg_c_t':avg_c_t,
             'current_per':current_per,
-            'account_type' :{
-                'is_trial_account':True,
-                'ending_date':"2022-10-22",
-                "is_block":True
-            },
             'overdue_per':overdue_per,
             'one_to_thord_per':one_to_thord_per,
             'thirty_to_sixty_per':thirty_to_sixty_per,
@@ -545,6 +540,19 @@ class DashboardView(APIView):
             'current_amount':current_amount['due_amount__sum'] if current_amount['due_amount__sum'] else 00,
             'overdue_amount':overdue_amount['due_amount__sum'] if overdue_amount['due_amount__sum'] else 00,
         }, status=status.HTTP_200_OK)
+
+
+class GetSubscription(APIView):
+    permission_classes = (IsAuthenticated, )
+    def get(self,request):
+        admin_user = request.user.parent if request.user.parent else request.user
+
+        return Response({
+            'is_trial_account':True,
+            'ending_date':"2022-10-22",
+            "is_block":True,
+            "message":"Your account is trail "
+        })
 
 class GetDetailsView(APIView):
     permission_classes = (IsAuthenticated, )
