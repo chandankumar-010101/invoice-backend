@@ -1,3 +1,4 @@
+from email import message
 import logging
 
 from datetime import datetime, date,timedelta
@@ -546,12 +547,16 @@ class GetSubscription(APIView):
     permission_classes = (IsAuthenticated, )
     def get(self,request):
         admin_user = request.user.parent if request.user.parent else request.user
+        is_trial_account = True
+        message  = ''
+        if is_trial_account:
+            message = "Purchase a subscription for unwanted interruption."
 
         return Response({
             'is_trial_account':True,
             'ending_date':"2022-10-22",
             "is_block":True,
-            "message":"Your account is trail "
+            "message":message
         })
 
 class GetDetailsView(APIView):
