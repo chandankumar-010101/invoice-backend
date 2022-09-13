@@ -555,7 +555,7 @@ class GetSubscription(APIView):
         return Response({
             'is_trial_account':True,
             'ending_date':"2022-10-22",
-            "is_block":True,
+            "is_block":False,
             "message":message
         })
 
