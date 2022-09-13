@@ -571,6 +571,18 @@ class CheckoutIdView(APIView):
         data = PeachPay().get_checkout_id(params)    
         return  Response(data)
 
+class MPESACheckoutView(APIView):
+    # permission_classes = (IsAuthenticated, )
+
+    def get(self,request):  
+        params={}
+        instance = Subscription.objects.all().last()
+        params['amount']=str(instance.amount)
+        params['transaction_id'] = '123'
+        params['phone_no']="254789653489"
+        data = PeachPay().mpesa(params)    
+        return  Response(data)
+
 class PaymentStatusView(APIView):
     permission_classes = (IsAuthenticated, )
 
@@ -632,6 +644,16 @@ def peach_Callback(request):
     print("callback POST", request.POST)
     print("callback GET", request.GET)
     return HttpResponse('Done')
+
+
+
+
+
+
+
+
+
+
 
 # def get_file_size():
 #     from apps.invoice.models import InvoiceAttachment

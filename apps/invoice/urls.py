@@ -32,6 +32,8 @@ urlpatterns = [
     path('card-details', views.BillingPaymentView.as_view()),
 
     path('checkout-id', views.CheckoutIdView.as_view()),
+    path('mpesa-checkout', views.MPESACheckoutView.as_view()),
+
     path('payment-status/<str:id>', views.PaymentStatusView.as_view()),
 
     # path('peach-webhook', views.peach_webhook),

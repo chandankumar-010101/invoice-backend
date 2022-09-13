@@ -93,13 +93,24 @@ class PeachPay:
         except URLError as e:
             return e.reason
 
-
+    
+    def mpesa(self,params):
+        url = "https://testapi.peachpayments.com/v1/payments/"
+        payload = "------WebKitFormBoundary7MA4YWxkTrZu0gW\r\nContent-Disposition: form-data; name=\"authentication.userId\"\r\n\r\n"+config('MPESA_PEACH_USER_ID')+"\r\n------WebKitFormBoundary7MA4YWxkTrZu0gW\r\nContent-Disposition: form-data; name=\"authentication.password\"\r\n\r\n"+config('MPESA_PEACH_PASSWORD')+"\r\n------WebKitFormBoundary7MA4YWxkTrZu0gW\r\nContent-Disposition: form-data; name=\"authentication.entityId\"\r\n\r\n"+config('MPESA_PEACH_ENTITY_ID')+"\r\n------WebKitFormBoundary7MA4YWxkTrZu0gW\r\nContent-Disposition: form-data; name=\"merchantTransactionId\"\r\n\r\n"+params['transaction_id']+"\r\n------WebKitFormBoundary7MA4YWxkTrZu0gW\r\nContent-Disposition: form-data; name=\"amount\"\r\n\r\n"+params['amount']+"\r\n------WebKitFormBoundary7MA4YWxkTrZu0gW\r\nContent-Disposition: form-data; name=\"currency\"\r\n\r\nKES\r\n------WebKitFormBoundary7MA4YWxkTrZu0gW\r\nContent-Disposition: form-data; name=\"paymentBrand\"\r\n\r\nMPESA\r\n------WebKitFormBoundary7MA4YWxkTrZu0gW\r\nContent-Disposition: form-data; name=\"paymentType \"\r\n\r\nDB\r\n------WebKitFormBoundary7MA4YWxkTrZu0gW\r\nContent-Disposition: form-data; name=\"virtualAccount.accountId\"\r\n\r\n"+params['phone_no']+"\r\n------WebKitFormBoundary7MA4YWxkTrZu0gW\r\nContent-Disposition: form-data; name=\"shopperResultUrl\"\r\n\r\nhttps://stage.jasiricap.com/\r\n------WebKitFormBoundary7MA4YWxkTrZu0gW--"
+        headers = {
+            'content-type': "multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW",
+            'cache-control': "no-cache",
+            'postman-token': "beb639f1-c0d3-f46b-14ae-5b1b27a86cb1"
+        }
+        response = requests.request("POST", url, data=payload, headers=headers)
+        return response.json()
     
 # invoice = Invoice.objects.all().last()
 # PeachPay().generate_payment_link(invoice)
 
-
+# PeachPay().mpesa()
 
 
 # responseData = get_checkout_id()
 # print(responseData['id'])
+
