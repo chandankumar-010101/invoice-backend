@@ -54,6 +54,38 @@ class PeachPay:
             print(response.json())
             return True,response.json()['response']['url']
         return  False,response.json()
+    
+    def recurring(self):
+        url = "https://eu-test.oppwa.com/v1/payments"
+        data = {
+            'entityId' :  config('PEACH_ENTITY_ID'),
+            'amount' : '92.00',
+            'currency' : 'ZAR',
+            'paymentBrand' : 'VISA',
+            'paymentType' : 'DB',
+            'card.number' : '4200000000000000',
+            'card.holder' : 'Jane Jones',
+            'card.expiryMonth' : '05',
+            'card.expiryYear' : '2034',
+            'card.cvv' : '123',
+            'standingInstruction.mode' : 'INITIAL',
+            'standingInstruction.source' : 'CIT',
+            'standingInstruction.type' : 'UNSCHEDULED',
+            'createRegistration' : 'true'
+        }
+        try:
+            opener = build_opener(HTTPHandler)
+            request = Request(url, data=urlencode(data).encode('utf-8'))
+            request.add_header('Authorization', 'Bearer {}'.format(config('PEACH_ACCESS_TOKEN')))
+            request.get_method = lambda: 'POST'
+            response = opener.open(request)
+            return json.loads(response.read())
+        except HTTPError as e:
+            return json.loads(e.read())
+        except URLError as e:
+            return e.reason
+
+    
 
     def get_webhook_details(self,params):
         headers = {
@@ -131,7 +163,7 @@ class PeachPay:
 # invoice = Invoice.objects.all().last()
 # PeachPay().generate_payment_link(invoice)
 
-
+# print(PeachPay().recurring())
 
 # responseData = get_checkout_id()
 # print(responseData['id'])
