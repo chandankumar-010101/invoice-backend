@@ -55,7 +55,28 @@ class PeachPay:
             return True,response.json()['response']['url']
         return  False,response.json()
 
-    
+    def get_webhook_details(self):
+        headers = {
+            # Already added when you pass json= but not when you pass data=
+            # 'Content-Type': 'application/json',
+            'Cache-Control': 'no-cache',
+        }
+
+        json_data = {
+            'Authentication': {
+                'userid': '123456789123456789123456788511fb',
+                'password': 'asgftr1245',
+                'entityid': '12345678912345678913456788511fb',
+            },
+            'Event': {
+                'eventId': 'ijkzddgMNjhPHrM=',
+                'type': 'PAYMENT.COMPLETED',
+            },
+        }
+
+        response = requests.post('http://(domain name)', headers=headers, json=json_data)
+
+
     def get_checkout_id(self,params):
         url = "https://eu-test.oppwa.com/v1/checkouts"
         data = {
