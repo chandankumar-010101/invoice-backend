@@ -274,9 +274,9 @@ class GetAgeingReportsSerializer(serializers.ModelSerializer):
         from datetime import date  
         queryset = obj.invoice.all().exclude(invoice_status='PAYMENT_DONE')
         if 'date' in request.GET and request.GET['date'] !='':
-            queryset = queryset.filter(created_on__lte = request.GET['date'])
+            queryset = queryset.filter(invoice_date__lte = request.GET['date'])
         else:
-            queryset = queryset.filter(created_on__lte = date.today())
+            queryset = queryset.filter(invoice_date__lte = date.today())
         current_amount = queryset.filter(due_date__gt = date.today()).aggregate(Sum('due_amount'))
         return current_amount['due_amount__sum'] if current_amount['due_amount__sum'] else 00
 
@@ -285,9 +285,9 @@ class GetAgeingReportsSerializer(serializers.ModelSerializer):
         request = self.context.get('request')
         queryset = obj.invoice.all().exclude(invoice_status='PAYMENT_DONE')
         if 'date' in request.GET and request.GET['date'] !='':
-            queryset = queryset.filter(created_on__lte = request.GET['date'])
+            queryset = queryset.filter(invoice_date__lte = request.GET['date'])
         else:
-            queryset = queryset.filter(created_on__lte = date.today())
+            queryset = queryset.filter(invoice_date__lte = date.today())
         return queryset.filter(due_date__gt = date.today()).count()
 
     def get_thirty_or_less(self,obj):
@@ -295,9 +295,9 @@ class GetAgeingReportsSerializer(serializers.ModelSerializer):
         request = self.context.get('request')
         queryset = obj.invoice.all().exclude(invoice_status='PAYMENT_DONE')
         if 'date' in request.GET and request.GET['date'] !='':
-            queryset = queryset.filter(created_on__lte = request.GET['date'])
+            queryset = queryset.filter(invoice_date__lte = request.GET['date'])
         else:
-            queryset = queryset.filter(created_on__lte = date.today())
+            queryset = queryset.filter(invoice_date__lte = date.today())
         one_to_thirty_days = queryset.filter(
             due_date__range = [date.today() - timedelta(days=30),date.today() - timedelta(days=2)]
         ).aggregate(Sum('due_amount'))
@@ -309,9 +309,9 @@ class GetAgeingReportsSerializer(serializers.ModelSerializer):
         request = self.context.get('request')
         queryset = obj.invoice.all().exclude(invoice_status='PAYMENT_DONE')
         if 'date' in request.GET and request.GET['date'] !='':
-            queryset = queryset.filter(created_on__lte = request.GET['date'])
+            queryset = queryset.filter(invoice_date__lte = request.GET['date'])
         else:
-            queryset = queryset.filter(created_on__lte = date.today())
+            queryset = queryset.filter(invoice_date__lte = date.today())
         thirty_to_sixty_days = queryset.filter(
             due_date__range = [date.today() - timedelta(days=60),date.today()- timedelta(days=30)]
         ).aggregate(Sum('due_amount'))
@@ -323,9 +323,9 @@ class GetAgeingReportsSerializer(serializers.ModelSerializer):
         request = self.context.get('request')
         queryset = obj.invoice.all().exclude(invoice_status='PAYMENT_DONE')
         if 'date' in request.GET and request.GET['date'] !='':
-            queryset = queryset.filter(created_on__lte = request.GET['date'])
+            queryset = queryset.filter(invoice_date__lte = request.GET['date'])
         else:
-            queryset = queryset.filter(created_on__lte = date.today())
+            queryset = queryset.filter(invoice_date__lte = date.today())
         sixty_to_ninty_days = queryset.filter(
             due_date__range = [date.today() - timedelta(days=90),date.today()- timedelta(days=60)]
         ).aggregate(Sum('due_amount'))
@@ -336,9 +336,9 @@ class GetAgeingReportsSerializer(serializers.ModelSerializer):
         request = self.context.get('request')
         queryset = obj.invoice.all().exclude(invoice_status='PAYMENT_DONE')
         if 'date' in request.GET and request.GET['date'] !='':
-            queryset = queryset.filter(created_on__lte = request.GET['date'])
+            queryset = queryset.filter(invoice_date__lte = request.GET['date'])
         else:
-            queryset = queryset.filter(created_on__lte = date.today())
+            queryset = queryset.filter(invoice_date__lte = date.today())
         ninty_plus_days = queryset.filter(
             due_date__lt = date.today()- timedelta(days=90)
         ).aggregate(Sum('due_amount'))
@@ -349,9 +349,9 @@ class GetAgeingReportsSerializer(serializers.ModelSerializer):
         request = self.context.get('request')
         queryset = obj.invoice.all().exclude(invoice_status='PAYMENT_DONE')
         if 'date' in request.GET and request.GET['date'] !='':
-            queryset = queryset.filter(created_on__lte = request.GET['date'])
+            queryset = queryset.filter(invoice_date__lte = request.GET['date'])
         else:
-            queryset = queryset.filter(created_on__lte = date.today())
+            queryset = queryset.filter(invoice_date__lte = date.today())
         current_amount = queryset.aggregate(Sum('due_amount'))
         return current_amount['due_amount__sum'] if current_amount['due_amount__sum'] else 00
 
@@ -360,9 +360,9 @@ class GetAgeingReportsSerializer(serializers.ModelSerializer):
         request = self.context.get('request')
         queryset = obj.invoice.all().exclude(invoice_status='PAYMENT_DONE')
         if 'date' in request.GET and request.GET['date'] !='':
-            queryset = queryset.filter(created_on__lte = request.GET['date'])
+            queryset = queryset.filter(invoice_date__lte = request.GET['date'])
         else:
-            queryset = queryset.filter(created_on__lte = date.today())
+            queryset = queryset.filter(invoice_date__lte = date.today())
         return queryset.count()
 
     class Meta:
