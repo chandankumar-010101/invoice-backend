@@ -29,7 +29,7 @@ def create_organization(request):
         )
         return True, org
     except Exception as e:
-        return False, e
+        return False, None
 def create_user_profile(request, user, org):
     """ Create a user profile 
     
