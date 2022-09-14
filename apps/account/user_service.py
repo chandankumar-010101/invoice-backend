@@ -22,7 +22,7 @@ def create_organization(request):
         industry=request.data.get('industry'), 
         annual_turnover=request.data.get('annual_turnover'),
         accounting_software=request.data.get('accounting_software'), 
-        number_employess = request.data.get('number_employess'), 
+        number_employees = request.data.get('number_employees'), 
         estimate_invoice_issue=request.data.get('invoice_issue_month'),
         phone_number=request.data.get('phone_number')
     )

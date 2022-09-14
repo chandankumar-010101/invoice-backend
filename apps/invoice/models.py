@@ -86,7 +86,6 @@ class RolesAndPermissions(models.Model):
 
 class CardDetail(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE,related_name="card_details_user")
-    # payment_type = models.PositiveSmallIntegerField(choices=PAYMENT_TYPE_CHOICES)
     holder_name = models.CharField(max_length= 50, null=True, blank=True)
     card_number = models.CharField(max_length=16,null=True,blank=True)
     expiry_date = models.DateField(null=True,blank=True)

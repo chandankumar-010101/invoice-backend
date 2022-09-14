@@ -23,7 +23,7 @@ class Organization(models.Model):
     industry = models.CharField(max_length=255, null=True, blank=True)
     annual_turnover = models.CharField(max_length=255, null=True, blank=True)
     accounting_software = models.CharField(max_length=255, null=True, blank=True)
-    number_employess = models.CharField(max_length=255, null=True, blank=True)
+    number_employees = models.CharField(max_length=255, null=True, blank=True)
     estimate_invoice_issue = models.CharField(max_length=255, null=True, blank=True)
     created_on = models.DateField(auto_now_add=True)
     updated_on = models.DateField(auto_now=True)

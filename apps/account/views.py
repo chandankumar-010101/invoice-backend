@@ -502,9 +502,9 @@ class DashboardView(APIView):
             { 'name': "Current", 'value': graph_current_amount['due_amount__sum'] if graph_current_amount['due_amount__sum'] else 00 },
             { 'name': "Overdue", 'value': graph_overdue_amount['due_amount__sum'] if graph_overdue_amount['due_amount__sum'] else 00 },
             { 'name': "0 - 30 Days Overdue", 'value': one_to_thirty_days['due_amount__sum'] if one_to_thirty_days['due_amount__sum'] else 00 },
-            { 'name': "30 - 60 Days Overdue", 'value': thirty_to_sixty_days['due_amount__sum'] if thirty_to_sixty_days['due_amount__sum'] else 00 },
-            { 'name': "60 - 90 Days Overdue", 'value': sixty_to_ninty_days['due_amount__sum'] if sixty_to_ninty_days['due_amount__sum'] else 00 },
-            { 'name': ">90 Days Overdue", 'value':  ninty_plus_days['due_amount__sum'] if ninty_plus_days['due_amount__sum'] else 00 },
+            { 'name': "31 - 60 Days Overdue", 'value': thirty_to_sixty_days['due_amount__sum'] if thirty_to_sixty_days['due_amount__sum'] else 00 },
+            { 'name': "61 - 90 Days Overdue", 'value': sixty_to_ninty_days['due_amount__sum'] if sixty_to_ninty_days['due_amount__sum'] else 00 },
+            { 'name': ">91 Days Overdue", 'value':  ninty_plus_days['due_amount__sum'] if ninty_plus_days['due_amount__sum'] else 00 },
         ]
         current_per, overdue_per, one_to_thord_per,thirty_to_sixty_per,sixty_to_ninty_per,ninty_plus_per  = 0.0,0.0,0.0,0.0,0.0,0.0
 
