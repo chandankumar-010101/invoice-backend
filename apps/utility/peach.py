@@ -42,7 +42,7 @@ class PeachPay:
                 "givenName": invoice.customer.full_name,
                 "surname": "",
                 "email": invoice.customer.primary_email,
-                "mobile": "917278737088"
+                "mobile": str(invoice.customer.primary_phone).replace("+", "")
             }
         })
         headers = {
@@ -55,7 +55,7 @@ class PeachPay:
             return True,response.json()['response']['url']
         return  False,response.json()
 
-    def get_webhook_details(self):
+    def get_webhook_details(self,params):
         headers = {
             'Content-Type': 'application/json',
             'Cache-Control': 'no-cache',
@@ -68,8 +68,8 @@ class PeachPay:
                 "entityid": config('PEACH_ENTITY_ID')
             },
             'Event': {
-                'eventId': 'iJw1pSJRYwQ=',
-                'type': 'PAYMENT.COMPLETED',
+                'eventId': params['Event[eventId]'],
+                'type': params['Event[type]'],
             },
         }
 
@@ -130,7 +130,6 @@ class PeachPay:
 # invoice = Invoice.objects.all().last()
 # PeachPay().generate_payment_link(invoice)
 
-# PeachPay().get_webhook_details()
 
 
 # responseData = get_checkout_id()

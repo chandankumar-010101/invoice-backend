@@ -14,6 +14,7 @@ PAYMENT_TYPE = (
 PAYMENT_MODE = (
     ('Cash', 'Cash'),
     ('Cheque', 'Cheque'),
+    ('Card', 'Card'),
     ('Bank Transfer', 'Bank Transfer'),
     ('M-Pesa', 'M-Pesa'),
     ('Debit Card', 'Debit Card'),
