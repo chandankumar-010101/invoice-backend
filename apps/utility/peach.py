@@ -74,8 +74,9 @@ class PeachPay:
         }
 
         response = requests.post('https://test.ppay.io/merchant/api/payments/getActivityDetail.json', headers=headers, json=json_data)
-        print(response)
-        print(response.json())
+        # print(response)
+        # print(response.json())
+        return response.json()
 
 
     def get_checkout_id(self,params):
