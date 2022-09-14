@@ -663,7 +663,7 @@ class PeachWebhookView(APIView):
             if params['Event[type]'] == 'PAYMENT.COMPLETED':
                 InvoiceTransaction.objects.create(
                     invoice = invoice,
-                    amount = response['response']['Payment']['amount'],
+                    amount = float(response['response']['Payment']['amount']),
                     payment_type = 'Online',
                     payment_mode = response['response']['Payment']['mode'],
                     payment_date = date.today()
@@ -686,6 +686,7 @@ class PeachWebhookView(APIView):
                 user = invoice.customer.user,
                 title = title,
                 message = message,
+                invoice = invoice,
                 icon_class = 'fa fa-long-arrow-down' if params['Event[type]'] == 'PAYMENT.COMPLETED' else 'fa fa-clock-o',
                 icon_colour = 'green' if params['Event[type]'] == 'PAYMENT.COMPLETED' else 'red'
             )
