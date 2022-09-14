@@ -449,6 +449,7 @@ class MPESAPaymentView(APIView):
         admin_user = request.user.parent if request.user.parent else request.user
         if hasattr(admin_user, 'card_details_user'):
             admin_user.card_details_user.m_pesa = params['m_pesa']
+            admin_user.card_details_user.save()
         else:
             CardDetail.objects.create(
                 user = admin_user,
