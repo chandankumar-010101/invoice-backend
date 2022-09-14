@@ -22,7 +22,7 @@ class SignupSerializer(serializers.Serializer):
     industry = serializers.CharField(max_length=50)
     annual_turnover = serializers.CharField(max_length=100)
     accounting_software = serializers.CharField(max_length=100)
-    invoice_issue_month = serializers.CharField(max_length=100)
+    invoice_issue_month = serializers.CharField(max_length=100,required=False)
     password = serializers.CharField(max_length=50)
 
     def validate_email(self, email):

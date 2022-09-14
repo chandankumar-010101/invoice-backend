@@ -14,7 +14,7 @@ login_schema = openapi.Schema(
         'password': openapi.Schema(type=openapi.TYPE_STRING),
     },
     required=['first_name','last_name','email','phone_number','company_name'
-        ,'industry','annual_turnover','accounting_software','invoice_issue_month','password'
+        ,'industry','annual_turnover','accounting_software','password'
     ]
 )
 

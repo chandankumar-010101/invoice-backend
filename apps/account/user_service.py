@@ -24,7 +24,7 @@ def create_organization(request):
             annual_turnover=request.data.get('annual_turnover'),
             accounting_software=request.data.get('accounting_software'), 
             number_employees = request.data.get('number_employees'), 
-            estimate_invoice_issue=request.data.get('invoice_issue_month'),
+            estimate_invoice_issue=request.data.get('invoice_issue_month',None),
             phone_number=request.data.get('phone_number')
         )
         return True, org
