@@ -45,9 +45,9 @@ def send_email(invoice,reminder,manually=False):
     is_sucess, url = PeachPay().generate_payment_link(invoice)
 
     data ={}
-    data['amount']=str(invoice.due_amount)
-    data['transaction_id']='12345'
-    data['phone_no']=str(invoice.customer.primary_phone.national_number)
+    data['amount']=str(int(invoice.due_amount))
+    data['transaction_id']=str(invoice.customer.user.uuid)
+    data['phone_no']=str(invoice.customer.primary_phone).replace("+", "")
     mpesa = PeachPay().mpesa(data)
     user = reminder.user
     from datetime import date  

@@ -280,7 +280,7 @@ class SendReminderView(APIView):
             invoice = Invoice.objects.get(id=id)
             data ={}
             data['amount']=str(int(invoice.due_amount))
-            data['transaction_id']='12345'
+            data['transaction_id']=str(invoice.customer.user.uuid)
             data['phone_no']=str(invoice.customer.primary_phone).replace("+", "")
             is_sucess, url = PeachPay().generate_payment_link(invoice)
             print("$$$$$$data",data)
