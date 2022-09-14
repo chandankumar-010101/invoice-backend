@@ -275,6 +275,7 @@ class RecordPaymentView(APIView):
 # data['phone_no']='254789653489'
 # mpease = PeachPay().mpesa(data)
 # print(mpease)
+
 class SendReminderView(APIView):
     permission_classes = [IsAuthenticated]
     @swagger_auto_schema(request_body=send_reminder_schema, operation_description='Send Reminder Invoice')
@@ -283,9 +284,9 @@ class SendReminderView(APIView):
         try:
             invoice = Invoice.objects.get(id=id)
             data ={}
-            data['amount']='101'
+            data['amount']=str(data.due_amount)
             data['transaction_id']='12345'
-            data['phone_no']='254789653489'
+            data['phone_no']=invoice.customer.primary_phone.national_number
             is_sucess, url = PeachPay().generate_payment_link(invoice)
             mpesa = PeachPay().mpesa(data)
 

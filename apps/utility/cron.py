@@ -43,6 +43,12 @@ def send_reminder_on_whats_app(invoice,body,url):
 
 def send_email(invoice,reminder,manually=False):
     is_sucess, url = PeachPay().generate_payment_link(invoice)
+
+    data ={}
+    data['amount']=str(data.due_amount)
+    data['transaction_id']='12345'
+    data['phone_no']=invoice.customer.primary_phone.national_number
+    mpesa = PeachPay().mpesa(data)
     user = reminder.user
     from datetime import date  
     td = date.today()
@@ -67,7 +73,8 @@ def send_email(invoice,reminder,manually=False):
             'subject':subject,
             'body':body,
             'site_url': 'https://stage.api.jasiricap.com',
-            'payment':url
+            'payment':url,
+            'mpesa':mpesa
         }
         try:
             if reminder.is_sent_on_email:
