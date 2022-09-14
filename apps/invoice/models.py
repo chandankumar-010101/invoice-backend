@@ -89,7 +89,7 @@ class CardDetail(models.Model):
     # payment_type = models.PositiveSmallIntegerField(choices=PAYMENT_TYPE_CHOICES)
     holder_name = models.CharField(max_length= 50, null=True, blank=True)
     card_number = models.CharField(max_length=16,null=True,blank=True)
-    expiry_date = models.DateField()
+    expiry_date = models.DateField(null=True,blank=True)
     cvv_code = models.CharField(max_length=3,null=True,blank=True)
     m_pesa = models.CharField(max_length=15,null=True,blank=True)
 
