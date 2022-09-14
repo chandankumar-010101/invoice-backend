@@ -105,9 +105,7 @@ class SignupView(APIView):
             is_success,org = user_service.create_organization(request)
             user_type = 2
             if not is_success:
-                return Response({
-                    "error":[str(org)]
-                }, status=status.HTTP_400_BAD_REQUEST)
+                return Response(org, status=status.HTTP_400_BAD_REQUEST)
 
             # create user
             try:

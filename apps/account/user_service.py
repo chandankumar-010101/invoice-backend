@@ -6,6 +6,7 @@ from django.contrib.auth import get_user_model
 from .models import Organization
 from .models import UserProfile
 from .utils import generate_organization_code
+import apps.account.response_messages as resp_msg
 
 
 def create_organization(request):
@@ -17,6 +18,12 @@ def create_organization(request):
         org: organization object
     """
     try:
+        if Organization.objects.filter(email = request.data.get('email')).exists():
+            return False, {'email':[resp_msg.EMAIL_ALREADY_EXISTS]}
+        if Organization.objects.filter(phone_number = request.data.get('phone_number')).exists():
+            return False, {'phone_number':[resp_msg.PHONE_ALREADY_EXISTS]}
+
+
         org = Organization.objects.create(company_name = request.data.get('company_name'), 
             code = generate_organization_code(),
             email = request.data.get('email'),
