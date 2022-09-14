@@ -700,13 +700,7 @@ class PeachWebhookView(APIView):
             "message": 'ok'
         }, status=status.HTTP_200_OK)
 
-# params={}
-# params['Event[eventId]']='D+FH3U6HexA='
-# params['Event[type]']='PAYMENT.COMPLETED'
 
-# response = PeachPay().get_webhook_details(params)
-
-# print(response['response']['Payment']['merchantInvoiceId'])
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST
 from django.http import HttpResponse

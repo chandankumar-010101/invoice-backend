@@ -169,7 +169,7 @@ class PaymentReminderSerializer(serializers.ModelSerializer):
 
 class CardSerializer(serializers.Serializer):
     
-    payment_type = serializers.CharField(max_length=255)
+    # payment_type = serializers.CharField(max_length=255)
     holder_name = serializers.CharField(max_length=255)
     card_number = serializers.CharField()
     expiry_date= serializers.DateField()
@@ -182,7 +182,7 @@ class CardSerializer(serializers.Serializer):
 
         return CardDetail.objects.create(
             user=admin_user,
-            payment_type = params['payment_type'],
+            # payment_type = params['payment_type'],
             holder_name = params['holder_name'],
             card_number = params['card_number'],
             expiry_date = params['expiry_date'],
@@ -192,7 +192,7 @@ class CardSerializer(serializers.Serializer):
     def update(self, instance, validated_data):
         request = self.context.get('request')
         params = request.data
-        instance.payment_type = params['payment_type']
+        # instance.payment_type = params['payment_type']
         instance.holder_name = params['holder_name']
         instance.card_number = params['card_number']
         instance.expiry_date = params['expiry_date']
