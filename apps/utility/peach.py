@@ -60,18 +60,19 @@ class PeachPay:
         data = {
             'entityId' :  config('PEACH_ENTITY_ID'),
             'amount' : '92.00',
-            'currency' : 'ZAR',
+            'currency' : 'KES',
             'paymentBrand' : 'VISA',
             'paymentType' : 'DB',
-            'card.number' : '4200000000000000',
+            'card.number' : '4111111111111111',
             'card.holder' : 'Jane Jones',
             'card.expiryMonth' : '05',
             'card.expiryYear' : '2034',
             'card.cvv' : '123',
-            'standingInstruction.mode' : 'INITIAL',
+            'standingInstruction.mode' : 'REPEATED',
             'standingInstruction.source' : 'CIT',
-            'standingInstruction.type' : 'UNSCHEDULED',
-            'createRegistration' : 'true'
+            'standingInstruction.type' : 'RECURRING',
+            'createRegistration' : 'true',
+            'shopperResultUrl':"https://google.com",
         }
         try:
             opener = build_opener(HTTPHandler)

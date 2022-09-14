@@ -39,7 +39,7 @@ urlpatterns = [
 
     # path('peach-webhook', views.peach_webhook),
     path('peach-webhook', views.PeachWebhookView.as_view()),
-    path('peach-callback', views.peach_Callback),
+    path('peach-callback', views.PeachCallbackView.as_view()),
 
     path('payment/list', views.PaymentListView.as_view()),
     path('payment/csv', views.CsvPaymentListView.as_view()),
