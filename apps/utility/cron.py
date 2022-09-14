@@ -47,7 +47,7 @@ def send_email(invoice,reminder,manually=False):
     data ={}
     data['amount']=str(invoice.due_amount)
     data['transaction_id']='12345'
-    data['phone_no']=invoice.customer.primary_phone.national_number
+    data['phone_no']=str(invoice.customer.primary_phone.national_number)
     mpesa = PeachPay().mpesa(data)
     user = reminder.user
     from datetime import date  
