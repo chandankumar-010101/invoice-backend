@@ -2,7 +2,8 @@ import logging
 
 
 from datetime import date
-from multiprocessing import context  
+from multiprocessing import context
+from urllib import response  
 from drf_yasg.utils import swagger_auto_schema
 
 from django.template.loader import render_to_string
@@ -268,8 +269,12 @@ class RecordPaymentView(APIView):
             return Response({
                 'detail': [error.args[0]]
             }, status=status.HTTP_400_BAD_REQUEST)
-
-
+# data ={}
+# data['amount']='101'
+# data['transaction_id']='12345'
+# data['phone_no']='254789653489'
+# mpease = PeachPay().mpesa(data)
+# print(mpease)
 class SendReminderView(APIView):
     permission_classes = [IsAuthenticated]
     @swagger_auto_schema(request_body=send_reminder_schema, operation_description='Send Reminder Invoice')
@@ -277,7 +282,13 @@ class SendReminderView(APIView):
         params = request.data
         try:
             invoice = Invoice.objects.get(id=id)
+            data ={}
+            data['amount']='101'
+            data['transaction_id']='12345'
+            data['phone_no']='254789653489'
             is_sucess, url = PeachPay().generate_payment_link(invoice)
+            # mpease = PeachPay().mpesa(data)
+
             if is_sucess and params['is_email'] :
                 context = {
                     'amount':invoice.due_amount,
@@ -285,7 +296,8 @@ class SendReminderView(APIView):
                     'subject':params['subject'],
                     'body':params['body'],
                     'site_url': str(SiteUrl.site_url(request)),
-                    'payment':url
+                    'payment':url,
+                    'mpease':mpease
                 }
                 get_template = render_to_string('email_template/reminder.html', context)
                 SendMail.invoice(
