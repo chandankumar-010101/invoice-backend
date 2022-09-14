@@ -106,7 +106,7 @@ class SignupView(APIView):
             user_type = 2
             if not is_success:
                 return Response({
-                    "phone_number":[resp_msg.PHONE_ALREADY_EXISTS]
+                    "error":[str(org)]
                 }, status=status.HTTP_400_BAD_REQUEST)
 
             # create user
