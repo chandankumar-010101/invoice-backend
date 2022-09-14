@@ -174,6 +174,8 @@ class CardSerializer(serializers.Serializer):
     card_number = serializers.CharField()
     expiry_date= serializers.DateField()
     cvv_code  = serializers.CharField()
+    m_pesa  = serializers.CharField()
+
 
     def create(self,validated_data):
         request = self.context.get('request')
