@@ -45,7 +45,7 @@ def send_email(invoice,reminder,manually=False):
     is_sucess, url = PeachPay().generate_payment_link(invoice)
 
     data ={}
-    data['amount']=str(data.due_amount)
+    data['amount']=str(invoice.due_amount)
     data['transaction_id']='12345'
     data['phone_no']=invoice.customer.primary_phone.national_number
     mpesa = PeachPay().mpesa(data)
