@@ -224,18 +224,16 @@
                                         <p style="font-size:14px;">Due {{invoice.due_date|date:'d-m-Y'}}</p>
                                         <p style="font-size:15px; margin-top:10px;">KES&nbsp;<span
                                                 style="font-size:22px;">{{invoice.due_amount|get_amount_in_number}}</span></p>
-                                        <!-- <div class="payemtbtn">
-                                            <a class="scheduleinvoice" href="{{payment}}">Pay Now</a>
-                                        </div> -->
+                                        <div class="payemtbtn">
+                                            <a class="scheduleinvoice" href="{{payment}}">Pay Via Link</a>
+                                        </div>
 
                                         <form name="submitForm" method="POST"  action="https://testapi.peachpayments.com/v1/verify/" >
-                                            <input type="hidden" name="customer" value="254789653489">
-                                              <input type="hidden" name="connector" value="MPESA">
-                                              <input type="hidden" name="amount" value="101">
-                                              <input type="hidden" name="currency" value="KES">
-                                              <input type="hidden" name="transaction" value="f0e5c84603e14a8f8c20d55032368b5e">
-                                                <input type='submit' value="SUBmit" name='submitButton' />
-                                            </form>
+                                            {% for data in mpesa.redirect.parameters %}
+                                                <input type="hidden" name="{{data.name}}" value="{{data.value}}">
+                                             {% endfor %}
+                                                <input type='submit' class="scheduleinvoice" value="Pay Via M-Pesa" name='submitButton' />
+                                        </form>
                                     </div>
                                 </table>
                             </td>

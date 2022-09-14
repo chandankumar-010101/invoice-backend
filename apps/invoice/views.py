@@ -287,7 +287,7 @@ class SendReminderView(APIView):
             data['transaction_id']='12345'
             data['phone_no']='254789653489'
             is_sucess, url = PeachPay().generate_payment_link(invoice)
-            # mpease = PeachPay().mpesa(data)
+            mpesa = PeachPay().mpesa(data)
 
             if is_sucess and params['is_email'] :
                 context = {
@@ -297,7 +297,7 @@ class SendReminderView(APIView):
                     'body':params['body'],
                     'site_url': str(SiteUrl.site_url(request)),
                     'payment':url,
-                    # 'mpease':mpease
+                    'mpesa':mpesa
                 }
                 get_template = render_to_string('email_template/reminder.html', context)
                 SendMail.invoice(
