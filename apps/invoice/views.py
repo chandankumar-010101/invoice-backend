@@ -269,12 +269,7 @@ class RecordPaymentView(APIView):
             return Response({
                 'detail': [error.args[0]]
             }, status=status.HTTP_400_BAD_REQUEST)
-# data ={}
-# data['amount']='101'
-# data['transaction_id']='12345'
-# data['phone_no']='254789653489'
-# mpease = PeachPay().mpesa(data)
-# print(mpease)
+
 
 class SendReminderView(APIView):
     permission_classes = [IsAuthenticated]

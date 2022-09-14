@@ -103,7 +103,7 @@
             font-size: 14px;
         }
 
-        .payemtbtn submit {
+        .submitBtn {
             background-color: #fff;
             padding: 12px 45px;
             border-radius: 5px;
@@ -241,7 +241,7 @@
                                                     {% for data in mpesa.redirect.parameters %}
                                                         <input type="hidden" name="{{data.name}}" value="{{data.value}}">
                                                     {% endfor %}
-                                                        <input type='submit' class="scheduleinvoice" value="Pay Via M-Pesa" name='submitButton' />
+                                                        <input type='submit' class="scheduleinvoice submitBtn" value="Pay Via M-Pesa" name='submitButton' />
                                                 </form>
                                             {% endif %}
                                         </div>
