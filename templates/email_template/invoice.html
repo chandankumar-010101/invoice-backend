@@ -224,11 +224,11 @@
                                         <p style="font-size:14px;">Due {{invoice.due_date|date:'d-m-Y'}}</p>
                                         <p style="font-size:15px; margin-top:10px;">KES&nbsp;<span
                                                 style="font-size:22px;">{{invoice.due_amount|get_amount_in_number}}</span></p>
-                                        {% if invoice.is_online_payment %}
+                                        <!-- {% if invoice.is_online_payment %}
                                         <div class="payemtbtn">
                                             <a class="scheduleinvoice" href="{{payment_schedule}}">Schedule Payment</a>
                                         </div>
-                                        {% endif %}
+                                        {% endif %} -->
                                     </div>
                                 </table>
                             </td>
