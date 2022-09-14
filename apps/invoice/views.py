@@ -655,43 +655,46 @@ class PeachWebhookView(APIView):
         from apps.utility.helpers import triger_socket
         params = request.data
         print(params)
-        response = PeachPay().get_webhook_details(params)
-        invoice = Invoice.objects.get(invoice_number = response['response']['Payment']['merchantInvoiceId'])
-        title ="Invoice payment received successfully."
-        message = ''
-        if params['Event[type]'] == 'PAYMENT.COMPLETED':
-            InvoiceTransaction.objects.create(
-                invoice = invoice,
-                amount = response['response']['Payment']['amount'],
-                payment_type = 'Online',
-                payment_mode = response['response']['Payment']['mode'],
-                payment_date = date.today()
-            )
-            message = "{} payment received of invoice no {}".format(
-                response['response']['Payment']['amount'],
-                response['response']['Payment']['merchantInvoiceId']
-            )
-            invoice.due_amount = 0
-            invoice.invoice_status = 'PAYMENT_DONE'
-            invoice.save()
-        elif params['Event[type]'] == 'PAYMENT.CANCELLED':
-            title ="Invoice payment cancelled."
-            message = "{} payment cancelled of invoice no {}".format(
-                response['response']['Payment']['amount'],
-                response['response']['Payment']['merchantInvoiceId']
-            )
+        try:
+            response = PeachPay().get_webhook_details(params)
+            invoice = Invoice.objects.get(invoice_number = response['response']['Payment']['merchantInvoiceId'])
+            title ="Invoice payment received successfully."
+            message = ''
+            if params['Event[type]'] == 'PAYMENT.COMPLETED':
+                InvoiceTransaction.objects.create(
+                    invoice = invoice,
+                    amount = response['response']['Payment']['amount'],
+                    payment_type = 'Online',
+                    payment_mode = response['response']['Payment']['mode'],
+                    payment_date = date.today()
+                )
+                message = "{} payment received of invoice no {}".format(
+                    response['response']['Payment']['amount'],
+                    response['response']['Payment']['merchantInvoiceId']
+                )
+                invoice.due_amount = 0
+                invoice.invoice_status = 'PAYMENT_DONE'
+                invoice.save()
+            elif params['Event[type]'] == 'PAYMENT.CANCELLED':
+                title ="Invoice payment cancelled."
+                message = "{} payment cancelled of invoice no {}".format(
+                    response['response']['Payment']['amount'],
+                    response['response']['Payment']['merchantInvoiceId']
+                )
 
-        instance = Notification.objects.create(
-            user = invoice.customer.user,
-            title = title,
-            message = message,
-            icon_class = 'fa fa-long-arrow-down' if params['Event[type]'] == 'PAYMENT.COMPLETED' else 'fa fa-clock-o',
-            icon_colour = 'green' if params['Event[type]'] == 'PAYMENT.COMPLETED' else 'red'
-        )
-        serializer = NotificationSerializer(instance).data
-        queryset = invoice.customer.user.notification_user.filter(is_seen = False).count()
-        serializer['notification_count'] = queryset
-        triger_socket(str(invoice.customer.user.uuid),serializer)
+            instance = Notification.objects.create(
+                user = invoice.customer.user,
+                title = title,
+                message = message,
+                icon_class = 'fa fa-long-arrow-down' if params['Event[type]'] == 'PAYMENT.COMPLETED' else 'fa fa-clock-o',
+                icon_colour = 'green' if params['Event[type]'] == 'PAYMENT.COMPLETED' else 'red'
+            )
+            serializer = NotificationSerializer(instance).data
+            queryset = invoice.customer.user.notification_user.filter(is_seen = False).count()
+            serializer['notification_count'] = queryset
+            triger_socket(str(invoice.customer.user.uuid),serializer)
+        except Exception as e:
+            print("####WEBHOOK ERROR",e)
         return Response({
             "message": 'ok'
         }, status=status.HTTP_200_OK)
