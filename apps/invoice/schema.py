@@ -81,3 +81,11 @@ card_schema = openapi.Schema(
     required=['payment_type','holder_name','card_number','expiry_date','cvv_code']
 
 )
+
+mpesa_schema =openapi.Schema(
+    type=openapi.TYPE_OBJECT, responses={200: 'OK'}, properties={
+        'm_pesa': openapi.Schema(type=openapi.TYPE_STRING),
+    },
+    required=['m_pesa',]
+
+)

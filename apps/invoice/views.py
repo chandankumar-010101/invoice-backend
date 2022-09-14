@@ -1,3 +1,4 @@
+from ast import Param
 import logging
 
 
@@ -35,7 +36,7 @@ from .schema import  (
     email_invoice_schema,
     record_payment_schema,whats_invoice_schema,
     payment_method_schema,roles_permissions_schema,
-    card_schema,send_reminder_schema
+    card_schema,send_reminder_schema,mpesa_schema
 )
 from apps.utility.filters import InvoiceFilter,invoice_filter,invoice_payment_filter
 from apps.customer.pagination import CustomPagination
@@ -438,6 +439,22 @@ class BillingPaymentView(APIView):
             return Response(serializer.data, status=status.HTTP_200_OK)
         logger.error(serializer.errors)
         return Response({'detail':serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
+
+class BillingPaymentView(APIView):
+    permission_classes = [IsAuthenticated]
+    @swagger_auto_schema(request_body=mpesa_schema, operation_description='Save Card Details')
+    def post(self, request):
+        params = request.data
+        from .models import CardDetail
+        admin_user = request.user.parent if request.user.parent else request.user
+        if hasattr(admin_user, 'card_details_user'):
+            admin_user.card_details_user.m_pesa = params['m_pesa']
+        else:
+            CardDetail.objects.create(
+                user = admin_user,
+                m_pesa = params['m_pesa']
+            )
+        return Response({'message':"M-Pesa Updated successfully"}, status=status.HTTP_200_OK)
 
 
 class PaymentListView(generics.ListAPIView):
