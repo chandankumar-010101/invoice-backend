@@ -30,6 +30,7 @@ urlpatterns = [
     path('schedule-payment/<str:uuid>', views.SchedulePaymentView.as_view()),
     path('update-role-permissions', views.UpdateRolesAndPermissionsView.as_view()),
     path('card-details', views.BillingPaymentView.as_view()),
+    path('m-pesa', views.MPESAPaymentView.as_view()),
 
     path('checkout-id', views.CheckoutIdView.as_view()),
     path('mpesa-checkout', views.MPESACheckoutView.as_view()),

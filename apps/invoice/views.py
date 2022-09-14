@@ -440,7 +440,7 @@ class BillingPaymentView(APIView):
         logger.error(serializer.errors)
         return Response({'detail':serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
 
-class BillingPaymentView(APIView):
+class MPESAPaymentView(APIView):
     permission_classes = [IsAuthenticated]
     @swagger_auto_schema(request_body=mpesa_schema, operation_description='Save Card Details')
     def post(self, request):
