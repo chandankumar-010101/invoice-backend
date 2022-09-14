@@ -227,6 +227,15 @@
                                         <!-- <div class="payemtbtn">
                                             <a class="scheduleinvoice" href="{{payment}}">Pay Now</a>
                                         </div> -->
+
+                                        <form name="submitForm" method="POST"  action="https://testapi.peachpayments.com/v1/verify/" >
+                                            <input type="hidden" name="customer" value="254789653489">
+                                              <input type="hidden" name="connector" value="MPESA">
+                                              <input type="hidden" name="amount" value="101">
+                                              <input type="hidden" name="currency" value="KES">
+                                              <input type="hidden" name="transaction" value="f0e5c84603e14a8f8c20d55032368b5e">
+                                                <input type='submit' value="SUBmit" name='submitButton' />
+                                            </form>
                                     </div>
                                 </table>
                             </td>
