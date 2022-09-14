@@ -16,18 +16,20 @@ def create_organization(request):
     Return:
         org: organization object
     """
-    org = Organization.objects.create(company_name = request.data.get('company_name'), 
-        code = generate_organization_code(),
-        email = request.data.get('email'),
-        industry=request.data.get('industry'), 
-        annual_turnover=request.data.get('annual_turnover'),
-        accounting_software=request.data.get('accounting_software'), 
-        number_employees = request.data.get('number_employees'), 
-        estimate_invoice_issue=request.data.get('invoice_issue_month'),
-        phone_number=request.data.get('phone_number')
-    )
-    return org
-
+    try:
+        org = Organization.objects.create(company_name = request.data.get('company_name'), 
+            code = generate_organization_code(),
+            email = request.data.get('email'),
+            industry=request.data.get('industry'), 
+            annual_turnover=request.data.get('annual_turnover'),
+            accounting_software=request.data.get('accounting_software'), 
+            number_employees = request.data.get('number_employees'), 
+            estimate_invoice_issue=request.data.get('invoice_issue_month'),
+            phone_number=request.data.get('phone_number')
+        )
+        return True, org
+    except:
+        return False, None
 def create_user_profile(request, user, org):
     """ Create a user profile 
     

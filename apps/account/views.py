@@ -102,8 +102,12 @@ class SignupView(APIView):
         serializer = SignupSerializer(data=request.data)
         if serializer.is_valid():
             # create Organization
-            org = user_service.create_organization(request)
+            is_success,org = user_service.create_organization(request)
             user_type = 2
+            if not is_success:
+                return Response({
+                    "phone_number":[resp_msg.PHONE_ALREADY_EXISTS]
+                }, status=status.HTTP_400_BAD_REQUEST)
 
             # create user
             try:
