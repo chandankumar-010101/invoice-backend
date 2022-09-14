@@ -233,7 +233,7 @@
                                         <p style="font-size:14px;">Due {{invoice.due_date|date:'d-m-Y'}}</p>
                                         <p style="font-size:15px; margin-top:10px;">KES&nbsp;<span
                                                 style="font-size:22px;">{{invoice.due_amount|get_amount_in_number}}</span></p>
-                                        <div class="payemtbtn">
+                                        <div class="payemtbtn" {% if mpesa.redirect.parameters %} style="display:flex" {% endif %}>
                                             <a class="scheduleinvoice" href="{{payment}}">Pay Via Link</a>
 
                                             {% if mpesa.redirect.parameters %}
