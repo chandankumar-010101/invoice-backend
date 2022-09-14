@@ -297,7 +297,7 @@ class SendReminderView(APIView):
                     'body':params['body'],
                     'site_url': str(SiteUrl.site_url(request)),
                     'payment':url,
-                    'mpease':mpease
+                    # 'mpease':mpease
                 }
                 get_template = render_to_string('email_template/reminder.html', context)
                 SendMail.invoice(
