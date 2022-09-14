@@ -57,24 +57,25 @@ class PeachPay:
 
     def get_webhook_details(self):
         headers = {
-            # Already added when you pass json= but not when you pass data=
-            # 'Content-Type': 'application/json',
+            'Content-Type': 'application/json',
             'Cache-Control': 'no-cache',
         }
 
         json_data = {
             'Authentication': {
-                'userid': '123456789123456789123456788511fb',
-                'password': 'asgftr1245',
-                'entityid': '12345678912345678913456788511fb',
+                "userid": config('PEACH_USER_ID'),
+                "password": config('PEACH_PASSWORD'),
+                "entityid": config('PEACH_ENTITY_ID')
             },
             'Event': {
-                'eventId': 'ijkzddgMNjhPHrM=',
+                'eventId': 'iJw1pSJRYwQ=',
                 'type': 'PAYMENT.COMPLETED',
             },
         }
 
-        response = requests.post('http://(domain name)', headers=headers, json=json_data)
+        response = requests.post('https://test.ppay.io/merchant/api/payments/getActivityDetail.json', headers=headers, json=json_data)
+        print(response)
+        print(response.json())
 
 
     def get_checkout_id(self,params):
@@ -129,7 +130,7 @@ class PeachPay:
 # invoice = Invoice.objects.all().last()
 # PeachPay().generate_payment_link(invoice)
 
-# PeachPay().mpesa()
+# PeachPay().get_webhook_details()
 
 
 # responseData = get_checkout_id()
