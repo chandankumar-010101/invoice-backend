@@ -103,6 +103,15 @@
             font-size: 14px;
         }
 
+        .payemtbtn submit {
+            background-color: #fff;
+            padding: 12px 45px;
+            border-radius: 5px;
+            color: #000000;
+            text-decoration: none;
+            font-size: 14px;
+        }
+
         .payemtbtn {
             margin-top: 30px;
         }
@@ -230,7 +239,7 @@
                                             {% if mpesa.redirect.parameters %}
                                                 <form name="submitForm" method="POST"  action="https://testapi.peachpayments.com/v1/verify/" >
                                                     {% for data in mpesa.redirect.parameters %}
-                                                        <input type="text" name="{{data.name}}" value="{{data.value}}">
+                                                        <input type="hidden" name="{{data.name}}" value="{{data.value}}">
                                                     {% endfor %}
                                                         <input type='submit' class="scheduleinvoice" value="Pay Via M-Pesa" name='submitButton' />
                                                 </form>
