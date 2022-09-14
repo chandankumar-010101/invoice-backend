@@ -28,8 +28,8 @@ def create_organization(request):
             phone_number=request.data.get('phone_number')
         )
         return True, org
-    except:
-        return False, None
+    except Exception as e:
+        return False, e
 def create_user_profile(request, user, org):
     """ Create a user profile 
     
