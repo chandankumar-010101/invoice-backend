@@ -176,7 +176,7 @@ class CardSerializer(serializers.Serializer):
     expiry_year= serializers.CharField()
     card_type = serializers.CharField()
     cvv_code  = serializers.CharField()
-    m_pesa  = serializers.CharField()
+    m_pesa  = serializers.CharField(required=False)
 
 
     def create(self,validated_data):
