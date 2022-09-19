@@ -550,15 +550,24 @@ class GetSubscription(APIView):
     permission_classes = (IsAuthenticated, )
     def get(self,request):
         admin_user = request.user.parent if request.user.parent else request.user
-        is_trial_account = True
         message  = ''
-        if is_trial_account:
+        is_trial_account = True
+        is_block = False
+        if hasattr(admin_user, 'subscription_user') :
+            is_trial_account = False
+            if admin_user.subscription_user.end_date <= date.today():
+                message = "Your subscription plan has been expired on {}. Purchase a subscription for unwanted interruption.".format(admin_user.subscription_user.end_date)
+            elif admin_user.subscription_user.end_date + timedelta(days=7) <= date.today():
+                is_block = True
+                message = "Your subscription plan has been expired on {}. Purchase a subscription for unwanted interruption.".format(admin_user.subscription_user.end_date)
+        else:
+            is_trial_account = True
             message = "Purchase a subscription for unwanted interruption."
 
         return Response({
-            'is_trial_account':True,
-            'ending_date':"2022-10-22",
-            "is_block":False,
+            'is_trial_account':is_trial_account,
+            'ending_date':admin_user.subscription_user.end_date if hasattr(admin_user, 'subscription_user') else '',
+            "is_block":is_block,
             "message":message
         })
 
