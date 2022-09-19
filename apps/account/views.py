@@ -32,7 +32,7 @@ from .serializer import (
 )
 from apps.customer.pagination import CustomPagination
 from apps.customer.models import Customer
-from apps.invoice.models import Invoice,Subscription
+from apps.invoice.models import Invoice,Subscription, UserSubscription
 
 from apps.utility.helpers import SiteUrl,SendMail,GenerateLink
 from .permissions import IsAdminOnly
@@ -545,6 +545,14 @@ class DashboardView(APIView):
             'overdue_amount':overdue_amount['due_amount__sum'] if overdue_amount['due_amount__sum'] else 00,
         }, status=status.HTTP_200_OK)
 
+# sub = UserSubscription.objects.all().last()
+# print("######",sub.end_date)
+# print("$$$$$$$$$$$",date.today())
+
+# if sub.end_date + timedelta(days=7)  < date.today():
+#     print("LESSS")
+# elif sub.end_date   < date.today():
+#     print("Dubale")
 
 class GetSubscription(APIView):
     permission_classes = (IsAuthenticated, )
@@ -555,10 +563,10 @@ class GetSubscription(APIView):
         is_block = False
         if hasattr(admin_user, 'subscription_user') :
             is_trial_account = False
-            if admin_user.subscription_user.end_date + timedelta(days=7) >= date.today():
+            if admin_user.subscription_user.end_date + timedelta(days=7) < date.today():
                 is_block = True
                 message = "Your subscription plan has been expired on {}. Purchase a subscription for unwanted interruption.".format(admin_user.subscription_user.end_date)
-            elif admin_user.subscription_user.end_date >= date.today():
+            elif admin_user.subscription_user.end_date < date.today():
                 message = "Your subscription plan has been expired on {}. Purchase a subscription for unwanted interruption.".format(admin_user.subscription_user.end_date)
         else:
             is_trial_account = True
