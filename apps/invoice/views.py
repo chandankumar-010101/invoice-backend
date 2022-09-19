@@ -618,14 +618,10 @@ class CardCheckoutView(APIView):
     permission_classes = (IsAuthenticated, )
 
     def get(self,request):  
-        params={}
         admin_user = request.user.parent if request.user.parent else request.user
-        if hasattr(admin_user, 'card_details_user') and admin_user.card_details_user.m_pesa:
+        if hasattr(admin_user, 'card_details_user') and admin_user.card_details_user.card_type and admin_user.card_details_user.holder_name and admin_user.card_details_user.card_number and admin_user.card_details_user.expiry_month and admin_user.card_details_user.expiry_year and admin_user.card_details_user.cvv_code:
             instance = Subscription.objects.all().last()
-            params['amount']=str(instance.amount)
-            params['transaction_id'] = '123'
-            params['phone_no'] = admin_user.card_details_user.m_pesa.replace("+", "")
-            data = PeachPay().mpesa(params)    
+            data = PeachPay().recurring(str(instance.amount),instance)    
             return  Response(data)
         return  Response(status=status.HTTP_406_NOT_ACCEPTABLE)
  

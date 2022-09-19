@@ -67,18 +67,18 @@ class PeachPay:
             'entityId' :  config('PEACH_ENTITY_ID'),
             'amount' : amount,
             'currency' : 'KES',
-            'paymentBrand' : 'VISA',
+            'paymentBrand' : instance.card_type,
             'paymentType' : 'DB',
             'card.number' : instance.card_number,
             'card.holder' : instance.holder_name,
-            'card.expiryMonth' : '05',
-            'card.expiryYear' : '2034',
+            'card.expiryMonth' : instance.expiry_month,
+            'card.expiryYear' : instance.expiry_year,
             'card.cvv' : instance.cvv_code,
             'standingInstruction.mode' : 'REPEATED',
             'standingInstruction.source' : 'CIT',
             'standingInstruction.type' : 'RECURRING',
             'createRegistration' : 'true',
-            'shopperResultUrl':"https://google.com",
+            'shopperResultUrl':"https://stage.jasiricap.com/",
         }
         try:
             opener = build_opener(HTTPHandler)
