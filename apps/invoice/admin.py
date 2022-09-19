@@ -4,7 +4,7 @@ from .models import (
     InvoiceAttachment,
     InvoiceTransaction,RolesAndPermissions,
     PaymentReminder,CardDetail,Notification,
-    Subscription
+    Subscription,UserSubscriptionTransaction,UserSubscription
 )
 
 # Register your models here.
@@ -43,6 +43,21 @@ class CardDetailAdmin(admin.ModelAdmin):
         "id",
     )
 
+
+@admin.register(UserSubscription)
+class UserSubscriptionAdmin(admin.ModelAdmin):
+
+    list_display = (
+        "id",
+    )
+
+
+@admin.register(UserSubscriptionTransaction)
+class UserSubscriptionTransactionAdmin(admin.ModelAdmin):
+
+    list_display = (
+        "id",
+    )
 
 
 @admin.register(Notification)

@@ -2,7 +2,7 @@ from ast import Param
 import logging
 
 
-from datetime import date
+from datetime import date,timedelta
 from multiprocessing import context
 from urllib import response  
 from drf_yasg.utils import swagger_auto_schema
@@ -23,7 +23,7 @@ from django.db.models import Q,Sum
 from rest_framework.viewsets import ModelViewSet
 
 
-from .models import Invoice,InvoiceAttachment,InvoiceTransaction, Notification,PaymentMethods,PaymentReminder, Subscription
+from .models import Invoice,InvoiceAttachment,InvoiceTransaction, Notification,PaymentMethods,PaymentReminder, Subscription, UserSubscription, UserSubscriptionTransaction
 from .serializer import (
     InvoiceSerializer,
     GetInvoiceSerializer,
@@ -621,7 +621,26 @@ class CardCheckoutView(APIView):
         admin_user = request.user.parent if request.user.parent else request.user
         if hasattr(admin_user, 'card_details_user') and admin_user.card_details_user.card_type and admin_user.card_details_user.holder_name and admin_user.card_details_user.card_number and admin_user.card_details_user.expiry_month and admin_user.card_details_user.expiry_year and admin_user.card_details_user.cvv_code:
             instance = Subscription.objects.all().last()
-            data = PeachPay().recurring(str(instance.amount),admin_user.card_details_user)    
+            data = PeachPay().recurring(str(instance.amount),admin_user.card_details_user) 
+            if data['result']['code'] == '000.100.110':
+                sub,created = UserSubscription.objects.get_or_create(
+                    user = admin_user
+                )
+                if created:
+                    sub.start_date = date.today()
+                    sub.end_date = date.today() + timedelta(days=30)
+                else:
+                    if sub.end_date >= date.today():
+                        sub.end_date = sub.end_date + timedelta(days=30)
+                    else:
+                        sub.end_date = date.today() + timedelta(days=30)
+                sub.save()
+                UserSubscriptionTransaction.objects.create(
+                    subscription = sub,
+                    user = admin_user,
+                    amount = instance.instance,
+                    tx_id = data['id']
+                )
             return  Response(data)
         return  Response(status=status.HTTP_406_NOT_ACCEPTABLE)
  

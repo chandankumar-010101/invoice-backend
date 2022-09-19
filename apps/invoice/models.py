@@ -95,6 +95,7 @@ class CardDetail(models.Model):
     m_pesa = models.CharField(max_length=15,null=True,blank=True)
 
 
+
 class Notification(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE,related_name="notification_user")
     invoice = models.ForeignKey(Invoice, on_delete=models.CASCADE,null=True,blank=True,related_name="notification_invoice")
@@ -116,4 +117,23 @@ class Subscription(models.Model):
     invoice =  models.CharField(max_length=150,null=True,blank=True)
     name = models.CharField(max_length= 150, null=True, blank=False)
     amount = models.IntegerField(default=0, null=True, blank=True)
+
+class UserSubscription(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE,related_name="subscription_user")
+    start_date = models.DateField()
+    end_date = models.DateField()
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+class UserSubscriptionTransaction(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE,related_name="subscription_transaction_user")
+    subscription = models.ForeignKey(UserSubscription, on_delete=models.CASCADE,related_name="subscription_transaction")
+    amount = models.IntegerField(default=0, null=True, blank=True)
+    tx_id = models.CharField(max_length=255, null=True, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+
+
+
 
