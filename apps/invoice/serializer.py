@@ -172,7 +172,9 @@ class CardSerializer(serializers.Serializer):
     # payment_type = serializers.CharField(max_length=255)
     holder_name = serializers.CharField(max_length=255)
     card_number = serializers.CharField()
-    expiry_date= serializers.DateField()
+    expiry_month= serializers.CharField()
+    expiry_year= serializers.CharField()
+    card_type = serializers.CharField()
     cvv_code  = serializers.CharField()
     m_pesa  = serializers.CharField()
 
@@ -187,8 +189,10 @@ class CardSerializer(serializers.Serializer):
             # payment_type = params['payment_type'],
             holder_name = params['holder_name'],
             card_number = params['card_number'],
-            expiry_date = params['expiry_date'],
+            expiry_month = params['expiry_month'],
+            expiry_year = params['expiry_year'],
             cvv_code = params['cvv_code'],
+            card_type = params['card_type']
         )
     
     def update(self, instance, validated_data):
@@ -197,7 +201,9 @@ class CardSerializer(serializers.Serializer):
         # instance.payment_type = params['payment_type']
         instance.holder_name = params['holder_name']
         instance.card_number = params['card_number']
-        instance.expiry_date = params['expiry_date']
+        instance.expiry_month = params['expiry_month']
+        instance.expiry_year = params['expiry_year']
+        instance.card_type = params['card_type']
         instance.cvv_code = params['cvv_code']
 
         instance.save()

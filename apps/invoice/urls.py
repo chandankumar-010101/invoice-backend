@@ -34,6 +34,7 @@ urlpatterns = [
 
     path('checkout-id', views.CheckoutIdView.as_view()),
     path('mpesa-checkout', views.MPESACheckoutView.as_view()),
+    path('card-checkout', views.CardCheckoutView.as_view()),
 
     path('payment-status/<str:id>', views.PaymentStatusView.as_view()),
 

@@ -613,7 +613,22 @@ class MPESACheckoutView(APIView):
             data = PeachPay().mpesa(params)    
             return  Response(data)
         return  Response(status=status.HTTP_406_NOT_ACCEPTABLE)
-        
+
+class CardCheckoutView(APIView):
+    permission_classes = (IsAuthenticated, )
+
+    def get(self,request):  
+        params={}
+        admin_user = request.user.parent if request.user.parent else request.user
+        if hasattr(admin_user, 'card_details_user') and admin_user.card_details_user.m_pesa:
+            instance = Subscription.objects.all().last()
+            params['amount']=str(instance.amount)
+            params['transaction_id'] = '123'
+            params['phone_no'] = admin_user.card_details_user.m_pesa.replace("+", "")
+            data = PeachPay().mpesa(params)    
+            return  Response(data)
+        return  Response(status=status.HTTP_406_NOT_ACCEPTABLE)
+ 
 
 class PaymentStatusView(APIView):
     permission_classes = (IsAuthenticated, )
