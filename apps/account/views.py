@@ -564,6 +564,7 @@ class GetSubscription(APIView):
             elif admin_user.subscription_user.end_date < date.today():
                 message = "Your subscription plan has been expired on {}. Purchase a subscription for unwanted interruption.".format(admin_user.subscription_user.end_date.strftime("%d/%m/%Y"))
             else:
+                title = "Plan Activated"
                 message = "Your subscription plan will be expired on {}".format(admin_user.subscription_user.end_date.strftime("%d/%m/%Y"))
         else:
             title = 'Trial'
