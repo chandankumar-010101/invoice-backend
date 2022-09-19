@@ -610,7 +610,9 @@ class MPESACheckoutView(APIView):
             params['amount']=str(instance.amount)
             params['transaction_id'] = '123'
             params['phone_no'] = admin_user.card_details_user.m_pesa.replace("+", "")
-            data = PeachPay().mpesa(params)    
+            data = PeachPay().mpesa(params)  
+            admin_user.card_details_user.is_auto_subscription = False
+            admin_user.card_details_user.save()  
             return  Response(data)
         return  Response(status=status.HTTP_406_NOT_ACCEPTABLE)
 
@@ -641,6 +643,8 @@ class CardCheckoutView(APIView):
                     amount = instance.amount,
                     tx_id = data['id']
                 )
+                admin_user.card_details_user.is_auto_subscription = True
+                admin_user.card_details_user.save()
             return  Response(data)
         return  Response(status=status.HTTP_406_NOT_ACCEPTABLE)
  

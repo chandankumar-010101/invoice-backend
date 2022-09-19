@@ -93,7 +93,7 @@ class CardDetail(models.Model):
     expiry_year = models.CharField(max_length=4,null=True,blank=True)
     cvv_code = models.CharField(max_length=3,null=True,blank=True)
     m_pesa = models.CharField(max_length=15,null=True,blank=True)
-
+    is_auto_subscription = models.BooleanField(default=False)
 
 
 class Notification(models.Model):

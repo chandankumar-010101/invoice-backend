@@ -177,7 +177,7 @@ class CardSerializer(serializers.Serializer):
     card_type = serializers.CharField()
     cvv_code  = serializers.CharField()
     m_pesa  = serializers.CharField(required=False)
-
+    is_auto_subscription = serializers.BooleanField(required=False)
 
     def create(self,validated_data):
         request = self.context.get('request')
