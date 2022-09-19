@@ -621,7 +621,7 @@ class CardCheckoutView(APIView):
         admin_user = request.user.parent if request.user.parent else request.user
         if hasattr(admin_user, 'card_details_user') and admin_user.card_details_user.card_type and admin_user.card_details_user.holder_name and admin_user.card_details_user.card_number and admin_user.card_details_user.expiry_month and admin_user.card_details_user.expiry_year and admin_user.card_details_user.cvv_code:
             instance = Subscription.objects.all().last()
-            data = PeachPay().recurring(str(instance.amount),instance)    
+            data = PeachPay().recurring(str(instance.amount),admin_user.card_details_user)    
             return  Response(data)
         return  Response(status=status.HTTP_406_NOT_ACCEPTABLE)
  
