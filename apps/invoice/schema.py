@@ -72,7 +72,6 @@ roles_permissions_schema = openapi.Schema(
 
 card_schema = openapi.Schema(
     type=openapi.TYPE_OBJECT, responses={200: 'OK'}, properties={
-        'payment_type': openapi.Schema(type=openapi.TYPE_STRING),
         'holder_name': openapi.Schema(type=openapi.TYPE_STRING),
         'card_number': openapi.Schema(type=openapi.TYPE_STRING),
         'expiry_month': openapi.Schema(type=openapi.TYPE_STRING),
@@ -80,7 +79,7 @@ card_schema = openapi.Schema(
         'cvv_code': openapi.Schema(type=openapi.TYPE_STRING),
         'card_type': openapi.Schema(type=openapi.TYPE_STRING),
     },
-    required=['payment_type','holder_name','card_number','expiry_month','expiry_year','cvv_code','card_type']
+    required=['holder_name','card_number','expiry_month','expiry_year','cvv_code','card_type']
 
 )
 
