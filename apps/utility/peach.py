@@ -61,7 +61,7 @@ class PeachPay:
             return True,response.json()['response']['url']
         return  False,response.json()
     
-    def recurring(self,instance,amount):
+    def recurring(self,amount,instance):
         url = "https://eu-test.oppwa.com/v1/payments"
         data = {
             'entityId' :  config('PEACH_ENTITY_ID'),
