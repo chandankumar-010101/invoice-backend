@@ -638,7 +638,7 @@ class CardCheckoutView(APIView):
                 UserSubscriptionTransaction.objects.create(
                     subscription = sub,
                     user = admin_user,
-                    amount = instance.instance,
+                    amount = instance.amount,
                     tx_id = data['id']
                 )
             return  Response(data)
