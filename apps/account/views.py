@@ -555,10 +555,10 @@ class GetSubscription(APIView):
         is_block = False
         if hasattr(admin_user, 'subscription_user') :
             is_trial_account = False
-            if admin_user.subscription_user.end_date >= date.today():
-                message = "Your subscription plan has been expired on {}. Purchase a subscription for unwanted interruption.".format(admin_user.subscription_user.end_date)
-            elif admin_user.subscription_user.end_date + timedelta(days=7) >= date.today():
+            if admin_user.subscription_user.end_date + timedelta(days=7) >= date.today():
                 is_block = True
+                message = "Your subscription plan has been expired on {}. Purchase a subscription for unwanted interruption.".format(admin_user.subscription_user.end_date)
+            elif admin_user.subscription_user.end_date >= date.today():
                 message = "Your subscription plan has been expired on {}. Purchase a subscription for unwanted interruption.".format(admin_user.subscription_user.end_date)
         else:
             is_trial_account = True
