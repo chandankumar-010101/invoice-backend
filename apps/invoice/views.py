@@ -647,7 +647,16 @@ class CardCheckoutView(APIView):
                 admin_user.card_details_user.save()
             return  Response(data)
         return  Response(status=status.HTTP_406_NOT_ACCEPTABLE)
- 
+
+class CancelAutoSubscriptionView(APIView):
+    permission_classes = (IsAuthenticated, )
+
+    def get(self,request):  
+        admin_user = request.user.parent if request.user.parent else request.user
+        admin_user.card_details_user.is_auto_subscription = False
+        admin_user.card_details_user.save()
+        return  Response({'message':"Auto Subscription has been cancelled."})
+
 
 class PaymentStatusView(APIView):
     permission_classes = (IsAuthenticated, )
