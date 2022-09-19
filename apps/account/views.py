@@ -550,7 +550,7 @@ class GetSubscription(APIView):
     def get(self,request):
         admin_user = request.user.parent if request.user.parent else request.user
         message  = ''
-        title = 'Trial'
+        title = ''
         is_trial_account = True
         is_block = False
         is_auto_display = False
@@ -563,10 +563,15 @@ class GetSubscription(APIView):
                 is_auto_display = True
             elif admin_user.subscription_user.end_date < date.today():
                 message = "Your subscription plan has been expired on {}. Purchase a subscription for unwanted interruption.".format(admin_user.subscription_user.end_date.strftime("%d/%m/%Y"))
+            else:
+                message = "Your subscription plan will be expired on {}".format(admin_user.subscription_user.end_date.strftime("%d/%m/%Y"))
         else:
+            title = 'Trial'
             is_trial_account = True
-            if admin_user.created_at.date()+ timedelta(days=60)  < date.today():
+            if admin_user.created_at.date() + timedelta(days=60)  < date.today():
+                title = 'Suspended'
                 is_block = True
+                is_auto_display = True
                 message = "Your Trial subscription has been expired. Purchase a subscription for unwanted interruption."
             else:
                 message = "Purchase a subscription for unwanted interruption. Your trial subscription will be expired on {}.".format((admin_user.created_at.date()+ timedelta(days=60)).strftime("%d/%m/%Y"))
