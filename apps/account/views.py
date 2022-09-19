@@ -545,7 +545,6 @@ class DashboardView(APIView):
             'overdue_amount':overdue_amount['due_amount__sum'] if overdue_amount['due_amount__sum'] else 00,
         }, status=status.HTTP_200_OK)
 
-
 class GetSubscription(APIView):
     permission_classes = (IsAuthenticated, )
     def get(self,request):
@@ -566,8 +565,11 @@ class GetSubscription(APIView):
                 message = "Your subscription plan has been expired on {}. Purchase a subscription for unwanted interruption.".format(admin_user.subscription_user.end_date)
         else:
             is_trial_account = True
-            message = "Purchase a subscription for unwanted interruption."
-
+            if admin_user.created_at.date()+ timedelta(days=60)  < date.today():
+                is_block = True
+                message = "Your Trial subscription has been expired. Purchase a subscription for unwanted interruption."
+            else:
+                message = "Purchase a subscription for unwanted interruption. Your trial subscription will be expired on {}.".format(admin_user.created_at.date()+ timedelta(days=60))
         return Response({
             'is_trial_account':is_trial_account,
             'ending_date':admin_user.subscription_user.end_date if hasattr(admin_user, 'subscription_user') else '',
