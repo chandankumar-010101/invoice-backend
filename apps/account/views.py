@@ -545,27 +545,23 @@ class DashboardView(APIView):
             'overdue_amount':overdue_amount['due_amount__sum'] if overdue_amount['due_amount__sum'] else 00,
         }, status=status.HTTP_200_OK)
 
-# sub = UserSubscription.objects.all().last()
-# print("######",sub.end_date)
-# print("$$$$$$$$$$$",date.today())
-
-# if sub.end_date + timedelta(days=7)  < date.today():
-#     print("LESSS")
-# elif sub.end_date   < date.today():
-#     print("Dubale")
 
 class GetSubscription(APIView):
     permission_classes = (IsAuthenticated, )
     def get(self,request):
         admin_user = request.user.parent if request.user.parent else request.user
         message  = ''
+        title = 'Trial'
         is_trial_account = True
         is_block = False
+        is_auto_display = False
         if hasattr(admin_user, 'subscription_user') :
             is_trial_account = False
             if admin_user.subscription_user.end_date + timedelta(days=7) < date.today():
                 is_block = True
                 message = "Your subscription plan has been expired on {}. Purchase a subscription for unwanted interruption.".format(admin_user.subscription_user.end_date)
+                title = 'Suspended'
+                is_auto_display = True
             elif admin_user.subscription_user.end_date < date.today():
                 message = "Your subscription plan has been expired on {}. Purchase a subscription for unwanted interruption.".format(admin_user.subscription_user.end_date)
         else:
@@ -576,7 +572,9 @@ class GetSubscription(APIView):
             'is_trial_account':is_trial_account,
             'ending_date':admin_user.subscription_user.end_date if hasattr(admin_user, 'subscription_user') else '',
             "is_block":is_block,
-            "message":message
+            "message":message,
+            "title":title,
+            "is_auto_display":is_auto_display
         })
 
 class GetDetailsView(APIView):
