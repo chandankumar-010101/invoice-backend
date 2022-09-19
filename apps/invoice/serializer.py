@@ -214,10 +214,10 @@ class CardSerializer(serializers.Serializer):
         if len(card_number) != 16:
             raise serializers.ValidationError("Card No must be 16 digits.")
 
-    def validate_expiry_date(self, expiry_date):
-        from datetime import date  
-        if (expiry_date-date.today()).days < 1:
-            raise serializers.ValidationError("Expiry date should be future date.")
+    # def validate_expiry_date(self, expiry_date):
+    #     from datetime import date  
+    #     if (expiry_date-date.today()).days < 1:
+    #         raise serializers.ValidationError("Expiry date should be future date.")
 
     def validate_cvv_code(self, cvv_code):
         if len(cvv_code) != 3:
